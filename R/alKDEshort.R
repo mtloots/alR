@@ -31,11 +31,11 @@ mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-h_y <- Silverman(y)
-ALy <- kdeGaussInt2(y, h_y, q1, q2, TRUE)
-
 p1 <- sapply(1:length(q1), function(i) qkdeGauss(q1[i], y, h_y)$result)
 p2 <- sapply(1:length(q2), function(i) qkdeGauss(q2[i], y, h_y)$result)
+
+h_y <- Silverman(y)
+ALy <- kdeGaussInt2(y, h_y, p1, p2, FALSE)
 
 al <- DEoptim(alrKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=2, ...), gamma=X, aly=ALy, q1=p1, q2=p2)
 
