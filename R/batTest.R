@@ -7,10 +7,14 @@
 #' @param y,x Samples to be compared.
 #' @param k Number of proportions.
 #'
+#' @importFrom stats ecdf pchisq
+#'
 #' @return bat.test: A list with the following components:
 #' \itemize{
-#' \item k: number of proportions used.
-#' \item chi: The test statistic for the Bhattacharrayya test.
+#' \item df=2*k: where k is the number of proportions used.
+#' \item y.prop, x.prop: Vectors of proportions.
+#' \item D2: Measure of divergence between samples.
+#' \item test.stat: The test statistic for the Bhattacharrayya test.
 #' \item p.value: The p-value of the test.
 #' }
 #' 
@@ -20,24 +24,39 @@
 #' bhatt.test(y,x,10)
 #'
 #' @export
-bhat.test <- function(y, x, k)
+bhatt.test <- function(y, x, k)
 {
 h_y <- Silverman(y)
 pts <- seq(0,1,length.out=k+1)[2:k]
-CDF <- sapply(pts, function(i) qkdeGauss(i, y, h_y))
+CDF <- sapply(pts, function(i) qkdeGauss(i, y, h_y)$result)
 yecdf <- ecdf(y)
 xecdf <- ecdf(x)
 
-yprop <- numeric(k)
-xprop <- numeric(k)
+yprop <- numeric(k+1)
+xprop <- numeric(k+1)
 
 for (i in 1:length(CDF))
 {
-yprop[i] <- yecdf(CDF[i])
-xprop[i] <- xecdf(CDF[i])
+yprop[i+1] <- yecdf(CDF[i])
+xprop[i+1] <- xecdf(CDF[i])
 }
 
-bhattout <- list(k,
-yprop,
-xprop)
+yprop[k+1] <- 1
+xprop[k+1] <-1
+
+Yprop <- diff(yprop)
+Xprop <- diff(xprop)
+
+numerator <- (Yprop-Xprop)^2
+denominator <- Yprop+Xprop
+chi <- length(y)*sum(numerator/denominator)
+p.value <- pchisq(chi, 2*k, lower.tail=FALSE)
+
+bhattout <- list(df=2*k,
+y.prop=Yprop,
+x.prop=Xprop,
+D2=chi/(2*length(y)),
+test.stat=chi,
+p.value=p.value)
+bhattout
 }
