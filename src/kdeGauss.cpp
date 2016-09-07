@@ -143,15 +143,15 @@ _["msg"] = msg);
 //' @param mu A vector of data points on which the kernel density estimator is based.
 //' @param h The kernel density estimator bandwidth.
 //' @rdname kdeGauss
-//' @return pkdeGauss: The estimated value of the density function at the point x.
+//' @return dkdeGauss: The estimated value of the density function at the point x.
 //' @examples
 //' library(alR)
 //' x <- rnorm(100)
 //' h_x <- Silverman(x)
-//' pkdeGauss(0, x, h_x)
+//' dkdeGauss(0, x, h_x)
 //' @export
 // [[Rcpp::export]]
-double pkdeGauss(double x, NumericVector mu, double h)
+double dkdeGauss(double x, NumericVector mu, double h)
 {
 return (1.0/(mu.size()*sqrt(2*PI)*h))*sum(exp(-0.5*pow((x-mu)/h, 2)));
 }
@@ -165,15 +165,15 @@ double h = param->h;
 
 for(int i = 0; i < n; i++)
 {
-t[i] = pkdeGauss(t[i], mu, h);
+t[i] = dkdeGauss(t[i], mu, h);
 }
 } 
 
 
 //' @rdname kdeGauss
 //' @examples
-//' dkdeGauss(0, x, h_x)
-//' @return dkdeGauss: A list with the following components:
+//' pkdeGauss(0, x, h_x)
+//' @return pkdeGauss: A list with the following components:
 //' \itemize{
 //' \item value: The estimated value of the cumulative distribution function at the point \code{x}.
 //' \item abs.err: The absolute error between iterations.
@@ -182,7 +182,7 @@ t[i] = pkdeGauss(t[i], mu, h);
 //' }
 //' @export
 // [[Rcpp::export]]
-List dkdeGauss(double x, NumericVector mu, double h)
+List pkdeGauss(double x, NumericVector mu, double h)
 {
 Params param = {mu, h};
 
@@ -197,7 +197,7 @@ NumericVector mu = param->mu;
 double h = param->h;
 double q = param->q;
 
-return double(dkdeGauss(x, mu, h)[0])-q;
+return double(pkdeGauss(x, mu, h)[0])-q;
 }
 
 
@@ -219,6 +219,7 @@ List qkdeGauss(double x, NumericVector mu, double h)
 Qarams param = {mu, h, x};
 double minmu = min(mu);
 double maxmu = max(mu);
+double rangemu = maxmu-minmu;
 int steps = 0;
 double lower, upper;
 List bf;
@@ -226,8 +227,8 @@ List bf;
 for (int i=1; i<=1000; i++)
 {
 steps++;
-lower = steps*minmu;
-upper = steps*maxmu;
+lower = steps*minmu-(steps-1)*rangemu;
+upper = steps*maxmu+(steps-1)*rangemu;
 bf = brents_fun(qkde, &param, lower, upper, 1e-10, 1000);
 if (bf[3] == 0)
 {
@@ -236,7 +237,7 @@ i = 1001;
 }
 
 return List::create(_["result"] = bf[0],
-_["value"] = dkdeGauss(bf[0], mu, h)[0],
+_["value"] = pkdeGauss(bf[0], mu, h)[0],
 _["obj.fun"] = bf[1],
 _["iterations"] = bf[2],
 _["steps"] = steps);

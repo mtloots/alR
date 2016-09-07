@@ -21,21 +21,8 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// pkdeGauss
-double pkdeGauss(double x, NumericVector mu, double h);
-RcppExport SEXP alR_pkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type h(hSEXP);
-    __result = Rcpp::wrap(pkdeGauss(x, mu, h));
-    return __result;
-END_RCPP
-}
 // dkdeGauss
-List dkdeGauss(double x, NumericVector mu, double h);
+double dkdeGauss(double x, NumericVector mu, double h);
 RcppExport SEXP alR_dkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -44,6 +31,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
     Rcpp::traits::input_parameter< double >::type h(hSEXP);
     __result = Rcpp::wrap(dkdeGauss(x, mu, h));
+    return __result;
+END_RCPP
+}
+// pkdeGauss
+List pkdeGauss(double x, NumericVector mu, double h);
+RcppExport SEXP alR_pkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    __result = Rcpp::wrap(pkdeGauss(x, mu, h));
     return __result;
 END_RCPP
 }

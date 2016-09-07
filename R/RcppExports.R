@@ -30,21 +30,21 @@ alrKDE <- function(beta, gamma, aly, q1, q2) {
 #' @param mu A vector of data points on which the kernel density estimator is based.
 #' @param h The kernel density estimator bandwidth.
 #' @rdname kdeGauss
-#' @return pkdeGauss: The estimated value of the density function at the point x.
+#' @return dkdeGauss: The estimated value of the density function at the point x.
 #' @examples
 #' library(alR)
 #' x <- rnorm(100)
 #' h_x <- Silverman(x)
-#' pkdeGauss(0, x, h_x)
+#' dkdeGauss(0, x, h_x)
 #' @export
-pkdeGauss <- function(x, mu, h) {
-    .Call('alR_pkdeGauss', PACKAGE = 'alR', x, mu, h)
+dkdeGauss <- function(x, mu, h) {
+    .Call('alR_dkdeGauss', PACKAGE = 'alR', x, mu, h)
 }
 
 #' @rdname kdeGauss
 #' @examples
-#' dkdeGauss(0, x, h_x)
-#' @return dkdeGauss: A list with the following components:
+#' pkdeGauss(0, x, h_x)
+#' @return pkdeGauss: A list with the following components:
 #' \itemize{
 #' \item value: The estimated value of the cumulative distribution function at the point \code{x}.
 #' \item abs.err: The absolute error between iterations.
@@ -52,8 +52,8 @@ pkdeGauss <- function(x, mu, h) {
 #' \item neval: Number of function evaluations used by the numerical approximation.
 #' }
 #' @export
-dkdeGauss <- function(x, mu, h) {
-    .Call('alR_dkdeGauss', PACKAGE = 'alR', x, mu, h)
+pkdeGauss <- function(x, mu, h) {
+    .Call('alR_pkdeGauss', PACKAGE = 'alR', x, mu, h)
 }
 
 #' @rdname kdeGauss
