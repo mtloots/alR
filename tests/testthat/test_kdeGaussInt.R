@@ -40,3 +40,14 @@ expect_equal(round(int_r[4],0), round(int_c[4],0))
 expect_equal(round(int_r[5],1), round(int_c[5],1))
 expect_equal(round(int_r[6],1), round(int_c[6],1))
 })
+
+test_that("quantile T/F should yield similar results", {
+set.seed(1)
+mu <- rnorm(1000)
+h <- Silverman(mu)
+
+X1 <- qkdeGauss(0.05, mu, h)$result
+X2 <- qkdeGauss(0.2, mu, h)$result
+
+expect_equal(kdeGaussInt(mu, h, q1=0.05, q2=0.2, quantile=TRUE)$value, kdeGaussInt(mu, h, q1=X1[[1]], q2=X2[[1]], quantile=FALSE)$value)
+})

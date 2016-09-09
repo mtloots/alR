@@ -219,7 +219,7 @@ List qkdeGauss(double x, NumericVector mu, double h)
 Qarams param = {mu, h, x};
 double minmu = min(mu);
 double maxmu = max(mu);
-double rangemu = maxmu-minmu;
+// double rangemu = maxmu-minmu;
 int steps = 0;
 double lower, upper;
 List bf;
@@ -227,8 +227,8 @@ List bf;
 for (int i=1; i<=1000; i++)
 {
 steps++;
-lower = steps*minmu-(steps-1)*rangemu/10;
-upper = steps*maxmu+(steps-1)*rangemu/10;
+lower = steps*minmu;
+upper = steps*maxmu;
 bf = brents_fun(qkde, &param, lower, upper, 1e-10, 1000);
 if (bf[3] == 0)
 {
