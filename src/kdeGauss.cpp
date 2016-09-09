@@ -227,8 +227,8 @@ List bf;
 for (int i=1; i<=1000; i++)
 {
 steps++;
-lower = steps*minmu-(steps-1)*rangemu;
-upper = steps*maxmu+(steps-1)*rangemu;
+lower = steps*minmu-(steps-1)*rangemu/10;
+upper = steps*maxmu+(steps-1)*rangemu/10;
 bf = brents_fun(qkde, &param, lower, upper, 1e-10, 1000);
 if (bf[3] == 0)
 {
