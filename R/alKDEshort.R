@@ -9,9 +9,10 @@
 #' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
 #' @param q1,q2 Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.
 #' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
 #'
-#' @importFrom RcppDE DEoptim DEoptim.control
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom stats model.frame model.matrix model.response
 #' @return alKDEshort: A list with the following components:
 #' \itemize{
@@ -22,22 +23,22 @@
 #' @examples
 #' x <- 1:10
 #' y <- x+rnorm(10)
-#' alKDEshort(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.1,0.5), q2=c(0.5,0.9), itermax=50)
+#' alKDEshort(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.1,0.5), q2=c(0.5,0.9), itermax=50, type=1)
 #'
 #' @export
-alKDEshort <- function(formula, data=list(), lower, upper, q1, q2, itermax, ...)
+alKDEshort <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-h_y <- Silverman(y)
+h_y <- bw(y, type)
 p1 <- sapply(1:length(q1), function(i) qkdeGauss(q1[i], y, h_y)$result)
 p2 <- sapply(1:length(q2), function(i) qkdeGauss(q2[i], y, h_y)$result)
 
 ALy <- kdeGaussInt2(y, h_y, p1, p2, FALSE)
 
-al <- DEoptim(alrKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=2, ...), gamma=X, aly=ALy, q1=p1, q2=p2)
+al <- DEoptim(alrKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=6, ...), gamma=X, aly=ALy, q1=p1, q2=p2, type=type)
 
 coefficients <- al$optim$bestmem
 

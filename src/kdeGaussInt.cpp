@@ -66,7 +66,7 @@ t[i] = sqrt(1+(1/(2*PI*pow(mu.size(), 2))*pow(h, 6))*sum(pow((t[i]-mu)*exp(-0.5*
 //' @examples
 //' library(alR)
 //' mu <- rnorm(100)
-//' h <- Silverman(mu)
+//' h <- bw(mu, type=1)
 //' kdeGaussInt(mu, h, 0.025, 0.975, TRUE)
 //' kdeGaussInt(mu, h, -1.96, 1.96, FALSE)
 //'

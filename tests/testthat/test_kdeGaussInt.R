@@ -5,7 +5,7 @@ context("General functionality of kdeGaussInt")
 test_that("numerical result is valid", {
 set.seed(1)
 mu <- rnorm(1000)
-h <- Silverman(mu)
+h <- bw(mu, type=1)
 
 integrand <- function(y, mu, h)
 {
@@ -44,7 +44,7 @@ expect_equal(round(int_r[6],1), round(int_c[6],1))
 test_that("quantile T/F should yield similar results", {
 set.seed(1)
 mu <- rnorm(1000)
-h <- Silverman(mu)
+h <- bw(mu, type=1)
 
 X1 <- qkdeGauss(0.05, mu, h)$result
 X2 <- qkdeGauss(0.2, mu, h)$result

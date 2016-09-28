@@ -4,7 +4,7 @@
 \alias{mmKDEshort}
 \title{Moment matching for kernel density estimators.}
 \usage{
-mmKDEshort(formula, data = list(), lower, upper, itermax, ...)
+mmKDEshort(formula, data = list(), lower, upper, itermax, type, ...)
 }
 \arguments{
 \item{formula}{An LHS ~ RHS formula, specifying the linear model to be estimated.}
@@ -14,6 +14,8 @@ mmKDEshort(formula, data = list(), lower, upper, itermax, ...)
 \item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
 
 \item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+
+\item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
 \item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
 }
@@ -33,7 +35,7 @@ A shortened version of \code{mmKDE}.
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-mmKDEshort(y~x, lower=c(-2,2), upper=c(2,2), itermax=50)
+mmKDEshort(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
 
 }
 

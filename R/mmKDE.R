@@ -6,18 +6,19 @@
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
 #' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
 #'
 #' @return A generic S3 object with class mmKDE.
-#' @importFrom RcppDE DEoptim DEoptim.control
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
-mmKDE <- function(formula, data=list(), lower, upper, itermax, ...) UseMethod("mmKDE")
+mmKDE <- function(formula, data=list(), lower, upper, itermax, type, ...) UseMethod("mmKDE")
 
 #' @describeIn mmKDE default method for mmKDE.
 #'
-#' @return mmKDE.default: A list with all components from \code{\link[RcppDE]{DEoptim}}, as well as:
+#' @return mmKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, as well as:
 #' \itemize{
 #' \item intercept: Did the model contain an intercept TRUE/FALSE?
 #' \item coefficients: A vector of estimated coefficients.
@@ -26,8 +27,8 @@ mmKDE <- function(formula, data=list(), lower, upper, itermax, ...) UseMethod("m
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+#' \item h_y: The KDE bandwidth estimator for the dependent variable.
+#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item MOMy: The first \eqn{n} non central moments of the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
 #' \item MOMX: The first \eqn{n} non central moments of the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
 #' }
@@ -35,19 +36,19 @@ mmKDE <- function(formula, data=list(), lower, upper, itermax, ...) UseMethod("m
 #' @examples
 #' x <- 1:10
 #' y <- x+rnorm(10)
-#' mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50)
+#' mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
 #'
 #' @export
-mmKDE.default <- function(formula, data=list(), lower, upper, itermax, ...)
+mmKDE.default <- function(formula, data=list(), lower, upper, itermax, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-h_y <- Silverman(y)
+h_y <- bw(y, type)
 MOMy <- kdeGaussMom(ncol(X), y, h_y)
 
-mom <- DEoptim(momKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=2, ...), gamma=X, momy=MOMy, kdeGaussMom)
+mom <- DEoptim(momKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=6, ...), gamma=X, momy=MOMy, kdeGaussMom, type=type)
 
 mom$intercept <- if(attr(attr(mf, "terms"), "intercept") == 1) TRUE else FALSE
 
@@ -67,7 +68,7 @@ mom$call <- match.call()
 
 mom$h_y <- h_y
 mom$MOMy <- MOMy
-mom$h_X <- Silverman(mom$fitted.values)
+mom$h_X <- bw(mom$fitted.values, type)
 mom$MOMX <- kdeGaussMom(ncol(X), mom$fitted.values, mom$h_X)
 
 class(mom) <- "mmKDE"
@@ -114,7 +115,7 @@ rownames(TAB) <- names(object$coefficients)
 
 momTAB <- cbind(LHS = c(object$MOMy, object$h_y), RHS = c(object$MOMX, object$h_X))
 
-rownames(momTAB) <- c(1:length(object$MOMy), "Silverman BW")
+rownames(momTAB) <- c(1:length(object$MOMy), "BW")
     colnames(momTAB) <- c("LHS", "RHS")
 
 f <- object$fitted.values
@@ -171,13 +172,13 @@ invisible(x)
 
 #' @describeIn mmKDE formula method for mmKDE.
 #' @export
-mmKDE.formula <- function(formula, data=list(), lower, upper, itermax, ...)
+mmKDE.formula <- function(formula, data=list(), lower, upper, itermax, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-mom <- mmKDE.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, ...)
+mom <- mmKDE.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, type=type, ...)
 mom$call <- match.call()
 mom$formula <- formula
 mom$intercept <- attr(attr(mf, "terms"), "intercept")
@@ -193,7 +194,7 @@ mom
 #' @examples
 #' u <- 11:20
 #' v <- u+rnorm(10)
-#' mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50)
+#' mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
 #' predict(mom, newdata=data.frame(y=v, x=u))
 #'
 #' @export

@@ -40,7 +40,7 @@ The arc length of a univariate Gaussian kernel density estimator is approximated
 \examples{
 library(alR)
 mu <- rnorm(100)
-h <- Silverman(mu)
+h <- bw(mu, type=1)
 kdeGaussInt(mu, h, 0.025, 0.975, TRUE)
 kdeGaussInt(mu, h, -1.96, 1.96, FALSE)
 

@@ -22,13 +22,7 @@ qkdeGauss(x, mu, h)
 \value{
 dkdeGauss: The estimated value of the density function at the point x.
 
-pkdeGauss: A list with the following components:
-\itemize{
-\item value: The estimated value of the cumulative distribution function at the point \code{x}.
-\item abs.err: The absolute error between iterations.
-subdivisions: Number of subdivisions used in the numerical approximation.
-\item neval: Number of function evaluations used by the numerical approximation.
-}
+pkdeGauss: The estimated value of the cumulative distribution function at the point \code{x}.
 
 qkdeGauss: A list with the following components:
 \itemize{
@@ -50,7 +44,7 @@ The quantiles of the Gaussian kernel density estimator are calculated using Bren
 \examples{
 library(alR)
 x <- rnorm(100)
-h_x <- Silverman(x)
+h_x <- bw(x, type=1)
 dkdeGauss(0, x, h_x)
 pkdeGauss(0, x, h_x)
 qkdeGauss(0.5, x, h_x)

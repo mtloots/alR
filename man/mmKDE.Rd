@@ -10,9 +10,10 @@
 \alias{summary.mmKDE}
 \title{Moment matching for kernel density estimators.}
 \usage{
-mmKDE(formula, data = list(), lower, upper, itermax, ...)
+mmKDE(formula, data = list(), lower, upper, itermax, type, ...)
 
-\method{mmKDE}{default}(formula, data = list(), lower, upper, itermax, ...)
+\method{mmKDE}{default}(formula, data = list(), lower, upper, itermax, type,
+  ...)
 
 \method{print}{mmKDE}(x, ...)
 
@@ -20,7 +21,8 @@ mmKDE(formula, data = list(), lower, upper, itermax, ...)
 
 \method{print}{summary.mmKDE}(x, ...)
 
-\method{mmKDE}{formula}(formula, data = list(), lower, upper, itermax, ...)
+\method{mmKDE}{formula}(formula, data = list(), lower, upper, itermax, type,
+  ...)
 
 \method{predict}{mmKDE}(object, newdata = NULL, ...)
 }
@@ -33,6 +35,8 @@ mmKDE(formula, data = list(), lower, upper, itermax, ...)
 
 \item{itermax}{Number of iterations for the Differential Evolution algorithm.}
 
+\item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
+
 \item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
 
 \item{x}{An mmKDE object.}
@@ -44,7 +48,7 @@ mmKDE(formula, data = list(), lower, upper, itermax, ...)
 \value{
 A generic S3 object with class mmKDE.
 
-mmKDE.default: A list with all components from \code{\link[RcppDE]{DEoptim}}, as well as:
+mmKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, as well as:
 \itemize{
 \item intercept: Did the model contain an intercept TRUE/FALSE?
 \item coefficients: A vector of estimated coefficients.
@@ -53,8 +57,8 @@ mmKDE.default: A list with all components from \code{\link[RcppDE]{DEoptim}}, as
 \item fitted.values: A vector of estimated values.
 \item residuals: The residuals resulting from the fitted model.
 \item call: The call to the function.
-\item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-\item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+\item h_y: The KDE bandwidth estimator for the dependent variable.
+\item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 \item MOMy: The first \eqn{n} non central moments of the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
 \item MOMX: The first \eqn{n} non central moments of the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
 }
@@ -96,11 +100,11 @@ Estimate parameters of a linear model by matching the moments of kernel density 
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50)
+mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
 
 u <- 11:20
 v <- u+rnorm(10)
-mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50)
+mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
 predict(mom, newdata=data.frame(y=v, x=u))
 
 }

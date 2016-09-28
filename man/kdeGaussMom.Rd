@@ -22,7 +22,7 @@ Calculate the non-central moments for a univariate Gaussian kernel density estim
 \examples{
 library(alR)
 x <- rnorm(100)
-h_x <- Silverman(x)
+h_x <- bw(x, type=1)
 kdeGaussMom(3, x, h_x)
 
 }

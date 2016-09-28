@@ -1,10 +1,10 @@
 Package: alR
-Version: 0.5.4
-Date: 07/09/2016
+Version: 0.6.3
+Date: 28/09/2016
 Title: Arc lengths of statistical functions
 Description: Estimation, regression and classification using arc lengths.
 Depends: R (>= 3.2)
-Imports: pbdMPI, Rcpp, RcppDE, stats
+Imports: pbdMPI, DEoptim, Rcpp, stats
 LinkingTo: Rcpp, RcppArmadillo
 Author: M Theodor Loots <theodor.loots@up.ac.za>
 Maintainer: M Theodor Loots <theodor.loots@up.ac.za>

@@ -4,7 +4,7 @@
 \alias{alrKDE}
 \title{Objective function for KDE arc length matching.}
 \usage{
-alrKDE(beta, gamma, aly, q1, q2)
+alrKDE(beta, gamma, aly, q1, q2, type)
 }
 \arguments{
 \item{beta}{Vector of regression parameters.}
@@ -16,6 +16,8 @@ alrKDE(beta, gamma, aly, q1, q2)
 \item{q1}{A vector of points (not quantiles) specifying the lower limit of the arc length segments.}
 
 \item{q2}{A vector of points (not quantiles) specifying the upper limit of the arc length segments.}
+
+\item{type}{An integer specifying the bandwidth selection method, see \code{\link{bw}}.}
 }
 \value{
 Sum of squared differences between \code{gamma}*\code{beta} and \code{aly}.

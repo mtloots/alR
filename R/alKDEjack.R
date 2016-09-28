@@ -7,17 +7,18 @@
 #' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
 #' @param q1,q2 Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.
 #' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param jackName The name of the .rds file to store the alKDEjack object.  May include a path.
 #' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
 #'
 #' @return A generic S3 object with class alKDEjack.
 #'
 #' @import pbdMPI
-#' @importFrom RcppDE DEoptim DEoptim.control
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom stats coef ecdf fitted model.frame model.matrix model.response printCoefmat quantile
 #'
 #' @export
-alKDEjack <- function(formula, data=list(), lower, upper, q1, q2, itermax, jackName, ...) UseMethod("alKDEjack")
+alKDEjack <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, jackName, ...) UseMethod("alKDEjack")
 
 #' @describeIn alKDEjack default method for alKDEjack.
 #'
@@ -34,21 +35,23 @@ alKDEjack <- function(formula, data=list(), lower, upper, q1, q2, itermax, jackN
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+#' \item h_y: The KDE bandwidth estimator for the dependent variable.
+#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item ALy: \eqn{n} arc length segments of the KDE cast over the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
 #' \item ALX: \eqn{n} arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
 #' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
+#' p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 #' }
 #' 
 #' @export
-alKDEjack.default <- function(formula, data=list(), lower, upper, q1, q2, itermax, jackName, ...)
+alKDEjack.default <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, jackName, ...)
 {
 comm.set.seed(123, diff=TRUE)
 N <- nrow(data)
 
 ret.time <- comm.timer({
-ret <- task.pull(1:nrow(data), function(jid) alKDEshort(formula, data[-jid], lower, upper, q1, q2, itermax, ...))
+ret <- task.pull(1:nrow(data), function(jid) alKDEshort(formula, data[-jid], lower, upper, q1, q2, itermax, type, ...))
 })
 
 if(comm.rank() == 0)
@@ -57,7 +60,7 @@ mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-jack <- alKDE(formula, data, lower, upper, q1, q2, itermax, ...)
+jack <- alKDE(formula, data, lower, upper, q1, q2, itermax, type, ...)
 
 jack$call <- match.call()
 
@@ -134,7 +137,7 @@ rownames(TAB) <- names(object$coefficients)
 
 alTAB <- cbind(LHS = c(object$ALy, object$h_y), RHS = c(object$ALX, object$h_X))
 
-rownames(alTAB) <- c(1:length(object$ALy), "Silverman BW")
+rownames(alTAB) <- c(paste("[", round(object$p1, 5), ", ", round(object$p2, 5), "]", sep=""), "BW")
     colnames(alTAB) <- c("LHS", "RHS")
 
 f <- object$fitted.values
@@ -198,13 +201,13 @@ invisible(x)
 
 #' @describeIn alKDEjack formula method for alKDEjack.
 #' @export
-alKDEjack.formula <- function(formula, data=list(), lower, upper, q1, q2, itermax, jackName, ...)
+alKDEjack.formula <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, jackName, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-al <- alKDEjack.default(formula, data=data, lower=lower, upper=upper, q1=q1, q2=q2, itermax=itermax, jackName, ...)
+al <- alKDEjack.default(formula, data=data, lower=lower, upper=upper, q1=q1, q2=q2, itermax=itermax, type=type, jackName, ...)
 al$call <- match.call()
 al$formula <- formula
 al$intercept <- attr(attr(mf, "terms"), "intercept")

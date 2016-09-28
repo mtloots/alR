@@ -6,17 +6,18 @@
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
 #' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param jackName The name of the .rds file to store the mmKDEjack object.  May include a path.
 #' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
 #'
 #' @return A generic S3 object with class mmKDEjack.
 #'
 #' @import pbdMPI
-#' @importFrom RcppDE DEoptim DEoptim.control
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
-mmKDEjack <- function(formula, data=list(), lower, upper, itermax, jackName, ...) UseMethod("mmKDEjack")
+mmKDEjack <- function(formula, data=list(), lower, upper, itermax, type, jackName, ...) UseMethod("mmKDEjack")
 
 #' @describeIn mmKDEjack default method for mmKDEjack.
 #'
@@ -34,18 +35,18 @@ mmKDEjack <- function(formula, data=list(), lower, upper, itermax, jackName, ...
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+#' \item h_y: The KDE bandwidth estimator for the dependent variable.
+#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item MOMy: The first \eqn{n} non central moments of the dependent variable, where \eqn{n} is the number of columns in the design matrix.
 #' \item MOMX: The first \eqn{n} non central moments of the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where \eqn{n} is the number of columns in the design matrix.
 #' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
 #' }
 #' 
 #' @export
-mmKDEjack.default <- function(formula, data=list(), lower, upper, itermax, jackName, ...)
+mmKDEjack.default <- function(formula, data=list(), lower, upper, itermax, type, jackName, ...)
 {
 ret.time <- comm.timer({
-ret <- task.pull(1:nrow(data), function(jid) mmKDEshort(formula, data[-jid], lower, upper, itermax, ...))
+ret <- task.pull(1:nrow(data), function(jid) mmKDEshort(formula, data[-jid], lower, upper, itermax, type, ...))
 })
 
 if(comm.rank() == 0)
@@ -54,7 +55,7 @@ mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-jack <- mmKDE(formula, data, lower, upper, itermax, ...)
+jack <- mmKDE(formula, data, lower, upper, itermax, type, ...)
 
 jack$call <- match.call()
 
@@ -131,7 +132,7 @@ rownames(TAB) <- names(object$coefficients)
 
 momTAB <- cbind(LHS = c(object$MOMy, object$h_y), RHS = c(object$MOMX, object$h_X))
 
-rownames(momTAB) <- c(1:length(object$MOMy), "Silverman BW")
+rownames(momTAB) <- c(1:length(object$MOMy), "BW")
     colnames(momTAB) <- c("LHS", "RHS")
 
 f <- object$fitted.values
@@ -195,13 +196,13 @@ invisible(x)
 
 #' @describeIn mmKDEjack formula method for mmKDEjack.
 #' @export
-mmKDEjack.formula <- function(formula, data=list(), lower, upper, itermax, jackName, ...)
+mmKDEjack.formula <- function(formula, data=list(), lower, upper, itermax, type, jackName, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-mom <- mmKDEjack.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, jackName, ...)
+mom <- mmKDEjack.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, type=type, jackName, ...)
 mom$call <- match.call()
 mom$formula <- formula
 mom$intercept <- attr(attr(mf, "terms"), "intercept")

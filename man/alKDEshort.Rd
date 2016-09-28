@@ -4,7 +4,7 @@
 \alias{alKDEshort}
 \title{Arc length matching for kernel density estimators.}
 \usage{
-alKDEshort(formula, data = list(), lower, upper, q1, q2, itermax, ...)
+alKDEshort(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
 }
 \arguments{
 \item{formula}{An LHS ~ RHS formula, specifying the linear model to be estimated.}
@@ -16,6 +16,8 @@ alKDEshort(formula, data = list(), lower, upper, q1, q2, itermax, ...)
 \item{q1, q2}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
 
 \item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+
+\item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
 \item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
 }
@@ -35,7 +37,7 @@ A shortened version of \code{alKDE}.
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-alKDEshort(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.1,0.5), q2=c(0.5,0.9), itermax=50)
+alKDEshort(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.1,0.5), q2=c(0.5,0.9), itermax=50, type=1)
 
 }
 

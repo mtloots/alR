@@ -10,10 +10,10 @@
 \alias{summary.alKDE}
 \title{Arc length matching for kernel density estimators.}
 \usage{
-alKDE(formula, data = list(), lower, upper, q1, q2, itermax, ...)
+alKDE(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
 
 \method{alKDE}{default}(formula, data = list(), lower, upper, q1, q2, itermax,
-  ...)
+  type, ...)
 
 \method{print}{alKDE}(x, ...)
 
@@ -22,7 +22,7 @@ alKDE(formula, data = list(), lower, upper, q1, q2, itermax, ...)
 \method{print}{summary.alKDE}(x, ...)
 
 \method{alKDE}{formula}(formula, data = list(), lower, upper, q1, q2, itermax,
-  ...)
+  type, ...)
 
 \method{predict}{alKDE}(object, newdata = NULL, ...)
 }
@@ -37,6 +37,8 @@ alKDE(formula, data = list(), lower, upper, q1, q2, itermax, ...)
 
 \item{itermax}{Number of iterations for the Differential Evolution algorithm.}
 
+\item{type}{An integer specifying the bandwidth selection method, see \code{\link{bw}}.}
+
 \item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
 
 \item{x}{An alKDE object.}
@@ -48,7 +50,7 @@ alKDE(formula, data = list(), lower, upper, q1, q2, itermax, ...)
 \value{
 A generic S3 object with class alKDE.
 
-alKDE.default: A list with all components from \code{\link[RcppDE]{DEoptim}}, as well as:
+alKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, as well as:
 \itemize{
 \item intercept: Did the model contain an intercept TRUE/FALSE?
 \item coefficients: A vector of estimated coefficients.
@@ -57,10 +59,12 @@ alKDE.default: A list with all components from \code{\link[RcppDE]{DEoptim}}, as
 \item fitted.values: A vector of estimated values.
 \item residuals: The residuals resulting from the fitted model.
 \item call: The call to the function.
-\item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-\item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+\item h_y: The KDE bandwidth estimator for the dependent variable.
+\item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 \item ALy: \eqn{n} arc length segments of the KDE cast over the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
 \item ALX: \eqn{n} arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
+p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
+p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 }
 
 summary.alKDE: A list of class summary.alKDE with the following components:
@@ -100,11 +104,11 @@ Estimate parameters of a linear model by matching the arc lengths of kernel dens
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-alKDE.default(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50)
+alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=1)
 
 u <- 11:20
 v <- u+rnorm(10)
-al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50)
+al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=1)
 predict(al, newdata=data.frame(y=v, x=u))
 
 }

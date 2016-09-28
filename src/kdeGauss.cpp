@@ -147,7 +147,7 @@ _["msg"] = msg);
 //' @examples
 //' library(alR)
 //' x <- rnorm(100)
-//' h_x <- Silverman(x)
+//' h_x <- bw(x, type=1)
 //' dkdeGauss(0, x, h_x)
 //' @export
 // [[Rcpp::export]]
@@ -155,7 +155,6 @@ double dkdeGauss(double x, NumericVector mu, double h)
 {
 return (1.0/(mu.size()*sqrt(2*PI)*h))*sum(exp(-0.5*pow((x-mu)/h, 2)));
 }
-
 
 void pdfkdeGauss(double *t, int n, void *ex)
 {
@@ -173,22 +172,21 @@ t[i] = dkdeGauss(t[i], mu, h);
 //' @rdname kdeGauss
 //' @examples
 //' pkdeGauss(0, x, h_x)
-//' @return pkdeGauss: A list with the following components:
-//' \itemize{
-//' \item value: The estimated value of the cumulative distribution function at the point \code{x}.
-//' \item abs.err: The absolute error between iterations.
-//' subdivisions: Number of subdivisions used in the numerical approximation.
-//' \item neval: Number of function evaluations used by the numerical approximation.
-//' }
+//' @return pkdeGauss: The estimated value of the cumulative distribution function at the point \code{x}.
 //' @export
 // [[Rcpp::export]]
-List pkdeGauss(double x, NumericVector mu, double h)
+double pkdeGauss(double x, NumericVector mu, double h)
 {
-Params param = {mu, h};
+int n = mu.size();
+double kde=0;
 
-return Rcpp_integrate_b(pdfkdeGauss, &param, x);
+for (int i=0; i<n; i++)
+{
+kde += R::pnorm(x, mu[i], h, true, false);
 }
 
+return kde/n;
+}
 
 double qkde(double x, void *ex)
 {
@@ -197,7 +195,7 @@ NumericVector mu = param->mu;
 double h = param->h;
 double q = param->q;
 
-return double(pkdeGauss(x, mu, h)[0])-q;
+return double(pkdeGauss(x, mu, h))-q;
 }
 
 
@@ -237,7 +235,7 @@ i = 1001;
 }
 
 return List::create(_["result"] = bf[0],
-_["value"] = pkdeGauss(bf[0], mu, h)[0],
+_["value"] = pkdeGauss(bf[0], mu, h),
 _["obj.fun"] = bf[1],
 _["iterations"] = bf[2],
 _["steps"] = steps);

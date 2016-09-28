@@ -10,11 +10,11 @@
 \alias{summary.alKDEjack}
 \title{Arc length matching for kernel density estimators.}
 \usage{
-alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, jackName,
-  ...)
+alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, type,
+  jackName, ...)
 
 \method{alKDEjack}{default}(formula, data = list(), lower, upper, q1, q2,
-  itermax, jackName, ...)
+  itermax, type, jackName, ...)
 
 \method{print}{alKDEjack}(x, ...)
 
@@ -23,7 +23,7 @@ alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, jackName,
 \method{print}{summary.alKDEjack}(x, ...)
 
 \method{alKDEjack}{formula}(formula, data = list(), lower, upper, q1, q2,
-  itermax, jackName, ...)
+  itermax, type, jackName, ...)
 
 \method{predict}{alKDEjack}(object, newdata = NULL, ...)
 }
@@ -37,6 +37,8 @@ alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, jackName,
 \item{q1, q2}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
 
 \item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+
+\item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
 \item{jackName}{The name of the .rds file to store the alKDEjack object.  May include a path.}
 
@@ -64,11 +66,13 @@ alKDEjack.default: A list object (saved using \code{saveRDS} in the specified lo
 \item fitted.values: A vector of estimated values.
 \item residuals: The residuals resulting from the fitted model.
 \item call: The call to the function.
-\item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-\item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+\item h_y: The KDE bandwidth estimator for the dependent variable.
+\item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 \item ALy: \eqn{n} arc length segments of the KDE cast over the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
 \item ALX: \eqn{n} arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
 \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
+p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 }
 
 summary.alKDEjack: A list of class summary.alKDEjack with the following components:

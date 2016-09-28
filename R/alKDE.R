@@ -7,18 +7,19 @@
 #' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
 #' @param q1,q2 Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.
 #' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param type An integer specifying the bandwidth selection method, see \code{\link{bw}}.
 #' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
 #'
 #' @return A generic S3 object with class alKDE.
-#' @importFrom RcppDE DEoptim DEoptim.control
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
-alKDE <- function(formula, data=list(), lower, upper, q1, q2, itermax, ...) UseMethod("alKDE")
+alKDE <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, ...) UseMethod("alKDE")
 
 #' @describeIn alKDE default method for alKDE.
 #'
-#' @return alKDE.default: A list with all components from \code{\link[RcppDE]{DEoptim}}, as well as:
+#' @return alKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, as well as:
 #' \itemize{
 #' \item intercept: Did the model contain an intercept TRUE/FALSE?
 #' \item coefficients: A vector of estimated coefficients.
@@ -27,32 +28,34 @@ alKDE <- function(formula, data=list(), lower, upper, q1, q2, itermax, ...) UseM
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+#' \item h_y: The KDE bandwidth estimator for the dependent variable.
+#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item ALy: \eqn{n} arc length segments of the KDE cast over the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
 #' \item ALX: \eqn{n} arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
+#' p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
+#' p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 #' }
 #' 
 #' @examples
 #' x <- 1:10
 #' y <- x+rnorm(10)
-#' alKDE.default(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50)
+#' alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=1)
 #'
 #' @export
-alKDE.default <- function(formula, data=list(), lower, upper, q1, q2, itermax, ...)
+alKDE.default <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-h_y <- Silverman(y)
+h_y <- bw(y, type)
 
 p1 <- sapply(1:length(q1), function(i) qkdeGauss(q1[i], y, h_y)$result)
 p2 <- sapply(1:length(q2), function(i) qkdeGauss(q2[i], y, h_y)$result)
 
 ALy <- kdeGaussInt2(y, h_y, p1, p2, FALSE)
 
-al <- DEoptim(alrKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=2, ...), gamma=X, aly=ALy, q1=p1, q2=p2)
+al <- DEoptim(alrKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=6, ...), gamma=X, aly=ALy, q1=p1, q2=p2, type=type)
 
 al$intercept <- if(attr(attr(mf, "terms"), "intercept") == 1) TRUE else FALSE
 
@@ -72,8 +75,10 @@ al$call <- match.call()
 
 al$h_y <- h_y
 al$ALy <- ALy
-al$h_X <- Silverman(al$fitted.values)
+al$h_X <- bw(al$fitted.values, type)
 al$ALX <- kdeGaussInt2(al$fitted.values, al$h_X, p1, p2, FALSE)
+al$p1 <- p1
+al$p2 <- p2
 
 class(al) <- "alKDE"
 al
@@ -119,7 +124,7 @@ rownames(TAB) <- names(object$coefficients)
 
 alTAB <- cbind(LHS = c(object$ALy, object$h_y), RHS = c(object$ALX, object$h_X))
 
-rownames(alTAB) <- c(1:length(object$ALy), "Silverman BW")
+rownames(alTAB) <- c(paste("[", round(object$p1, 5), ", ", round(object$p2, 5), "]", sep=""), "BW")
     colnames(alTAB) <- c("LHS", "RHS")
 
 f <- object$fitted.values
@@ -176,13 +181,13 @@ invisible(x)
 
 #' @describeIn alKDE formula method for alKDE.
 #' @export
-alKDE.formula <- function(formula, data=list(), lower, upper, q1, q2, itermax, ...)
+alKDE.formula <- function(formula, data=list(), lower, upper, q1, q2, itermax, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-al <- alKDE.default(formula, data=data, lower=lower, upper=upper, q1=q1, q2=q2, itermax=itermax, ...)
+al <- alKDE.default(formula, data=data, lower=lower, upper=upper, q1=q1, q2=q2, itermax=itermax, type=type, ...)
 al$call <- match.call()
 al$formula <- formula
 al$intercept <- attr(attr(mf, "terms"), "intercept")
@@ -198,7 +203,7 @@ al
 #' @examples
 #' u <- 11:20
 #' v <- u+rnorm(10)
-#' al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50)
+#' al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=1)
 #' predict(al, newdata=data.frame(y=v, x=u))
 #'
 #' @export

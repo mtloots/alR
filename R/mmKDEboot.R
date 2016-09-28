@@ -6,6 +6,7 @@
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
 #' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param bootstraps An integer giving the number of bootstrap samples.
 #' @param bootName The name of the .rds file to store the mmKDEboot object.  May include a path.
 #' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
@@ -13,11 +14,11 @@
 #' @return A generic S3 object with class mmKDEboot.
 #'
 #' @import pbdMPI
-#' @importFrom RcppDE DEoptim DEoptim.control
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom stats coef ecdf fitted model.frame model.matrix model.response printCoefmat quantile
 #'
 #' @export
-mmKDEboot <- function(formula, data=list(), lower, upper, itermax, bootstraps, bootName, ...) UseMethod("mmKDEboot")
+mmKDEboot <- function(formula, data=list(), lower, upper, itermax, type, bootstraps, bootName, ...) UseMethod("mmKDEboot")
 
 #' @describeIn mmKDEboot default method for mmKDEboot.
 #'
@@ -34,15 +35,15 @@ mmKDEboot <- function(formula, data=list(), lower, upper, itermax, bootstraps, b
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item h_y: The KDE bandwidth estimator for the dependent variable, using Silverman's rule of thumb.
-#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}, using Silverman's rule of thumb.
+#' \item h_y: The KDE bandwidth estimator for the dependent variable.
+#' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item MOMy: The first \eqn{n} non central moments of the dependent variable, where \eqn{n} is the number of columns in the design matrix.
 #' \item MOMX: The first \eqn{n} non central moments of the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where \eqn{n} is the number of columns in the design matrix.
 #' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
 #' }
 #' 
 #' @export
-mmKDEboot.default <- function(formula, data=list(), lower, upper, itermax, bootstraps, bootName, ...)
+mmKDEboot.default <- function(formula, data=list(), lower, upper, itermax, type, bootstraps, bootName, ...)
 {
 comm.set.seed(123, diff=TRUE)
 N <- nrow(data)
@@ -51,7 +52,7 @@ ret.time <- comm.timer({
 ret <- task.pull(1:bootstraps, function(jid)
 {
 id <- sample(1:N, N, replace=TRUE)
-mmKDEshort(formula, data[id,], lower, upper, itermax, ...)
+mmKDEshort(formula, data[id,], lower, upper, itermax, type, ...)
 })
 })
 
@@ -61,7 +62,7 @@ mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-boot <- mmKDE(formula, data, lower, upper, itermax, ...)
+boot <- mmKDE(formula, data, lower, upper, itermax, type, ...)
 
 boot$call <- match.call()
 
@@ -137,7 +138,7 @@ rownames(TAB) <- names(object$coefficients)
 
 momTAB <- cbind(LHS = c(object$MOMy, object$h_y), RHS = c(object$MOMX, object$h_X))
 
-rownames(momTAB) <- c(1:length(object$MOMy), "Silverman BW")
+rownames(momTAB) <- c(1:length(object$MOMy), "BW")
     colnames(momTAB) <- c("LHS", "RHS")
 
 f <- object$fitted.values
@@ -201,13 +202,13 @@ invisible(x)
 
 #' @describeIn mmKDEboot formula method for mmKDEboot.
 #' @export
-mmKDEboot.formula <- function(formula, data=list(), lower, upper, itermax, bootstraps, bootName, ...)
+mmKDEboot.formula <- function(formula, data=list(), lower, upper, itermax, type, bootstraps, bootName, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-mom <- mmKDEboot.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, bootstraps, bootName, ...)
+mom <- mmKDEboot.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, type=type, bootstraps, bootName, ...)
 mom$call <- match.call()
 mom$formula <- formula
 mom$intercept <- attr(attr(mf, "terms"), "intercept")

@@ -4,7 +4,7 @@
 \alias{momKDE}
 \title{Objective function for KDE moment matching.}
 \usage{
-momKDE(beta, gamma, momy, kdeGaussMom)
+momKDE(beta, gamma, momy, kdeGaussMom, type)
 }
 \arguments{
 \item{beta}{Vector of regression parameters.}
@@ -14,6 +14,8 @@ momKDE(beta, gamma, momy, kdeGaussMom)
 \item{momy}{A numerical vector of moments to be matched to (same length as \code{beta}).}
 
 \item{kdeGaussMom}{A R function object to be passed that calculates exact moments.}
+
+\item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 }
 \value{
 Sum of squared differences between \code{gamma}*\code{beta} and \code{momy}.
