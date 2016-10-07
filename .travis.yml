@@ -1,7 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: true
+sudo: false
 cache: packages
-sudo apt-get build-dep r-cran-pbdMPI
-sudo R CMD INSTALL pbdMPI --configure-args=--with-mpi=/usr/lib/openmpi
+r_github_packages: RBigData/pbdMPI
