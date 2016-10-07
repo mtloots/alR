@@ -5,7 +5,7 @@ context("General functionality of kdeGaussMom")
 test_that("numerical result is valid", {
 set.seed(1)
 x <- rnorm(100)
-h_x <- bw(x, type=1)
+h_x <- bw(x, type=-1)
 mom.theo <- numeric(3)
 mom.theo[1] <- mean(x)
 mom.theo[2] <- (1/100)*(sum((x)^2+(h_x)^2))

@@ -32,7 +32,7 @@ else DD(D(expr, name), name, order-1)
 #' @examples
 #' library(alR)
 #' x <- rnorm(100)
-#' h_x <- bw(x, type=1)
+#' h_x <- bw(x, type=-1)
 #' kdeGaussMom(3, x, h_x)
 #'
 #' @export

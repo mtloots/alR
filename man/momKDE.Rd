@@ -18,7 +18,7 @@ momKDE(beta, gamma, momy, kdeGaussMom, type)
 \item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 }
 \value{
-Sum of squared differences between \code{gamma}*\code{beta} and \code{momy}.
+Square root of sum of squared differences between \code{gamma}*\code{beta} and \code{momy} (Eucledian distance).
 }
 \description{
 The moments of kernel density estimates are matched.

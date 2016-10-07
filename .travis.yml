@@ -1,5 +1,5 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo apt-get build-dep r-cran-rmpi
-sudo R CMD INSTALL Rmpi --configure-args=--with-mpi=/usr/lib/openmpi
+sudo: false
+cache: packages

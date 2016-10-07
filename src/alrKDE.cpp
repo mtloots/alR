@@ -1,7 +1,7 @@
 #include <RcppArmadillo.h>
 using namespace Rcpp;
-#include "alR.h"
 // [[Rcpp::depends(RcppArmadillo)]]
+#include "alR.h"
 
 //' Objective function for KDE arc length matching.
 //'
@@ -14,14 +14,14 @@ using namespace Rcpp;
 //' @param q2 A vector of points (not quantiles) specifying the upper limit of the arc length segments.
 //' @param type An integer specifying the bandwidth selection method, see \code{\link{bw}}.
 //'
-//' @return Sum of squared differences between \code{gamma}*\code{beta} and \code{aly}.
+//' @return Square root of the sum of squared differences between \code{gamma}*\code{beta} and \code{aly} (Eucledian distance).
 //'
 //' @export
 // [[Rcpp::export]]
 double alrKDE(const arma::vec& beta, const arma::mat& gamma, const arma::vec& aly, const arma::vec& q1, const arma::vec& q2, const int& type)
 {
 arma::vec X = gamma*beta;
-double h_gamma = bw(X, type);
+double h_gamma = bw(as<NumericVector>(wrap(X)), type);
 arma::vec al_gamma = as<NumericVector>(wrap(kdeGaussInt2(as<NumericVector>(wrap(X)), h_gamma, as<NumericVector>(wrap(q1)), as<NumericVector>(wrap(q2)), false)));
-return sum(pow(al_gamma-aly, 2));
+return sqrt(arma::sum(pow(al_gamma-aly, 2)));
 }

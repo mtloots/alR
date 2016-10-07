@@ -1,33 +1,10 @@
 #include <Rcpp.h>
-#include <R_ext/Applic.h>
 using namespace Rcpp;
-#include "alR_ext.h"
+#include <R_ext/Applic.h>
+#include "alR.h"
 
 
 typedef struct { NumericVector mu; double h; } Params;
-
-
-List Rcpp_integrate(integr_fn f, void *ex, double lower, double upper, int subdiv = 100, double eps_abs = 1e-10, double eps_rel = 1e-10)
-{
-int lenw = 4 * subdiv;
-int *iwork = new int[subdiv];
-double *work = new double[lenw];
-double value;
-double abs_err;
-int subdiv_used;
-int neval;
-int error;
-
-Rdqags(f, ex, &lower, &upper, &eps_abs, &eps_rel, &value, &abs_err, &neval, &error, &subdiv, &lenw, &subdiv_used, iwork, work);
-
-delete [] iwork;
-delete [] work;
-
-return List::create(_["value"] = value,
-_["abs.err"] = abs_err,
-_["subdivisions"] = subdiv_used,
-_["neval"] = neval);
-}
 
 
 void apdfkdeGauss(double *t, int n, void *ex)
@@ -38,7 +15,7 @@ double h = param->h;
 
 for(int i = 0; i < n; i++)
 {
-t[i] = sqrt(1+(1/(2*PI*pow(mu.size(), 2))*pow(h, 6))*sum(pow((t[i]-mu)*exp(-0.5*pow((t[i]-mu)/h, 2)), 2)));
+t[i] = sqrt(1+(1/(2*PI*pow(mu.size(), 2)*pow(h, 6)))*pow(sum((t[i]-mu)*exp(-0.5*pow((t[i]-mu)/h, 2))), 2));
 }
 }
 
@@ -47,7 +24,9 @@ t[i] = sqrt(1+(1/(2*PI*pow(mu.size(), 2))*pow(h, 6))*sum(pow((t[i]-mu)*exp(-0.5*
 //'
 //' Calculate the arc length for a univariate Gaussian kernel density estimator over a specified interval.
 //'
-//' The arc length of a univariate Gaussian kernel density estimator is approximated using the numerical integration C code implimented for R's integrate functions, i.e. using Rdqags.  For this approximation, subdiv = 100 (100 subdivisions), and eps_abs = eps_rel = 1e-10, i.e. the absolute and relative errors respectively.
+//' For \code{kdeGaussInt} and \code{kdeGaussInt2}, the arc length of a univariate Gaussian kernel density estimator is approximated using the numerical integration C code implimented for R's integrate functions, i.e. using Rdqags.  For this approximation, subdiv = 100 (100 subdivisions), and eps_abs = eps_rel = 1e-10, i.e. the absolute and relative errors respectively.
+//'
+//' For \code{kdeGaussIntApprox}, the arc length is approximated by constructing the KDE, and then calculated as the sum of a finite collection of straight lines, based on the Pythagorean theorem.
 //'
 //' @param mu A vector of data points on which the kernel density estimator is based.
 //' @param h The kernel density estimator bandwidth.
@@ -109,6 +88,65 @@ NumericVector result(n);
 for (i=0; i<n; i++)
 {
 result[i] = kdeGaussInt(mu, h, q1[i], q2[i], quantile)[0];
+}
+
+return result;
+}
+
+
+//' @rdname kdeGaussInt
+//' @return kdeGaussIntApprox: The resultant arc length.
+//' @examples
+//' kdeGaussIntApprox(mu, h, 0.025, 0.975, TRUE)
+//' kdeGaussIntApprox(mu, h, -1.96, 1.96, FALSE)
+//'
+//' @export
+// [[Rcpp::export]]
+double kdeGaussIntApprox(NumericVector mu, double h, double q1, double q2, bool quantile)
+{
+double Q1, Q2;
+
+if (quantile)
+{
+Q1 = qsamp(mu, q1);
+Q2 = qsamp(mu, q2);
+}
+else
+{
+Q1 = q1;
+Q2 = q2;
+}
+
+NumericVector x = mu[(mu >= Q1) & (mu <= Q2)];
+int n = x.size();
+std::sort(x.begin(), x.end());
+NumericVector xHat(n);
+
+for (int i=0; i<n; i++)
+{
+xHat[i] = dkdeGauss(x[i], x, h);
+}
+
+return sum(sqrt(pow(diff(x), 2)+pow(diff(xHat), 2)));
+}
+
+//' @rdname kdeGaussInt
+//' @return kdeGaussIntApprox2: A vector having length equal to that of the vector of lower quantile bounds, containing the discrete arc lengths requested for a Gaussian kernel density estimator.
+//'
+//' @examples
+//' kdeGaussIntApprox2(mu, h, c(0.025, 0.5), c(0.5, 0.975), TRUE)
+//' kdeGaussIntApprox2(mu, h, c(-1.96, 0), c(0, 1.96), FALSE)
+//'
+//' @export
+// [[Rcpp::export]]
+NumericVector kdeGaussIntApprox2(NumericVector mu, double h, NumericVector q1, NumericVector q2, bool quantile)
+{
+int i, n = q1.size();
+NumericVector result(n);
+
+for (i=0; i<n; i++)
+{
+result[i] = kdeGaussIntApprox(mu, h, q1[i], q2[i], quantile);
 }
 
 return result;

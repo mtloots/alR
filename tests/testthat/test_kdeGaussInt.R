@@ -5,7 +5,7 @@ context("General functionality of kdeGaussInt")
 test_that("numerical result is valid", {
 set.seed(1)
 mu <- rnorm(1000)
-h <- bw(mu, type=1)
+h <- bw(mu, type=-1)
 
 integrand <- function(y, mu, h)
 {
@@ -33,18 +33,18 @@ int_c[4] <- kdeGaussInt(mu, h, -1.96, 1.96, FALSE)$value
 int_c[5] <- kdeGaussInt(mu, h, -1.96, 0, FALSE)$value
 int_c[6] <- kdeGaussInt(mu, h, 0, 1.96, FALSE)$value
 
-expect_equal(round(int_r[1],0), round(int_c[1],0))
-expect_equal(round(int_r[2],0), round(int_c[2],0))
-expect_equal(round(int_r[3],0), round(int_c[3],0))
-expect_equal(round(int_r[4],0), round(int_c[4],0))
-expect_equal(round(int_r[5],1), round(int_c[5],1))
-expect_equal(round(int_r[6],1), round(int_c[6],1))
+expect_equal(int_r[1], int_c[1])
+expect_equal(int_r[2], int_c[2])
+expect_equal(int_r[3], int_c[3])
+expect_equal(int_r[4], int_c[4])
+expect_equal(int_r[5], int_c[5])
+expect_equal(int_r[6], int_c[6])
 })
 
 test_that("quantile T/F should yield similar results", {
 set.seed(1)
 mu <- rnorm(1000)
-h <- bw(mu, type=1)
+h <- bw(mu, type=-1)
 
 X1 <- qkdeGauss(0.05, mu, h)$result
 X2 <- qkdeGauss(0.2, mu, h)$result

@@ -35,7 +35,7 @@ A shortened version of \code{mmKDE}.
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-mmKDEshort(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
+mmKDEshort(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=-1)
 
 }
 

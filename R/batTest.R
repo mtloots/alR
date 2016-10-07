@@ -42,7 +42,7 @@ xprop[i+1] <- xecdf(CDF[i])
 }
 
 yprop[k+1] <- 1
-xprop[k+1] <-1
+xprop[k+1] <- 1
 
 Yprop <- diff(yprop)
 Xprop <- diff(xprop)

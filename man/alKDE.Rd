@@ -104,11 +104,11 @@ Estimate parameters of a linear model by matching the arc lengths of kernel dens
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=1)
+alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=-1)
 
 u <- 11:20
 v <- u+rnorm(10)
-al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=1)
+al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=-1)
 predict(al, newdata=data.frame(y=v, x=u))
 
 }

@@ -114,7 +114,7 @@ print(x$coefficients, digits=5)
 #' @export
 summary.mmKDEjack <- function(object, ...)
 {
-ci <- do.call(rbind, lapply(1:ncol(object$coefDist), function(j) quantile(object$coefDist[,j], probs=c(0.025, 0.975), names=FALSE, type=1)))
+ci <- do.call(rbind, lapply(1:ncol(object$coefDist), function(j) c(qsamp(object$coefDist[,j], 0.025), qsamp(object$coefDist[,j], 0.975))))
 
 pval <- do.call(rbind, lapply(1:length(object$coefficients), function(i) {
 fn <- ecdf(object$coefDist[,i]-object$jcoefficients[i])

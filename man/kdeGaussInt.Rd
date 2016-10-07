@@ -3,11 +3,17 @@
 \name{kdeGaussInt}
 \alias{kdeGaussInt}
 \alias{kdeGaussInt2}
+\alias{kdeGaussIntApprox}
+\alias{kdeGaussIntApprox2}
 \title{Arc length of Gaussian KDE.}
 \usage{
 kdeGaussInt(mu, h, q1, q2, quantile)
 
 kdeGaussInt2(mu, h, q1, q2, quantile)
+
+kdeGaussIntApprox(mu, h, q1, q2, quantile)
+
+kdeGaussIntApprox2(mu, h, q1, q2, quantile)
 }
 \arguments{
 \item{mu}{A vector of data points on which the kernel density estimator is based.}
@@ -30,12 +36,18 @@ subdivisions: Number of subdivisions used in the numerical approximation.
 }
 
 kdeGaussInt2: A vector having length equal to that of the vector of lower quantile bounds, containing the arc lengths requested for a Gaussian kernel density estimator.
+
+kdeGaussIntApprox: The resultant arc length.
+
+kdeGaussIntApprox2: A vector having length equal to that of the vector of lower quantile bounds, containing the discrete arc lengths requested for a Gaussian kernel density estimator.
 }
 \description{
 Calculate the arc length for a univariate Gaussian kernel density estimator over a specified interval.
 }
 \details{
-The arc length of a univariate Gaussian kernel density estimator is approximated using the numerical integration C code implimented for R's integrate functions, i.e. using Rdqags.  For this approximation, subdiv = 100 (100 subdivisions), and eps_abs = eps_rel = 1e-10, i.e. the absolute and relative errors respectively.
+For \code{kdeGaussInt} and \code{kdeGaussInt2}, the arc length of a univariate Gaussian kernel density estimator is approximated using the numerical integration C code implimented for R's integrate functions, i.e. using Rdqags.  For this approximation, subdiv = 100 (100 subdivisions), and eps_abs = eps_rel = 1e-10, i.e. the absolute and relative errors respectively.
+
+For \code{kdeGaussIntApprox}, the arc length is approximated by constructing the KDE, and then calculated as the sum of a finite collection of straight lines, based on the Pythagorean theorem.
 }
 \examples{
 library(alR)
@@ -46,6 +58,12 @@ kdeGaussInt(mu, h, -1.96, 1.96, FALSE)
 
 kdeGaussInt2(mu, h, c(0.025, 0.5), c(0.5, 0.975), TRUE)
 kdeGaussInt2(mu, h, c(-1.96, 0), c(0, 1.96), FALSE)
+
+kdeGaussIntApprox(mu, h, 0.025, 0.975, TRUE)
+kdeGaussIntApprox(mu, h, -1.96, 1.96, FALSE)
+
+kdeGaussIntApprox2(mu, h, c(0.025, 0.5), c(0.5, 0.975), TRUE)
+kdeGaussIntApprox2(mu, h, c(-1.96, 0), c(0, 1.96), FALSE)
 
 }
 

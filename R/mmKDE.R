@@ -36,7 +36,7 @@ mmKDE <- function(formula, data=list(), lower, upper, itermax, type, ...) UseMet
 #' @examples
 #' x <- 1:10
 #' y <- x+rnorm(10)
-#' mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
+#' mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=-1)
 #'
 #' @export
 mmKDE.default <- function(formula, data=list(), lower, upper, itermax, type, ...)
@@ -194,7 +194,7 @@ mom
 #' @examples
 #' u <- 11:20
 #' v <- u+rnorm(10)
-#' mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=1)
+#' mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=-1)
 #' predict(mom, newdata=data.frame(y=v, x=u))
 #'
 #' @export

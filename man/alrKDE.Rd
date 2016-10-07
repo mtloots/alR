@@ -20,7 +20,7 @@ alrKDE(beta, gamma, aly, q1, q2, type)
 \item{type}{An integer specifying the bandwidth selection method, see \code{\link{bw}}.}
 }
 \value{
-Sum of squared differences between \code{gamma}*\code{beta} and \code{aly}.
+Square root of the sum of squared differences between \code{gamma}*\code{beta} and \code{aly} (Eucledian distance).
 }
 \description{
 The arc lengths over specified intervals, in the domain of kernel density estimates, are matched.
