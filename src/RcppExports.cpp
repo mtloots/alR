@@ -40,17 +40,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matrixSqrt
-NumericMatrix matrixSqrt(NumericMatrix x);
-RcppExport SEXP alR_matrixSqrt(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrixSqrt(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // alrKDE
 double alrKDE(const arma::vec& beta, const arma::mat& gamma, const arma::vec& aly, const arma::vec& q1, const arma::vec& q2, const int& type);
 RcppExport SEXP alR_alrKDE(SEXP betaSEXP, SEXP gammaSEXP, SEXP alySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP typeSEXP) {

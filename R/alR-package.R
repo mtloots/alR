@@ -7,7 +7,6 @@
 #' @docType package
 #' @useDynLib alR
 #' @importFrom Rcpp sourceCpp
-#' @importFrom RcppParallel RcppParallelLibs
 #' @exportPattern "^[[:alpha:]]+"
 NULL
 ## NULL

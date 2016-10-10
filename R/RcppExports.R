@@ -14,6 +14,8 @@
 #' This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
 #'
 #' @param x A vector of sample values.
+#' @param mu A real value specifying the mean of the normal distribution.
+#' @param sigma A positive real number specifying the scale parameter of the normal distribution.
 #' @param q1,q2 Vectors specifying the quantiles (or points if quantile=FALSE) over which arc length segments are to be computed.
 #' @param quantile TRUE/FALSE whether q1 and q2 are quantiles, or elements of the domain of \code{x}.
 #' @param dc TRUE/FALSE:  Should the discrete or continuous sample statistic be used.
@@ -45,10 +47,6 @@ alE <- function(x, q1, q2, dc, type) {
 #' @return alEdist: A vector (matrix) of arc lengths over the specified interval(s), i.e. the simulated distribution for the chosen sample arc length statistic.
 alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type) {
     .Call('alR_alEdist', PACKAGE = 'alR', n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
-}
-
-matrixSqrt <- function(x) {
-    .Call('alR_matrixSqrt', PACKAGE = 'alR', x)
 }
 
 #' Objective function for KDE arc length matching.

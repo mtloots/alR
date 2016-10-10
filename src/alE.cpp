@@ -1,9 +1,6 @@
 #include <Rcpp.h>
-#include <RcppParallel.h>
-// [[Rcpp::depends(RcppParallel)]]
 #include <R_ext/Applic.h>
 using namespace Rcpp;
-using namespace RcppParallel; 
 #include "alR.h"
 
 
@@ -23,24 +20,6 @@ return sqrt(sum(pow(theoAL-sampAL, 2)));
 }
 
 
-struct SquareRoot : public Worker
-{
-// source matrix
-const RMatrix<double> input;
-
-// destination matrix
-RMatrix<double> output;
-
-// initialize with source and destination
-SquareRoot(const NumericMatrix input, NumericMatrix output) : input(input), output(output) {}
-
-// take the square root of the range of elements requested
-void operator()(std::size_t begin, std::size_t end) {
-std::transform(input.begin() + begin, input.begin() + end, output.begin() + begin, ::sqrt);
-}
-};
-
-
 //' Arc length estimation.
 //'
 //' A framework for arc length estimation.
@@ -54,6 +33,8 @@ std::transform(input.begin() + begin, input.begin() + end, output.begin() + begi
 //' This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
 //'
 //' @param x A vector of sample values.
+//' @param mu A real value specifying the mean of the normal distribution.
+//' @param sigma A positive real number specifying the scale parameter of the normal distribution.
 //' @param q1,q2 Vectors specifying the quantiles (or points if quantile=FALSE) over which arc length segments are to be computed.
 //' @param quantile TRUE/FALSE whether q1 and q2 are quantiles, or elements of the domain of \code{x}.
 //' @param dc TRUE/FALSE:  Should the discrete or continuous sample statistic be used.
@@ -129,20 +110,4 @@ else
 }
 
 return sampDist;
-}
-
-
-// [[Rcpp::export]]
-NumericMatrix matrixSqrt(NumericMatrix x)
-{
-// allocate the output matrix
-NumericMatrix output(x.nrow(), x.ncol());
-// SquareRoot functor (pass input and output matrixes)
-SquareRoot squareRoot(x, output);
-
-// call parallelFor to do the work
-parallelFor(0, x.length(), squareRoot);
-
-// return the output matrix
-return output;
 }

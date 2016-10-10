@@ -22,6 +22,10 @@ alEdist(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
 
 \item{bootstraps}{An integer specifying the size of the parametric bootstrap.}
 
+\item{mu}{A real value specifying the mean of the normal distribution.}
+
+\item{sigma}{A positive real number specifying the scale parameter of the normal distribution.}
+
 \item{quantile}{TRUE/FALSE whether q1 and q2 are quantiles, or elements of the domain of \code{x}.}
 }
 \value{
