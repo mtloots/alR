@@ -2,33 +2,49 @@
 % Please edit documentation in R/RcppExports.R
 \name{alE}
 \alias{alE}
+\alias{alEdist}
 \title{Arc length estimation.}
 \usage{
 alE(x, q1, q2, dc, type)
+
+alEdist(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
 }
 \arguments{
 \item{x}{A vector of sample values.}
 
-\item{q1, q2}{Vectors specifying the quantiles over which arc length segments are to be computed.}
+\item{q1, q2}{Vectors specifying the quantiles (or points if quantile=FALSE) over which arc length segments are to be computed.}
 
 \item{dc}{TRUE/FALSE:  Should the discrete or continuous sample statistic be used.}
 
 \item{type}{The type of bandwidth estimator for the underlying KDE; see \code{\link{bw}}.}
+
+\item{n}{An integer specifying the sample size.}
+
+\item{bootstraps}{An integer specifying the size of the parametric bootstrap.}
+
+\item{quantile}{TRUE/FALSE whether q1 and q2 are quantiles, or elements of the domain of \code{x}.}
 }
 \value{
-A list with the following components (see \code{\link{optim}}):
+alE: A list with the following components (see \code{\link{optim}}):
 \itemize{
 \item par: The estimated parameters.
 \item abstol: The absolute tolarence level (default 1e-15).
 \item fail: An integer code indicating convergence.
 \item fncount: Number of function evaluations.
 }
+
+alEdist: A vector (matrix) of arc lengths over the specified interval(s), i.e. the simulated distribution for the chosen sample arc length statistic.
 }
 \description{
-Estimate distributional parameters using the method of arc lengths.
+A framework for arc length estimation.
 }
 \details{
-This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.
+\itemize{
+\item Estimate distributional parameters using the method of arc lengths.
+\item Simulate distributions for sample arc length statistics.
+}
+
+This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
 }
 \examples{
 x <- rnorm(1000)

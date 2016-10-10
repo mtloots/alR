@@ -1,6 +1,9 @@
 #include <Rcpp.h>
+#include <RcppParallel.h>
+// [[Rcpp::depends(RcppParallel)]]
 #include <R_ext/Applic.h>
 using namespace Rcpp;
+using namespace RcppParallel; 
 #include "alR.h"
 
 
@@ -20,18 +23,45 @@ return sqrt(sum(pow(theoAL-sampAL, 2)));
 }
 
 
+struct SquareRoot : public Worker
+{
+// source matrix
+const RMatrix<double> input;
+
+// destination matrix
+RMatrix<double> output;
+
+// initialize with source and destination
+SquareRoot(const NumericMatrix input, NumericMatrix output) : input(input), output(output) {}
+
+// take the square root of the range of elements requested
+void operator()(std::size_t begin, std::size_t end) {
+std::transform(input.begin() + begin, input.begin() + end, output.begin() + begin, ::sqrt);
+}
+};
+
+
 //' Arc length estimation.
 //'
-//' Estimate distributional parameters using the method of arc lengths.
+//' A framework for arc length estimation.
 //'
-//' This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.
+//'
+//' \itemize{
+//' \item Estimate distributional parameters using the method of arc lengths.
+//' \item Simulate distributions for sample arc length statistics.
+//' }
+//'
+//' This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
 //'
 //' @param x A vector of sample values.
-//' @param q1,q2 Vectors specifying the quantiles over which arc length segments are to be computed.
+//' @param q1,q2 Vectors specifying the quantiles (or points if quantile=FALSE) over which arc length segments are to be computed.
+//' @param quantile TRUE/FALSE whether q1 and q2 are quantiles, or elements of the domain of \code{x}.
 //' @param dc TRUE/FALSE:  Should the discrete or continuous sample statistic be used.
 //' @param type The type of bandwidth estimator for the underlying KDE; see \code{\link{bw}}.
+//' @param n An integer specifying the sample size.
+//' @param bootstraps An integer specifying the size of the parametric bootstrap.
 //'
-//' @return A list with the following components (see \code{\link{optim}}):
+//' @return alE: A list with the following components (see \code{\link{optim}}):
 //' \itemize{
 //' \item par: The estimated parameters.
 //' \item abstol: The absolute tolarence level (default 1e-15).
@@ -73,4 +103,46 @@ Aux aux = {sampAL, p1, p2};
 double xin[2] = {mean(x), sd(x)};
 
 return Rcpp_nmmin(2, alEobj, xin, &aux);
+}
+
+
+//' @rdname alE
+//' @return alEdist: A vector (matrix) of arc lengths over the specified interval(s), i.e. the simulated distribution for the chosen sample arc length statistic.
+// [[Rcpp::export]]
+NumericMatrix alEdist(int n, int bootstraps, double mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type)
+{
+NumericMatrix sampDist(bootstraps, q1.size());
+
+for (int i=0; i<bootstraps; i++)
+{
+NumericVector x = rnorm(n, mu, sigma);
+double h = bw(x, type);
+
+if (dc)
+{
+sampDist(i, _) = kdeGaussIntApprox2(x, h, q1, q2, quantile);
+}
+else
+{
+ sampDist(i, _) = kdeGaussInt2(x, h, q1, q2, quantile);
+}
+}
+
+return sampDist;
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix matrixSqrt(NumericMatrix x)
+{
+// allocate the output matrix
+NumericMatrix output(x.nrow(), x.ncol());
+// SquareRoot functor (pass input and output matrixes)
+SquareRoot squareRoot(x, output);
+
+// call parallelFor to do the work
+parallelFor(0, x.length(), squareRoot);
+
+// return the output matrix
+return output;
 }
