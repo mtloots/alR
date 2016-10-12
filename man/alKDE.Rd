@@ -10,10 +10,9 @@
 \alias{summary.alKDE}
 \title{Arc length matching for kernel density estimators.}
 \usage{
-alKDE(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
+alKDE(formula, data = list(), xin, q1, q2, type, ...)
 
-\method{alKDE}{default}(formula, data = list(), lower, upper, q1, q2, itermax,
-  type, ...)
+\method{alKDE}{default}(formula, data = list(), xin, q1, q2, type, ...)
 
 \method{print}{alKDE}(x, ...)
 
@@ -21,8 +20,7 @@ alKDE(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
 
 \method{print}{summary.alKDE}(x, ...)
 
-\method{alKDE}{formula}(formula, data = list(), lower, upper, q1, q2, itermax,
-  type, ...)
+\method{alKDE}{formula}(formula, data = list(), xin, q1, q2, type, ...)
 
 \method{predict}{alKDE}(object, newdata = NULL, ...)
 }
@@ -31,15 +29,13 @@ alKDE(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
 
 \item{data}{A data.frame which contains the variables in \code{formula}.}
 
-\item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
+\item{xin}{Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.}
 
-\item{q1, q2}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
-
-\item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+\item{q1, q2}{Numeric vectors, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
 
 \item{type}{An integer specifying the bandwidth selection method, see \code{\link{bw}}.}
 
-\item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
+\item{...}{Arguments to be passed on to the control argument of the \code{\link{optim}} function.}
 
 \item{x}{An alKDE object.}
 
@@ -50,7 +46,7 @@ alKDE(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
 \value{
 A generic S3 object with class alKDE.
 
-alKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, as well as:
+alKDE.default: A list with all components from \code{\link{optim}}, as well as:
 \itemize{
 \item intercept: Did the model contain an intercept TRUE/FALSE?
 \item coefficients: A vector of estimated coefficients.
@@ -61,8 +57,8 @@ alKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, a
 \item call: The call to the function.
 \item h_y: The KDE bandwidth estimator for the dependent variable.
 \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
-\item ALy: \eqn{n} arc length segments of the KDE cast over the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
-\item ALX: \eqn{n} arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
+\item ALy: Arc length segments of the KDE cast over the dependent variable.
+\item ALX: Arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
 p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 }
@@ -71,7 +67,7 @@ summary.alKDE: A list of class summary.alKDE with the following components:
 \itemize{
 \item call: Original call to the \code{alKDE} function.
 \item coefficients: A vector with parameter estimates.
-\item arclengths: A matrix of the \eqn{n} arc length segments of the dependent and independent variables that were matched.  The final row corresponds to the estimated bandwidth parameters for each, i.e. \code{h_y} and \code{h_X}, respectively.
+\item arclengths: A matrix of the arc length segments of the dependent and independent variables that were matched.  The final row corresponds to the estimated bandwidth parameters for each, i.e. \code{h_y} and \code{h_X}, respectively.
 \item r.squared: The \eqn{r^{2}} coefficient.
 \item adj.r.squared: The adjusted \eqn{r^{2}} coefficient.
 \item sigma: The residual standard error.
@@ -104,11 +100,13 @@ Estimate parameters of a linear model by matching the arc lengths of kernel dens
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=-1)
+XIn <- lm(y~x)
+alKDE(y~x, xin=coef(XIn), q1=c(0.025,0.5), q2=c(0.5,0.975), type=-1)
 
 u <- 11:20
 v <- u+rnorm(10)
-al <- alKDE(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.025,0.5), q2=c(0.5,0.975), itermax=50, type=-1)
+XIn <- lm(y~x)
+al <- alKDE(y~x, xin=coef(XIn), q1=c(0.025,0.5), q2=c(0.5,0.975), type=-1)
 predict(al, newdata=data.frame(y=v, x=u))
 
 }

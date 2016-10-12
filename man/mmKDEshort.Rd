@@ -4,20 +4,18 @@
 \alias{mmKDEshort}
 \title{Moment matching for kernel density estimators.}
 \usage{
-mmKDEshort(formula, data = list(), lower, upper, itermax, type, ...)
+mmKDEshort(formula, data = list(), xin, type, ...)
 }
 \arguments{
 \item{formula}{An LHS ~ RHS formula, specifying the linear model to be estimated.}
 
 \item{data}{A data.frame which contains the variables in \code{formula}.}
 
-\item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
-
-\item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+\item{xin}{Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.}
 
 \item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
-\item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
+\item{...}{Arguments to be passed on to the control argument of the \code{\link{optim}} function.}
 }
 \value{
 mmKDEshort: A list with the following components:
@@ -30,12 +28,13 @@ mmKDEshort: A list with the following components:
 Estimate parameters of a linear model by matching the moments of kernel density estimators.
 }
 \details{
-A shortened version of \code{mmKDE}.
+A shortened version of \code{\link{mmKDE}}.
 }
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-mmKDEshort(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=-1)
+XIn <- lm(y~x)
+mmKDEshort(y~x, xin=coef(XIn), type=-1)
 
 }
 

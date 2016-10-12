@@ -10,11 +10,10 @@
 \alias{summary.mmKDEboot}
 \title{Moment matching for kernel density estimators.}
 \usage{
-mmKDEboot(formula, data = list(), lower, upper, itermax, type, bootstraps,
-  bootName, ...)
+mmKDEboot(formula, data = list(), xin, type, bootstraps, bootName, ...)
 
-\method{mmKDEboot}{default}(formula, data = list(), lower, upper, itermax,
-  type, bootstraps, bootName, ...)
+\method{mmKDEboot}{default}(formula, data = list(), xin, type, bootstraps,
+  bootName, ...)
 
 \method{print}{mmKDEboot}(x, ...)
 
@@ -22,8 +21,8 @@ mmKDEboot(formula, data = list(), lower, upper, itermax, type, bootstraps,
 
 \method{print}{summary.mmKDEboot}(x, ...)
 
-\method{mmKDEboot}{formula}(formula, data = list(), lower, upper, itermax,
-  type, bootstraps, bootName, ...)
+\method{mmKDEboot}{formula}(formula, data = list(), xin, type, bootstraps,
+  bootName, ...)
 
 \method{predict}{mmKDEboot}(object, newdata = NULL, ...)
 }
@@ -32,9 +31,7 @@ mmKDEboot(formula, data = list(), lower, upper, itermax, type, bootstraps,
 
 \item{data}{A data.frame which contains the variables in \code{formula}.}
 
-\item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
-
-\item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+\item{xin}{Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.}
 
 \item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
@@ -42,7 +39,7 @@ mmKDEboot(formula, data = list(), lower, upper, itermax, type, bootstraps,
 
 \item{bootName}{The name of the .rds file to store the mmKDEboot object.  May include a path.}
 
-\item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
+\item{...}{Arguments to be passed on to the control argument of the \code{\link{optim}} function.}
 
 \item{x}{An mmKDEboot object.}
 

@@ -57,5 +57,11 @@ alE(x,c(0.025, 0.5), c(0.5, 0.975), TRUE, -1)
 alE(x,0.025, 0.975, FALSE, -1)
 alE(x,c(0.025, 0.5), c(0.5, 0.975), FALSE, -1)
 
+alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, TRUE, -1)
+alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, TRUE, -1)
+alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, FALSE, -1)
+alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, FALSE, -1)
+alEdist(50, 100, 2, 3.5, qnorm(0.025,2,3.5), qnorm(0.975, 2, 3.5), FALSE, FALSE, -1)
+alEdist(50, 100, 2, 3.5, c(qnorm(0.025, 2, 3.5),2), c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
 }
 

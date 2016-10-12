@@ -4,20 +4,18 @@
 #'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
-#' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
-#' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param xin Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.
 #' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param jackName The name of the .rds file to store the mmKDEjack object.  May include a path.
-#' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
+#' @param ... Arguments to be passed on to the control argument of the \code{\link{optim}} function.
 #'
 #' @return A generic S3 object with class mmKDEjack.
 #'
 #' @import pbdMPI
-#' @importFrom DEoptim DEoptim DEoptim.control
-#' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
+#' @importFrom stats coef fitted model.frame model.matrix model.response optim printCoefmat
 #'
 #' @export
-mmKDEjack <- function(formula, data=list(), lower, upper, itermax, type, jackName, ...) UseMethod("mmKDEjack")
+mmKDEjack <- function(formula, data=list(), xin, type, jackName, ...) UseMethod("mmKDEjack")
 
 #' @describeIn mmKDEjack default method for mmKDEjack.
 #'
@@ -43,10 +41,10 @@ mmKDEjack <- function(formula, data=list(), lower, upper, itermax, type, jackNam
 #' }
 #' 
 #' @export
-mmKDEjack.default <- function(formula, data=list(), lower, upper, itermax, type, jackName, ...)
+mmKDEjack.default <- function(formula, data=list(), xin, type, jackName, ...)
 {
 ret.time <- comm.timer({
-ret <- task.pull(1:nrow(data), function(jid) mmKDEshort(formula, data[-jid], lower, upper, itermax, type, ...))
+ret <- task.pull(1:nrow(data), function(jid) mmKDEshort(formula, data[-jid], xin, type, ...))
 })
 
 if(comm.rank() == 0)
@@ -55,7 +53,7 @@ mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-jack <- mmKDE(formula, data, lower, upper, itermax, type, ...)
+jack <- mmKDE(formula, data, xin, type, ...)
 
 jack$call <- match.call()
 
@@ -196,13 +194,13 @@ invisible(x)
 
 #' @describeIn mmKDEjack formula method for mmKDEjack.
 #' @export
-mmKDEjack.formula <- function(formula, data=list(), lower, upper, itermax, type, jackName, ...)
+mmKDEjack.formula <- function(formula, data=list(), xin, type, jackName, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-mom <- mmKDEjack.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, type=type, jackName, ...)
+mom <- mmKDEjack.default(formula, data=data, xin=xin, type=type, jackName, ...)
 mom$call <- match.call()
 mom$formula <- formula
 mom$intercept <- attr(attr(mf, "terms"), "intercept")

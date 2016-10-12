@@ -4,22 +4,20 @@
 \alias{alKDEshort}
 \title{Arc length matching for kernel density estimators.}
 \usage{
-alKDEshort(formula, data = list(), lower, upper, q1, q2, itermax, type, ...)
+alKDEshort(formula, data = list(), xin, q1, q2, type, ...)
 }
 \arguments{
 \item{formula}{An LHS ~ RHS formula, specifying the linear model to be estimated.}
 
 \item{data}{A data.frame which contains the variables in \code{formula}.}
 
-\item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
+\item{xin}{Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.}
 
-\item{q1, q2}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
-
-\item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+\item{q1, q2}{Numeric vectors, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
 
 \item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
-\item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
+\item{...}{Arguments to be passed on to the control argument of the \code{\link{optim}} function.}
 }
 \value{
 alKDEshort: A list with the following components:
@@ -32,12 +30,13 @@ alKDEshort: A list with the following components:
 Estimate parameters of a linear model by matching the arc lengths of kernel density estimators.
 }
 \details{
-A shortened version of \code{alKDE}.
+A shortened version of \code{\link{alKDE}}.
 }
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
-alKDEshort(y~x, lower=c(-2,2), upper=c(2,2), q1=c(0.1,0.5), q2=c(0.5,0.9), itermax=50, type=-1)
+XIn <- lm(y~x)
+alKDEshort(y~x, xin=coef(XIn), q1=c(0.1,0.5), q2=c(0.5,0.9), type=-1)
 
 }
 

@@ -10,11 +10,10 @@
 \alias{summary.alKDEjack}
 \title{Arc length matching for kernel density estimators.}
 \usage{
-alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, type,
-  jackName, ...)
+alKDEjack(formula, data = list(), xin, q1, q2, type, jackName, ...)
 
-\method{alKDEjack}{default}(formula, data = list(), lower, upper, q1, q2,
-  itermax, type, jackName, ...)
+\method{alKDEjack}{default}(formula, data = list(), xin, q1, q2, type,
+  jackName, ...)
 
 \method{print}{alKDEjack}(x, ...)
 
@@ -22,8 +21,8 @@ alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, type,
 
 \method{print}{summary.alKDEjack}(x, ...)
 
-\method{alKDEjack}{formula}(formula, data = list(), lower, upper, q1, q2,
-  itermax, type, jackName, ...)
+\method{alKDEjack}{formula}(formula, data = list(), xin, q1, q2, type,
+  jackName, ...)
 
 \method{predict}{alKDEjack}(object, newdata = NULL, ...)
 }
@@ -32,17 +31,15 @@ alKDEjack(formula, data = list(), lower, upper, q1, q2, itermax, type,
 
 \item{data}{A data.frame which contains the variables in \code{formula}.}
 
-\item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
+\item{xin}{Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.}
 
-\item{q1, q2}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
-
-\item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+\item{q1, q2}{Numeric vectors, for the lower and upper bounds of the intervals over which arc lengths are to be computed.}
 
 \item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
 \item{jackName}{The name of the .rds file to store the alKDEjack object.  May include a path.}
 
-\item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
+\item{...}{Arguments to be passed on to the control argument of the \code{\link{optim}} function.}
 
 \item{x}{An alKDEjack object.}
 
@@ -68,8 +65,8 @@ alKDEjack.default: A list object (saved using \code{saveRDS} in the specified lo
 \item call: The call to the function.
 \item h_y: The KDE bandwidth estimator for the dependent variable.
 \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
-\item ALy: \eqn{n} arc length segments of the KDE cast over the dependent variable, where $\eqn{n} is the number of columns in the design matrix.
-\item ALX: \eqn{n} arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where $\eqn{n} is the number of columns in the design matrix.
+\item ALy: Arc length segments of the KDE cast over the dependent variable.
+\item ALX: Arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
 p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
 p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.

@@ -4,21 +4,19 @@
 #'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
-#' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
-#' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param xin Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.
 #' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
 #' @param bootstraps An integer giving the number of bootstrap samples.
 #' @param bootName The name of the .rds file to store the mmKDEboot object.  May include a path.
-#' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
+#' @param ... Arguments to be passed on to the control argument of the \code{\link{optim}} function.
 #'
 #' @return A generic S3 object with class mmKDEboot.
 #'
 #' @import pbdMPI
-#' @importFrom DEoptim DEoptim DEoptim.control
-#' @importFrom stats coef ecdf fitted model.frame model.matrix model.response printCoefmat
+#' @importFrom stats coef ecdf fitted model.frame model.matrix model.response optim printCoefmat
 #'
 #' @export
-mmKDEboot <- function(formula, data=list(), lower, upper, itermax, type, bootstraps, bootName, ...) UseMethod("mmKDEboot")
+mmKDEboot <- function(formula, data=list(), xin, type, bootstraps, bootName, ...) UseMethod("mmKDEboot")
 
 #' @describeIn mmKDEboot default method for mmKDEboot.
 #'
@@ -43,7 +41,7 @@ mmKDEboot <- function(formula, data=list(), lower, upper, itermax, type, bootstr
 #' }
 #' 
 #' @export
-mmKDEboot.default <- function(formula, data=list(), lower, upper, itermax, type, bootstraps, bootName, ...)
+mmKDEboot.default <- function(formula, data=list(), xin, type, bootstraps, bootName, ...)
 {
 comm.set.seed(123, diff=TRUE)
 N <- nrow(data)
@@ -52,7 +50,7 @@ ret.time <- comm.timer({
 ret <- task.pull(1:bootstraps, function(jid)
 {
 id <- sample(1:N, N, replace=TRUE)
-mmKDEshort(formula, data[id,], lower, upper, itermax, type, ...)
+mmKDEshort(formula, data[id,], xin, type, ...)
 })
 })
 
@@ -62,7 +60,7 @@ mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-boot <- mmKDE(formula, data, lower, upper, itermax, type, ...)
+boot <- mmKDE(formula, data, xin, type, ...)
 
 boot$call <- match.call()
 
@@ -202,13 +200,13 @@ invisible(x)
 
 #' @describeIn mmKDEboot formula method for mmKDEboot.
 #' @export
-mmKDEboot.formula <- function(formula, data=list(), lower, upper, itermax, type, bootstraps, bootName, ...)
+mmKDEboot.formula <- function(formula, data=list(), xin, type, bootstraps, bootName, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-mom <- mmKDEboot.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, type=type, bootstraps, bootName, ...)
+mom <- mmKDEboot.default(formula, data=data, xin=xin, type=type, bootstraps, bootName, ...)
 mom$call <- match.call()
 mom$formula <- formula
 mom$intercept <- attr(attr(mf, "terms"), "intercept")

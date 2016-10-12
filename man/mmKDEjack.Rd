@@ -10,10 +10,9 @@
 \alias{summary.mmKDEjack}
 \title{Moment matching for kernel density estimators.}
 \usage{
-mmKDEjack(formula, data = list(), lower, upper, itermax, type, jackName, ...)
+mmKDEjack(formula, data = list(), xin, type, jackName, ...)
 
-\method{mmKDEjack}{default}(formula, data = list(), lower, upper, itermax,
-  type, jackName, ...)
+\method{mmKDEjack}{default}(formula, data = list(), xin, type, jackName, ...)
 
 \method{print}{mmKDEjack}(x, ...)
 
@@ -21,8 +20,7 @@ mmKDEjack(formula, data = list(), lower, upper, itermax, type, jackName, ...)
 
 \method{print}{summary.mmKDEjack}(x, ...)
 
-\method{mmKDEjack}{formula}(formula, data = list(), lower, upper, itermax,
-  type, jackName, ...)
+\method{mmKDEjack}{formula}(formula, data = list(), xin, type, jackName, ...)
 
 \method{predict}{mmKDEjack}(object, newdata = NULL, ...)
 }
@@ -31,15 +29,13 @@ mmKDEjack(formula, data = list(), lower, upper, itermax, type, jackName, ...)
 
 \item{data}{A data.frame which contains the variables in \code{formula}.}
 
-\item{lower, upper}{Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.}
-
-\item{itermax}{Number of iterations for the Differential Evolution algorithm.}
+\item{xin}{Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.}
 
 \item{type}{An integer specifying the bandwidth selection method used, see \code{\link{bw}}.}
 
 \item{jackName}{The name of the .rds file to store the mmKDEjack object.  May include a path.}
 
-\item{...}{Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.}
+\item{...}{Arguments to be passed on to the control argument of the \code{\link{optim}} function.}
 
 \item{x}{An mmKDEjack object.}
 

@@ -45,6 +45,14 @@ alE <- function(x, q1, q2, dc, type) {
 
 #' @rdname alE
 #' @return alEdist: A vector (matrix) of arc lengths over the specified interval(s), i.e. the simulated distribution for the chosen sample arc length statistic.
+#' @examples
+#' alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, TRUE, -1)
+#' alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, TRUE, -1)
+#' alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, FALSE, -1)
+#' alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, FALSE, -1)
+#' alEdist(50, 100, 2, 3.5, qnorm(0.025,2,3.5), qnorm(0.975, 2, 3.5), FALSE, FALSE, -1)
+#' alEdist(50, 100, 2, 3.5, c(qnorm(0.025, 2, 3.5),2), c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
+#' @export
 alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type) {
     .Call('alR_alEdist', PACKAGE = 'alR', n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
 }

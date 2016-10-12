@@ -4,21 +4,19 @@
 #'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
-#' @param lower,upper Numeric vectors, of length equal to the number of independent variables, for the lower and upper bounds for the parameters to be estimated.
-#' @param itermax Number of iterations for the Differential Evolution algorithm.
+#' @param xin Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.
 #' @param type An integer specifying the bandwidth selection method used, see \code{\link{bw}}.
-#' @param ... Arguments to be passed on to \code{DEoptim.control()} of the Differential Evolution algorithm.
+#' @param ... Arguments to be passed on to the control argument of the \code{\link{optim}} function.
 #'
 #' @return A generic S3 object with class mmKDE.
-#' @importFrom DEoptim DEoptim DEoptim.control
-#' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
+#' @importFrom stats coef fitted model.frame model.matrix model.response optim printCoefmat
 #'
 #' @export
-mmKDE <- function(formula, data=list(), lower, upper, itermax, type, ...) UseMethod("mmKDE")
+mmKDE <- function(formula, data=list(), xin, type, ...) UseMethod("mmKDE")
 
 #' @describeIn mmKDE default method for mmKDE.
 #'
-#' @return mmKDE.default: A list with all components from \code{\link[DEoptim]{DEoptim}}, as well as:
+#' @return mmKDE.default: A list with all components from \code{\link{optim}}, as well as:
 #' \itemize{
 #' \item intercept: Did the model contain an intercept TRUE/FALSE?
 #' \item coefficients: A vector of estimated coefficients.
@@ -36,10 +34,11 @@ mmKDE <- function(formula, data=list(), lower, upper, itermax, type, ...) UseMet
 #' @examples
 #' x <- 1:10
 #' y <- x+rnorm(10)
-#' mmKDE.default(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=-1)
+#' XIn <- lm(y~x)
+#' mmKDE.default(y~x, xin=coef(XIn), type=-1)
 #'
 #' @export
-mmKDE.default <- function(formula, data=list(), lower, upper, itermax, type, ...)
+mmKDE.default <- function(formula, data=list(), xin, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
@@ -48,11 +47,11 @@ y <- model.response(mf)
 h_y <- bw(y, type)
 MOMy <- kdeGaussMom(ncol(X), y, h_y)
 
-mom <- DEoptim(momKDE, lower=lower, upper=upper, control=DEoptim.control(trace=FALSE, itermax=itermax, strategy=6, ...), gamma=X, momy=MOMy, kdeGaussMom, type=type)
+mom <- optim(xin, momKDE, gamma=X, momy=MOMy, kdeGaussMom=kdeGaussMom, type=type, control=list(...))
 
 mom$intercept <- if(attr(attr(mf, "terms"), "intercept") == 1) TRUE else FALSE
 
-mom$coefficients <- mom$optim$bestmem
+mom$coefficients <- mom$par
 
 labels <- if(mom$intercept) c("Intercept", attr(attr(mf, "terms"), "term.labels")) else attr(attr(mf, "terms"), "term.labels")
 
@@ -60,7 +59,7 @@ names(mom$coefficients) <- labels
 
 mom$df <- nrow(X)-ncol(X)
 
-mom$error <- mom$optim$bestval
+mom$error <- mom$value
 
 mom$fitted.values <- as.vector(X%*%mom$coefficients)
 mom$residuals <- y-mom$fitted.values
@@ -172,13 +171,13 @@ invisible(x)
 
 #' @describeIn mmKDE formula method for mmKDE.
 #' @export
-mmKDE.formula <- function(formula, data=list(), lower, upper, itermax, type, ...)
+mmKDE.formula <- function(formula, data=list(), xin, type, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 x <- model.matrix(attr(mf, "terms"), data=mf)
 y <- model.response(mf)
 
-mom <- mmKDE.default(formula, data=data, lower=lower, upper=upper, itermax=itermax, type=type, ...)
+mom <- mmKDE.default(formula, data=data, xin=xin, type=type, ...)
 mom$call <- match.call()
 mom$formula <- formula
 mom$intercept <- attr(attr(mf, "terms"), "intercept")
@@ -194,7 +193,8 @@ mom
 #' @examples
 #' u <- 11:20
 #' v <- u+rnorm(10)
-#' mom <- mmKDE(y~x, lower=c(-2,2), upper=c(2,2), itermax=50, type=-1)
+#' XIn <- lm(y~x)
+#' mom <- mmKDE(y~x, xin=coef(XIn), type=-1)
 #' predict(mom, newdata=data.frame(y=v, x=u))
 #'
 #' @export
