@@ -21,6 +21,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// alEfitdist
+NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps);
+RcppExport SEXP alR_alEfitdist(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP bootstrapsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q1(q1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q2(q2SEXP);
+    Rcpp::traits::input_parameter< bool >::type dc(dcSEXP);
+    Rcpp::traits::input_parameter< double >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< int >::type bootstraps(bootstrapsSEXP);
+    rcpp_result_gen = Rcpp::wrap(alEfitdist(x, q1, q2, dc, type, bootstraps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // alEdist
 NumericMatrix alEdist(int n, int bootstraps, double mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type);
 RcppExport SEXP alR_alEdist(SEXP nSEXP, SEXP bootstrapsSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP, SEXP dcSEXP, SEXP typeSEXP) {
