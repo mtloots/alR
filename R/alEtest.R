@@ -56,14 +56,16 @@ stop("This test is only implemented for single arc length segments.")
 else
 {
 al <- list()
-al$dist <- alEdist(length(X), bootstraps, mu, sigma, q1, q2, TRUE, FALSE, type)
+p1 <- qsamp(X, q1)
+p2 <- qsamp(X, q2)
+al$dist <- alEdist(length(X), bootstraps, mu, sigma, p1, p2, FALSE, FALSE, type)
 al$mu <- mu
 al$sigma <- sigma
 al$bw <- bw(X, type)
 al$q1 <- q1
 al$q2 <- q2
 al$bootstraps <- bootstraps
-al$statistic <- kdeGaussInt(X, al$bw, q1, q2, TRUE)$value
+al$statistic <- kdeGaussInt(X, al$bw, p1, p2, FALSE)$value
 
 fn <- ecdf(al$dist)
 al$pvalue <- 1-2*abs(0.5-fn(al$statistic))
