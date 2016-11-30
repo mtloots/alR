@@ -115,8 +115,11 @@ summary.mmKDEjack <- function(object, ...)
 ci <- do.call(rbind, lapply(1:ncol(object$coefDist), function(j) c(qsamp(object$coefDist[,j], 0.025), qsamp(object$coefDist[,j], 0.975))))
 
 pval <- do.call(rbind, lapply(1:length(object$coefficients), function(i) {
-fn <- ecdf(object$coefDist[,i]-object$jcoefficients[i])
-1-fn(object$coefficients[i])
+lpv <- mean(object$coefDist[,i]-object$jcoefficients[i] <= object$coefficients[i])
+2*min(lpv, 1-lpv)
+
+##fn <- ecdf(object$coefDist[,i]-object$jcoefficients[i])
+##1-fn(object$coefficients[i])
 }))
 
 TAB <- cbind(Estimate = coef(object),

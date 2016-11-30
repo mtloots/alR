@@ -19,7 +19,6 @@
 #'
 #' @return alEtest: A generic S3 object with class alEtest.
 #'
-#' @importFrom stats ecdf
 #' @export
 alEtest <- function(X, mu, sigma, q1, q2, type, bootstraps, ...) UseMethod("alEtest")
 
@@ -67,8 +66,8 @@ al$q2 <- q2
 al$bootstraps <- bootstraps
 al$statistic <- kdeGaussInt(X, al$bw, p1, p2, FALSE)$value
 
-fn <- ecdf(al$dist)
-al$pvalue <- 1-2*abs(0.5-fn(al$statistic))
+lpv <- mean(al$dist <= al$statistic)
+al$pvalue <- 2*min(lpv, 1-lpv)
 
 class(al) <- "alEtest"
 al

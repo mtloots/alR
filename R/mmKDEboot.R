@@ -13,7 +13,7 @@
 #' @return A generic S3 object with class mmKDEboot.
 #'
 #' @import pbdMPI
-#' @importFrom stats coef ecdf fitted model.frame model.matrix model.response optim printCoefmat
+#' @importFrom stats coef fitted model.frame model.matrix model.response optim printCoefmat
 #'
 #' @export
 mmKDEboot <- function(formula, data=list(), xin, type, bootstraps, bootName, ...) UseMethod("mmKDEboot")
@@ -121,8 +121,11 @@ summary.mmKDEboot <- function(object, ...)
 ci <- do.call(rbind, lapply(1:ncol(object$coefDist), function(j) c(qsamp(object$coefDist[,j], 0.025), qsamp(object$coefDist[,j], 0.975))))
 
 pval <- do.call(rbind, lapply(1:length(object$coefficients), function(i) {
-fn <- ecdf(object$coefDist[,i]-object$bcoefficients[i])
-1-fn(object$coefficients[i])
+lpv <- mean(object$coefDist[,i]-object$bcoefficients[i] <= object$coefficients[i])
+2*min(lpv, 1-lpv)
+
+##fn <- ecdf(object$coefDist[,i]-object$bcoefficients[i])
+##1-fn(object$coefficients[i])
 }))
 
 TAB <- cbind(Estimate = coef(object),
