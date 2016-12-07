@@ -58,8 +58,8 @@ Params param = {mu, h};
 
 if (quantile)
 {
-p1 = qkdeGauss(q1, mu, h)[0];
-p2 = qkdeGauss(q2, mu, h)[0];
+p1 = as<double>(qkdeGauss(q1, mu, h)["result"]);
+p2 = as<double>(qkdeGauss(q2, mu, h)["result"]);
 }
 else
 {
@@ -87,7 +87,7 @@ NumericVector result(n);
 
 for (i=0; i<n; i++)
 {
-result[i] = kdeGaussInt(mu, h, q1[i], q2[i], quantile)[0];
+result[i] = as<double>(kdeGaussInt(mu, h, q1[i], q2[i], quantile)["value"]);
 }
 
 return result;

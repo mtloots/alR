@@ -105,15 +105,15 @@ steps++;
 lower = steps*minmu-(steps-1)*rangemu/2;
 upper = steps*maxmu+(steps-1)*rangemu/2;
 bf = brents_fun(qkde, &param, lower, upper, 1e-10, 1000);
-if (bf[3] == 0)
+if (as<int>(bf["msg"]) == 0)
 {
 i = 1001;
 }
 }
 
-return List::create(_["result"] = bf[0],
-_["value"] = pkdeGauss(bf[0], mu, h),
-_["obj.fun"] = bf[1],
-_["iterations"] = bf[2],
+return List::create(_["result"] = as<double>(bf["result"]),
+_["value"] = pkdeGauss(as<double>(bf["result"]), mu, h),
+_["obj.fun"] = as<double>(bf["value"]),
+_["iterations"] = as<int>(bf["iterations"]),
 _["steps"] = steps);
 }

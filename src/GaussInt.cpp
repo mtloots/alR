@@ -84,7 +84,7 @@ NumericVector result(n);
 
 for (i=0; i<n; i++)
 {
-result[i] = GaussInt(mu, sigma, q1[i], q2[i], quantile)[0];
+result[i] = as<double>(GaussInt(mu, sigma, q1[i], q2[i], quantile)["value"]);
 }
 
 return result;
