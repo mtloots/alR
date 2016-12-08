@@ -200,3 +200,8 @@ _["abstol"] = abstol,
 _["fail"] = fail,
 _["fncount"] = fncount);
 }
+
+NumericVector RcppSample(NumericVector sample, int n)
+{
+return sample[round(runif(n)*(sample.size()-1.0), 0)];
+}

@@ -1,6 +1,6 @@
 Package: alR
-Version: 1.0.7
-Date: 07/12/2016
+Version: 1.0.8
+Date: 08/12/2016
 Title: Arc lengths of statistical functions
 Description: Estimation, regression and classification using arc lengths.
 Depends: R (>= 3.2)

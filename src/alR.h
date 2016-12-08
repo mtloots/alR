@@ -25,4 +25,6 @@ Rcpp::List Rcpp_integrate(integr_fn f, void *ex, double lower, double upper, int
 
 Rcpp::List Rcpp_nmmin(int n, optimfn fn, double *xin, void *ex, double Fmin = 0.0, double abstol=1e-15, double intol=1e-15, double alpha=1.0, double beta=0.5, double gamma=2.0, int trace=0, int maxit=1000);
 
+Rcpp::NumericVector RcppSample(Rcpp::NumericVector sample, int n);
+
 #endif
