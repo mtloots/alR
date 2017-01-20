@@ -13,7 +13,7 @@
 #' @return A generic S3 object with class alKDEjack.
 #'
 #' @import pbdMPI
-#' @importFrom stats coef fitted model.frame model.matrix model.response optim printCoefmat
+#' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
 alKDEjack <- function(formula, data=list(), xin, q1, q2, type, jackName, ...) UseMethod("alKDEjack")
@@ -54,10 +54,6 @@ ret <- task.pull(1:nrow(data), function(jid) alKDEshort(formula, data[-jid], xin
 
 if(comm.rank() == 0)
 {
-mf <- model.frame(formula=formula, data=data)
-X <- model.matrix(attr(mf, "terms"), data=mf)
-y <- model.response(mf)
-
 jack <- alKDE(formula, data, xin, q1, q2, type, ...)
 
 jack$call <- match.call()

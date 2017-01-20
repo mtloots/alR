@@ -160,6 +160,103 @@ GaussInt2 <- function(mu, sigma, q1, q2, quantile) {
     .Call('alR_GaussInt2', PACKAGE = 'alR', mu, sigma, q1, q2, quantile)
 }
 
+#' Four-parameter kappa distribution.
+#'
+#' Functions for the four-parameter kappa distribution.
+#'
+#' @param x A data point, or quantile, at which the four-parameter kappa distribution should be evaluated.
+#' @param mu A real value representing the location of the distribution.
+#' @param sigma A positive real number representing the scale parameter of the distribution.
+#' @param h,k Real numbers representing shape parameters of the distribution.
+#' @param n Number of random variates to generate.
+#' @rdname kappa4
+#' @examples
+#' pkappa4(1, 1, 2, 0.5, 2)
+#' @return pkappa4: The cumulative distribution function at the point \code{x}.
+#' @export
+pkappa4 <- function(x, mu, sigma, h, k) {
+    .Call('alR_pkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+}
+
+#' @rdname kappa4
+#' @return dkappa4: The density function at the point x.
+#' @examples
+#' dkappa4(1, 1, 2, 0.5, 2)
+#' @export
+dkappa4 <- function(x, mu, sigma, h, k) {
+    .Call('alR_dkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+}
+
+#' @rdname kappa4
+#' @examples
+#' qkappa4(0.25, 1, 2, 0.5, 2)
+#' @return qkappa4: The \code{x}th quantile of the distribution.
+#' @export
+qkappa4 <- function(x, mu, sigma, h, k) {
+    .Call('alR_qkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+}
+
+#' @rdname kappa4
+#' @examples
+#' rkappa4(10, 1, 2, 0.5, 2)
+#' @return rkappa4: Randomly generated numbers from the distribution.
+#' @export
+rkappa4 <- function(n, mu, sigma, h, k) {
+    .Call('alR_rkappa4', PACKAGE = 'alR', n, mu, sigma, h, k)
+}
+
+#' @rdname kappa4
+#' @return kappa4tc: A list with the following components:
+#' \itemize{
+#' \item $par: The k shape parameter corresponding to a given h parameter for the time-conductivity problem.
+#' \item $abstol: The absolute tolerance for the numerical optimisation.
+#' \item $fail: A code relating to the optimisation routine.
+#' \item $fncount: Number of function calls.
+#' }
+#' @examples
+#' kappa4tc(-4)
+#' @export
+kappa4tc <- function(h, mu = 0, sigma = 1) {
+    .Call('alR_kappa4tc', PACKAGE = 'alR', h, mu, sigma)
+}
+
+#' Sigmoidal curve fitting.
+#'
+#' Support functions for fitting four-parameter kappa sigmoidal curves.
+#'
+#' @param parms A numeric vector of parameters to be estimated.
+#' @param  xvec A numeric vector of independent observations.
+#' @param y A numeric vector of dependent observations.
+#' @param x_min The minimum xvec value.
+#' @param x_max The maximum xvec value.
+#'
+#' @return kappa4NLSobj: The nonlinear least squares objective function.
+#' @export
+kappa4NLSobj <- function(parms, xvec, y, x_min, x_max) {
+    .Call('alR_kappa4NLSobj', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4NLScon: A vector with three conditions evaluated.
+#' @export
+kappa4NLScon <- function(parms, xvec, y, x_min, x_max) {
+    .Call('alR_kappa4NLScon', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4NLShin: A vector specifying a single nonlinear inequality constraint.
+#' @export
+kappa4NLShin <- function(parms, xvec, y, x_min, x_max) {
+    .Call('alR_kappa4NLShin', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4NLSheq: A vector specifying two nonlinear equality constraints.
+#' @export
+kappa4NLSheq <- function(parms, xvec, y, x_min, x_max) {
+    .Call('alR_kappa4NLSheq', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+}
+
 #' Gaussian kernel density estimator.
 #'
 #' Estimate a density function using a kernel density estimator with a Gaussian kernel.

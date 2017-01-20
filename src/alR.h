@@ -9,6 +9,12 @@ Rcpp::List brents_fun(brents_fn f, void *ex, double lower, double upper, double 
 
 double bw(NumericVector x, double type);
 
+double pkappa4(double x, double mu, double sigma, double h, double k);
+
+double dddkappa4(double x, double mu, double sigma, double h, double k);
+
+double kappa4cond(double mu, double sigma, double h, double k);
+
 double dkdeGauss(double x, Rcpp::NumericVector mu, double h);
 
 Rcpp::NumericVector GaussInt2(double mu, double sigma, Rcpp::NumericVector q1, Rcpp::NumericVector q2, bool quantile);

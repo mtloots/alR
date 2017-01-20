@@ -76,7 +76,6 @@ return Rcpp_nmmin(2, alEobj, xin, &aux);
 NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps)
 {
 NumericMatrix sampDist(bootstraps, 2);
-// NumericVector prob = NumericVector::create();
 int n = x.size();
 
 for (int i=0; i<bootstraps; i++)

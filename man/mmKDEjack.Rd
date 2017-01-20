@@ -69,7 +69,7 @@ mmKDEjack.default: A list object (saved using \code{saveRDS} in the specified lo
 
 summary.mmKDEjack: A list of class summary.mmKDEjack with the following components:
 \itemize{
-\item call: Original call to \code{mmKDEjack} function.
+\item call: Original call to the \code{mmKDEjack} function.
 \item coefficients: A matrix with estimates, estimated errors, and 95\% parameter confidence intervals (based on the inverse empirical distribution function).
 \item moments: A matrix of the first \eqn{n} moments of the dependent and independent variables that were matched.  The final row corresponds to the estimated bandwidth parameters for each, i.e. \code{h_y} and \code{h_X}, respectively.
 \item r.squared: The \eqn{r^{2}} coefficient.

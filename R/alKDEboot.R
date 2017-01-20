@@ -14,7 +14,7 @@
 #' @return A generic S3 object with class alKDEboot.
 #'
 #' @import pbdMPI
-#' @importFrom stats coef fitted model.frame model.matrix model.response optim printCoefmat
+#' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
 alKDEboot <- function(formula, data=list(), xin, q1, q2, type, bootstraps, bootName, ...) UseMethod("alKDEboot")
@@ -59,10 +59,6 @@ alKDEshort(formula, data[id,], xin, q1, q2, type, ...)
 
 if(comm.rank() == 0)
 {
-mf <- model.frame(formula=formula, data=data)
-X <- model.matrix(attr(mf, "terms"), data=mf)
-y <- model.response(mf)
-
 boot <- alKDE(formula, data, xin, q1, q2, type, ...)
 
 boot$call <- match.call()

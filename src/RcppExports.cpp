@@ -136,6 +136,139 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pkappa4
+double pkappa4(double x, double mu, double sigma, double h, double k);
+RcppExport SEXP alR_pkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(pkappa4(x, mu, sigma, h, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dkappa4
+double dkappa4(double x, double mu, double sigma, double h, double k);
+RcppExport SEXP alR_dkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(dkappa4(x, mu, sigma, h, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qkappa4
+double qkappa4(double x, double mu, double sigma, double h, double k);
+RcppExport SEXP alR_qkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(qkappa4(x, mu, sigma, h, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rkappa4
+NumericVector rkappa4(int n, double mu, double sigma, double h, double k);
+RcppExport SEXP alR_rkappa4(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(rkappa4(n, mu, sigma, h, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kappa4tc
+List kappa4tc(double h, double mu, double sigma);
+RcppExport SEXP alR_kappa4tc(SEXP hSEXP, SEXP muSEXP, SEXP sigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(kappa4tc(h, mu, sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kappa4NLSobj
+double kappa4NLSobj(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
+RcppExport SEXP alR_kappa4NLSobj(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parms(parmsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xvec(xvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type x_min(x_minSEXP);
+    Rcpp::traits::input_parameter< double >::type x_max(x_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(kappa4NLSobj(parms, xvec, y, x_min, x_max));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kappa4NLScon
+NumericVector kappa4NLScon(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
+RcppExport SEXP alR_kappa4NLScon(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parms(parmsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xvec(xvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type x_min(x_minSEXP);
+    Rcpp::traits::input_parameter< double >::type x_max(x_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(kappa4NLScon(parms, xvec, y, x_min, x_max));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kappa4NLShin
+NumericVector kappa4NLShin(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
+RcppExport SEXP alR_kappa4NLShin(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parms(parmsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xvec(xvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type x_min(x_minSEXP);
+    Rcpp::traits::input_parameter< double >::type x_max(x_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(kappa4NLShin(parms, xvec, y, x_min, x_max));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kappa4NLSheq
+NumericVector kappa4NLSheq(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
+RcppExport SEXP alR_kappa4NLSheq(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type parms(parmsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xvec(xvecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type x_min(x_minSEXP);
+    Rcpp::traits::input_parameter< double >::type x_max(x_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(kappa4NLSheq(parms, xvec, y, x_min, x_max));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dkdeGauss
 double dkdeGauss(double x, NumericVector mu, double h);
 RcppExport SEXP alR_dkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
