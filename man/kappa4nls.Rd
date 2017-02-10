@@ -92,7 +92,7 @@ A framework for nonlinear least squares fitting of the four-parameter kappa sigm
 \item \code{kappa4nls}: predict method for kappa4nls.
 }}
 \examples{
-k <- kappa4tc(-4)$par
+k <- kappa4tc(-4, 0, 1)$par
 x <- seq(qkappa4(0, 4, 0.4, -4, k), qkappa4(0.7, 4, 0.4, -4, k), length.out=100)
 y <- sapply(x, function(i) pkappa4(i, 4, 0.4, -4, k))
 kappa4nls.default(y~x, tol=1e-5)

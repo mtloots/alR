@@ -1,18 +1,19 @@
 #' Sigmoidal curve fitting.
 #'
-#' A framework for nonlinear least squares fitting of the four-parameter kappa sigmoidal function.
+#' A framework for arc length fitting of the four-parameter kappa sigmoidal function.
 #'
-#' A shortened version of \code{\link{kappa4nls}}.
+#' A shortened version of \code{\link{kappa4al}}.
 #'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param xin Numeric vector of length 3 containing initial values, for \eqn{\sigma}, \eqn{h}, and \eqn{k}.
+#' @param q1,q2 Numeric vectors, for the lower and upper bounds of the intervals over which arc lengths are to be computed.
 #' @param ... Arguments to be passed on to the outer control list of \code{\link{constrOptim.nl}}.
 #'
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #' @importFrom alabama constrOptim.nl
 #'
-#' @return kappa4nlsShort: A list with the following components:
+#' @return kappa4alShort: A list with the following components:
 #' \itemize{
 #' \item coefficients: A vector of estimated coefficients.
 #' \item error: The value of the objective function.
@@ -22,10 +23,10 @@
 #' k <- kappa4tc(-4, 0, 1)$par
 #' x <- seq(qkappa4(0, 4, 0.4, -4, k), qkappa4(0.7, 4, 0.4, -4, k), length.out=100)
 #' y <- sapply(x, function(i) pkappa4(i, 4, 0.4, -4, k))
-#' kappa4nlsShort(y~x, xin=c(0.1, -3, -0.1))
+#' kappa4alShort(y~x, xin=c(0.1, -3, -0.1), q1=c(0.1, 0.5), q2=c(0.5, 0.9))
 #'
 #' @export
-kappa4nlsShort <- function(formula, data=list(), xin, ...)
+kappa4alShort <- function(formula, data=list(), xin, q1, q2, ...)
 {
 mf <- model.frame(formula=formula, data=data)
 X <- model.matrix(attr(mf, "terms"), data=mf)
@@ -42,23 +43,30 @@ else
 x <- X[,1]
 }
 
-nls <- alabama::constrOptim.nl(par=xin, fn=kappa4NLSobj, hin=kappa4NLShin, heq=kappa4NLSheq, control.outer=list(eps=1e-25, itmax=50000, trace=FALSE), control.optim=list(maxit=50000, abstol=1e-25, reltol=1e-25), xvec=x, y=y/max(y), x_min=min(x), x_max=max(x))
+p1 <- sapply(1:length(q1), function(i) x[length(which((y/max(y)) <= q1[i]))+1])
+p2 <- sapply(1:length(q2), function(i) x[length(which((y/max(y)) <= q2[i]))+1])
 
-if(nls$par[2] <= 0)
+al_samp <- kappa4IntApprox2(x, y/max(y), p1, p2, FALSE)
+
+al <- alabama::constrOptim.nl(par=xin, fn=kappa4ALobj, hin=kappa4ALhin, heq=kappa4ALheq, control.outer=list(eps=1e-25, itmax=50000, trace=FALSE), control.optim=list(maxit=50000, abstol=1e-25, reltol=1e-25), al_samp=al_samp, x_min=min(x), x_max=max(x), q1=p1, q2=p2)
+
+k <- al$par[3]
+
+if(al$par[2] <= 0)
 {
-mu <- min(x)-(nls$par[1]/nls$par[3])
+mu <- min(x)-(al$par[1]/k)
 }
 else
 {
-mu <- min(x)-nls$par[1]*(1-(nls$par[2])^(-nls$par[3]))/nls$par[3]
+mu <- min(x)-al$par[1]*(1-(al$par[2])^(-k))/k
 }
 
-coefficients <- c(mu, nls$par)
+coefficients <- c(mu, al$par)
 names(coefficients) <- c("mu", "sigma", "h", "k")
 
-error <- nls$value
+error <- al$value
 
-nlsout <- list(coefficients=coefficients,
+alout <- list(coefficients=coefficients,
 error=error)
-nlsout
+alout
 }

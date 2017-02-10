@@ -9,7 +9,7 @@
 #' @param upper A vector of upper constraints for the parameters to be estimated; defaults to c(10, 1, 1).
 #' @param tol Error tolerance level; defaults to 1e-15.
 #' @param maxiter The maximum number of iterations allowed; defaults to 50000.
-#' @param jackName The name of the .rds file to store the mmKDEjack object.  May include a path.
+#' @param jackName The name of the .rds file to store the kappa4nlsJack object.  May include a path.
 #' @param ... Arguments to be passed on to the differential evolution function \code{\link{JDEoptim}}.
 #'
 #' @return A generic S3 object with class kappa4nlsJack.
@@ -214,7 +214,7 @@ else
 X <- x[,1]
 }
 
-y <- sapply(X, function(i) pkappa4(i, coef(object)[1], coef(object)[2], coef(object)[3], coef(object)[4]))
+y <- sapply(X, function(i) pkappa4(i, coef(object)[1], coef(object)[2], coef(object)[3], coef(object)[4]))/pkappa4(max(X), coef(object)[1], coef(object)[2], coef(object)[3], coef(object)[4])
 }
 y
 }

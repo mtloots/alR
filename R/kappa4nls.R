@@ -30,7 +30,7 @@ kappa4nls <- function(formula, data=list(), lower, upper, tol, maxiter, ...) Use
 #' }
 #' 
 #' @examples
-#' k <- kappa4tc(-4)$par
+#' k <- kappa4tc(-4, 0, 1)$par
 #' x <- seq(qkappa4(0, 4, 0.4, -4, k), qkappa4(0.7, 4, 0.4, -4, k), length.out=100)
 #' y <- sapply(x, function(i) pkappa4(i, 4, 0.4, -4, k))
 #' kappa4nls.default(y~x, tol=1e-5)
@@ -53,7 +53,7 @@ else
 x <- X[,1]
 }
 
-nls <- DEoptimR::JDEoptim(lower=lower, upper=upper, fn=kappa4NLSobj, constr=kappa4NLScon, meq=1, tol=tol, maxiter=maxiter, x=x, y=y/max(y), x_min=min(x), x_max=max(x))
+nls <- DEoptimR::JDEoptim(lower=lower, upper=upper, fn=kappa4NLSobj, constr=kappa4NLScon, meq=2, tol=tol, maxiter=maxiter, x=x, y=y/max(y), x_min=min(x), x_max=max(x))
 
 nls$intercept <- intercept
 
@@ -71,7 +71,7 @@ names(nls$coefficients) <- c("mu", "sigma", "h", "k")
 
 nls$error <- nls$value
 
-nls$fitted.values <- sapply(x, function(i) pkappa4(i, nls$coefficients[1], nls$coefficients[2], nls$coefficients[3], nls$coefficients[4]))
+nls$fitted.values <- sapply(x, function(i) pkappa4(i, mu, nls$par[1], nls$par[2], nls$par[3]))/pkappa4(max(x), mu, nls$par[1], nls$par[2], nls$par[3])
 nls$residuals <- y/max(y)-nls$fitted.values
 nls$call <- match.call()
 
@@ -205,7 +205,7 @@ else
 X <- x[,1]
 }
 
-y <- sapply(X, function(i) pkappa4(i, coef(object)[1], coef(object)[2], coef(object)[3], coef(object)[4]))
+y <- sapply(X, function(i) pkappa4(i, coef(object)[1], coef(object)[2], coef(object)[3], coef(object)[4]))/pkappa4(max(X), coef(object)[1], coef(object)[2], coef(object)[3], coef(object)[4])
 }
 y
 }

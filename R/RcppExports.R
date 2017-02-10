@@ -206,6 +206,24 @@ rkappa4 <- function(n, mu, sigma, h, k) {
 }
 
 #' @rdname kappa4
+#' @return dddkappa4: The second derivative of dkappa4.
+#' @examples
+#' dddkappa4(1, 1, 2, 0.5, 2)
+#' @export
+dddkappa4 <- function(x, mu, sigma, h, k) {
+    .Call('alR_dddkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+}
+
+#' @rdname kappa4
+#' @return kappa4cond: The resultant induction period (IP).
+#' @examples
+#' kappa4cond(1, 2, 0.5, 2)
+#' @export
+kappa4cond <- function(mu, sigma, h, k) {
+    .Call('alR_kappa4cond', PACKAGE = 'alR', mu, sigma, h, k)
+}
+
+#' @rdname kappa4
 #' @return kappa4tc: A list with the following components:
 #' \itemize{
 #' \item $par: The k shape parameter corresponding to a given h parameter for the time-conductivity problem.
@@ -214,10 +232,94 @@ rkappa4 <- function(n, mu, sigma, h, k) {
 #' \item $fncount: Number of function calls.
 #' }
 #' @examples
-#' kappa4tc(-4)
+#' kappa4tc(-4, 0, 1)
 #' @export
-kappa4tc <- function(h, mu = 0, sigma = 1) {
+kappa4tc <- function(h, mu, sigma) {
     .Call('alR_kappa4tc', PACKAGE = 'alR', h, mu, sigma)
+}
+
+#' Arc length of four-parameter kappa CDF.
+#'
+#' Calculate the arc length for a univariate four-parameter kappa cumulative distribution function over a specified interval.
+#'
+#' The arc length of a univariate four-parameter kappa cumulative distribution function is approximated using the numerical integration C code implimented for R's integrate functions, i.e. using Rdqags.  For this approximation, subdiv = 100 (100 subdivisions), and eps_abs = eps_rel = 1e-10, i.e. the absolute and relative errors respectively.
+#'
+#' @param mu A real number specifying the location parameter.
+#' @param sigma A positive real number specifying the scale parameter.
+#' @param h,k Real numbers specifying the two shape parameters.
+#' @param tau A real number between 0 and 1, corresponding to the CDF value at the point of truncation.
+#' @param q1 The point (or vector for \code{kappa4Int2}) specifying the lower limit of the arc length integral.
+#' @param q2 The point (or vector for \code{kappa4Int2}) specifying the upper limit of the arc length integral.
+#' @param quantile Logical, TRUE/FALSE, whether \code{q1} and \code{q2} are quantiles, or actual points in the domain.
+#'
+#' @return kappa4Int: A list with the following components:
+#' \itemize{
+#' \item value: The resultant arc length.
+#' \item abs.err: The absolute error between iterations.
+#' subdivisions: Number of subdivisions used in the numerical approximation.
+#' \item neval: Number of function evaluations used by the numerical approximation.
+#' }
+#'
+#' @examples
+#' library(alR)
+#' mu <- 4
+#' sigma <- 0.4
+#' h <- -4
+#' tau <- 1 ## no truncation
+#' k <- kappa4tc(-4, 0, 1)$par
+#' kappa4Int(mu, sigma, h, k, tau, 0.025, 0.975, TRUE)
+#' p1 <- qkappa4(0.025, mu, sigma, h, k)
+#' p2 <- qkappa4(0.975, mu, sigma, h, k)
+#' kappa4Int(mu, sigma, h, k, tau, p1, p2, FALSE)
+#'
+#' @export
+kappa4Int <- function(mu, sigma, h, k, tau, q1, q2, quantile) {
+    .Call('alR_kappa4Int', PACKAGE = 'alR', mu, sigma, h, k, tau, q1, q2, quantile)
+}
+
+#' @rdname kappa4Int
+#' @return kappa4Int2: A vector having length equal to that of the vector of lower quantile bounds, containing the arc lengths requested for a four-parameter kappa cumulative distribution function.
+#'
+#' @examples
+#' kappa4Int2(mu, sigma, h, k, tau, c(0.025, 0.5), c(0.5, 0.975), TRUE)
+#' p12 <- qkappa4(0.5, mu, sigma, h, k)
+#' kappa4Int2(mu, sigma, h, k, tau, c(p1, p12), c(p12, p2), FALSE)
+#'
+#' @export
+kappa4Int2 <- function(mu, sigma, h, k, tau, q1, q2, quantile) {
+    .Call('alR_kappa4Int2', PACKAGE = 'alR', mu, sigma, h, k, tau, q1, q2, quantile)
+}
+
+#' Sample arc length statistic.
+#'
+#' The arc length over a specified interval is calculated for use in non-linear estimation.
+#'
+#' @param x Numeric vector of independent outcomes.
+#' @param y Numeric vector of dependent outcomes \eqn{y=F(x)}.
+#' @param q1,q2 Quantiles (between 0 and 1) over which the arc length segment is to be computed.
+#' @return kappa4IntApprox: The resultant arc length.
+#' @param quantile Logical, TRUE/FALSE, whether \code{q1} and \code{q2} are quantiles, or actual points in the domain.
+#' @examples
+#' x <- rnorm(100)
+#' y <- pnorm(x)
+#' kappa4IntApprox(x, y, 0.025, 0.975, TRUE)
+#' kappa4IntApprox(x, y, -1.96, 1.96, FALSE)
+#'
+#' @export
+kappa4IntApprox <- function(x, y, q1, q2, quantile) {
+    .Call('alR_kappa4IntApprox', PACKAGE = 'alR', x, y, q1, q2, quantile)
+}
+
+#' @rdname kappa4IntApprox
+#' @return kappa4IntApprox2: A vector having length equal to that of the vector of lower quantile bounds, containing the discrete arc length segments over the specified intervals.
+#'
+#' @examples
+#' kappa4IntApprox2(x, y, c(0.025, 0.5), c(0.5, 0.975), TRUE)
+#' kappa4IntApprox2(x, y, c(-1.96, 0), c(0, 1.96), FALSE)
+#'
+#' @export
+kappa4IntApprox2 <- function(x, y, q1, q2, quantile) {
+    .Call('alR_kappa4IntApprox2', PACKAGE = 'alR', x, y, q1, q2, quantile)
 }
 
 #' Sigmoidal curve fitting.
@@ -229,6 +331,8 @@ kappa4tc <- function(h, mu = 0, sigma = 1) {
 #' @param y A numeric vector of dependent observations.
 #' @param x_min The minimum xvec value.
 #' @param x_max The maximum xvec value.
+#' @param q1,q2 Numeric vectors, for the lower and upper bounds of the intervals over which arc lengths are to be computed.
+#' @param al_samp The sample arc length statistic.
 #'
 #' @return kappa4NLSobj: The nonlinear least squares objective function.
 #' @export
@@ -255,6 +359,34 @@ kappa4NLShin <- function(parms, xvec, y, x_min, x_max) {
 #' @export
 kappa4NLSheq <- function(parms, xvec, y, x_min, x_max) {
     .Call('alR_kappa4NLSheq', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4ALobj: The arc length objective function.
+#' @export
+kappa4ALobj <- function(parms, al_samp, x_min, x_max, q1, q2) {
+    .Call('alR_kappa4ALobj', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4ALcon: A vector with three conditions evaluated.
+#' @export
+kappa4ALcon <- function(parms, al_samp, x_min, x_max, q1, q2) {
+    .Call('alR_kappa4ALcon', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4ALhin: A vector specifying a single nonlinear inequality constraint.
+#' @export
+kappa4ALhin <- function(parms, al_samp, x_min, x_max, q1, q2) {
+    .Call('alR_kappa4ALhin', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+}
+
+#' @rdname kappa4NLSobj
+#' @return kappa4ALheq: A vector specifying two nonlinear equality constraints.
+#' @export
+kappa4ALheq <- function(parms, al_samp, x_min, x_max, q1, q2) {
+    .Call('alR_kappa4ALheq', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
 }
 
 #' Gaussian kernel density estimator.
@@ -391,6 +523,23 @@ momKDE <- function(beta, gamma, momy, kdeGaussMom, type) {
     .Call('alR_momKDE', PACKAGE = 'alR', beta, gamma, momy, kdeGaussMom, type)
 }
 
+#' Point corresponding to quantile.
+#' Calculate the \eqn{x} point corresponding to a quantile \eqn{F(x)} using linear interpolation.
+#'
+#' @param x A numeric vector, specifying the \eqn{x} values.
+#' @param y A numeric vector, specifying the \eqn{F(x)} values.
+#' @param q A real number between 0 and 1 inclusive, specifying the desired quantile.
+#'
+#' @return The interpolated quantile, \eqn{x}, corresponding to \eqn{q=F(x)}.
+#' @examples
+#' x <- rnorm(100)
+#' y <- pnorm(x)
+#' qlin(x, y, 0.5)
+#' @export
+qlin <- function(x, y, q) {
+    .Call('alR_qlin', PACKAGE = 'alR', x, y, q)
+}
+
 #' Empirical sample quantile.
 #' Calculate empirical sample quantile.
 #'
@@ -404,5 +553,40 @@ momKDE <- function(beta, gamma, momy, kdeGaussMom, type) {
 #' @export
 qsamp <- function(x, q) {
     .Call('alR_qsamp', PACKAGE = 'alR', x, q)
+}
+
+#' Sorted vector index.
+#'
+#' The sorted vector is returned along with the original index of the vector it belonged to.
+#'
+#' @param x A real-valued vector to be sorted.
+#'
+#' @return A list with two components:
+#' \itemize{
+#' \item sorted: The sorted version of \code{x}.
+#' \item index: The index of the \eqn{i^{th}} element in \code{x}.
+#' }
+#'
+#' @examples
+#' pairSort(c(5, 2, 6))
+#' @export
+pairSort <- function(x) {
+    .Call('alR_pairSort', PACKAGE = 'alR', x)
+}
+
+#' LULU smoother.
+#'
+#' Performs LULU smoothing of the provided vector.
+#'
+#' @param x A real-valued vector.
+#'
+#' @return The LULU-smoothed version of \code{x}.
+#'
+#' @examples
+#' x <- rnorm(10)
+#' lulu(x)
+#' @export
+lulu <- function(x) {
+    .Call('alR_lulu', PACKAGE = 'alR', x)
 }
 

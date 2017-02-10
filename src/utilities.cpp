@@ -106,6 +106,46 @@ _["msg"] = msg);
  } // end brents_fun
 
 
+//' Point corresponding to quantile.
+//' Calculate the \eqn{x} point corresponding to a quantile \eqn{F(x)} using linear interpolation.
+//'
+//' @param x A numeric vector, specifying the \eqn{x} values.
+//' @param y A numeric vector, specifying the \eqn{F(x)} values.
+//' @param q A real number between 0 and 1 inclusive, specifying the desired quantile.
+//'
+//' @return The interpolated quantile, \eqn{x}, corresponding to \eqn{q=F(x)}.
+//' @examples
+//' x <- rnorm(100)
+//' y <- pnorm(x)
+//' qlin(x, y, 0.5)
+//' @export
+// [[Rcpp::export]]
+double qlin(NumericVector x, NumericVector y, double q)
+{
+int pos2 = sum(ifelse(y<=q, 1, 0));
+
+if (pos2 == 0)
+{
+pos2 = 1;
+}
+
+int pos1 = pos2-1;
+
+std::nth_element(y.begin(), y.begin()+pos2, y.end());
+std::nth_element(y.begin(), y.begin()+pos1, y.end());
+
+double x1 = x[pos1];
+double x2 = x[pos2];
+double y1 = y[pos1];
+double y2 = y[pos2];
+
+double m = (y2-y1)/(x2-x1);
+double c = y1-m*x1;
+
+return (q-c)/m;
+}
+
+
 //' Empirical sample quantile.
 //' Calculate empirical sample quantile.
 //'
@@ -204,4 +244,89 @@ _["fncount"] = fncount);
 NumericVector RcppSample(NumericVector sample, int n)
 {
 return sample[round(runif(n)*(sample.size()-1.0), 0)];
+}
+
+
+//' Sorted vector index.
+//'
+//' The sorted vector is returned along with the original index of the vector it belonged to.
+//'
+//' @param x A real-valued vector to be sorted.
+//'
+//' @return A list with two components:
+//' \itemize{
+//' \item sorted: The sorted version of \code{x}.
+//' \item index: The index of the \eqn{i^{th}} element in \code{x}.
+//' }
+//'
+//' @examples
+//' pairSort(c(5, 2, 6))
+//' @export
+//[[Rcpp::export]]
+List pairSort(NumericVector x)
+{
+int n = x.size();
+NumericVector x_sorted(n);
+IntegerVector x_index(n);
+
+std::vector<double> arr(x.begin(), x.end());
+std::vector<std::pair<double,int> >V;
+
+for (int i=0; i<x.size(); i++)
+{
+std::pair<double,int>P = std::make_pair(arr[i], i);
+V.push_back(P);
+}
+
+std::sort(V.begin(), V.end());
+
+for (int i=0; i<x.size(); i++)
+{
+x_sorted[i] = V[i].first;
+x_index[i] = V[i].second;
+}
+
+return List::create(_["sorted"] = x_sorted,
+_["index"] = x_index);
+}
+
+
+//' LULU smoother.
+//'
+//' Performs LULU smoothing of the provided vector.
+//'
+//' @param x A real-valued vector.
+//'
+//' @return The LULU-smoothed version of \code{x}.
+//'
+//' @examples
+//' x <- rnorm(10)
+//' lulu(x)
+//' @export
+//[[Rcpp::export]]
+NumericVector lulu(NumericVector x)
+{
+int n = x.size();
+NumericVector x_out(n);
+
+x.insert(0,0);
+x.insert(n+1,0);
+
+for (int i=1; i<=n; i++)
+{
+if ((x[i] < x[i-1]) & (x[i] < x[i+1]))
+{
+x_out[i-1] = std::min(x[i-1], x[i+1]);
+}
+else if ((x[i] > x[i-1]) & (x[i] > x[i+1]))
+{
+x_out[i-1] = std::max(x[i-1], x[i+1]);
+}
+else
+{
+x_out[i-1] = x[i];
+}
+}
+
+return x_out;
 }

@@ -91,12 +91,24 @@ return (1/sigma)*dkappa4(x, mu, sigma, h, k)*pow(gkappa4(x, mu, sigma, k), -1)*(
 }
 
 
+//' @rdname kappa4
+//' @return dddkappa4: The second derivative of dkappa4.
+//' @examples
+//' dddkappa4(1, 1, 2, 0.5, 2)
+//' @export
+// [[Rcpp::export]]
 double dddkappa4(double x, double mu, double sigma, double h, double k)
 {
 return pow(gkappa4(x, mu, sigma, k), -1.0)*(((1-h)/sigma)*pow(pkappa4(x, mu, sigma, h, k), -h)*pow(gkappa4(x, mu, sigma, k), 1.0/k)*(2*ddkappa4(x, mu, sigma, h, k)-(1.0/pow(sigma, 2))*pow(pkappa4(x, mu, sigma, h, k), 1-2*h)*pow(gkappa4(x, mu, sigma, k), 2.0/k-2))-((1-k)/sigma)*(ddkappa4(x, mu, sigma, h, k)+(k/pow(sigma, 2))*pow(pkappa4(x, mu, sigma, h, k), 1-h)*pow(gkappa4(x, mu, sigma, k), 1.0/k-2)));
 }
 
 
+//' @rdname kappa4
+//' @return kappa4cond: The resultant induction period (IP).
+//' @examples
+//' kappa4cond(1, 2, 0.5, 2)
+//' @export
+// [[Rcpp::export]]
 double kappa4cond(double mu, double sigma, double h, double k)
 {
 return mu+(sigma/k)*(1-pow((1-k)/(1-h*k), k-1));
@@ -132,10 +144,10 @@ return std::abs(dddkappa4(x, mu, sigma, h, k[0]))+cond;
 //' \item $fncount: Number of function calls.
 //' }
 //' @examples
-//' kappa4tc(-4)
+//' kappa4tc(-4, 0, 1)
 //' @export
 // [[Rcpp::export]]
-List kappa4tc(double h, double mu = 0, double sigma = 1)
+List kappa4tc(double h, double mu, double sigma)
 {
 params param = {mu, sigma, h};
 double xin[1];

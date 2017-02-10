@@ -9,11 +9,22 @@ Rcpp::List brents_fun(brents_fn f, void *ex, double lower, double upper, double 
 
 double bw(NumericVector x, double type);
 
+Rcpp::List pairSort(Rcpp::NumericVector x);
+
 double pkappa4(double x, double mu, double sigma, double h, double k);
+
+double dkappa4(double x, double mu, double sigma, double h, double k);
+
+double qkappa4(double x, double mu, double sigma, double h, double k);
 
 double dddkappa4(double x, double mu, double sigma, double h, double k);
 
 double kappa4cond(double mu, double sigma, double h, double k);
+
+NumericVector kappa4Int2(double mu, double sigma, double h, double k, double tau, NumericVector q1, NumericVector q2, bool quantile);
+
+Rcpp::List kappa4tc(double h, double mu, double sigma);
+
 
 double dkdeGauss(double x, Rcpp::NumericVector mu, double h);
 
@@ -23,7 +34,11 @@ Rcpp::NumericVector kdeGaussInt2(Rcpp::NumericVector mu, double h, Rcpp::Numeric
 
 Rcpp::NumericVector kdeGaussIntApprox2(Rcpp::NumericVector mu, double h, Rcpp::NumericVector q1, Rcpp::NumericVector q2, bool quantile);
 
+Rcpp::NumericVector lulu(Rcpp::NumericVector x);
+
 Rcpp::List qkdeGauss(double x, Rcpp::NumericVector mu, double h);
+
+double qlin(NumericVector x, NumericVector y, double q);
 
 double qsamp(Rcpp::NumericVector x, double q);
 
