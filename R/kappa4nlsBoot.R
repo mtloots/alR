@@ -16,7 +16,7 @@
 #' @return A generic S3 object with class kappa4nlsBoot.
 #'
 #' @import pbdMPI
-#' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat var
+#' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat sd var
 #'
 #' @export
 kappa4nlsBoot <- function(formula, data=list(), xin, lower, upper, tol, maxiter, bootstraps, bootName, ...) UseMethod("kappa4nlsBoot")
@@ -62,10 +62,8 @@ ret.coef <- do.call(rbind, lapply(1:bootstraps, function(x) ret[[x]]$coefficient
 
 boot$coefDist <- ret.coef
 
-coefMean <- colMeans(ret.coef)
-coefVar <- (1/(bootstraps-1))*colSums((ret.coef-coefMean)^2)
-boot$se <- sqrt(coefVar)
-boot$bcoefficients <- coefMean
+boot$bcoefficients <- colMeans(ret.coef)
+boot$se <- apply(ret.coef, 2, sd)
 
 boot$errorList <- as.vector(do.call(rbind, lapply(1:bootstraps, function(x) ret[[x]]$error)))
 
@@ -113,9 +111,6 @@ ci <- do.call(rbind, lapply(1:ncol(object$coefDist), function(j) c(qsamp(object$
 pval <- do.call(rbind, lapply(1:length(object$coefficients), function(i) {
 lpv <- mean(object$coefDist[,i]-object$bcoefficients[i] <= object$coefficients[i])
 2*min(lpv, 1-lpv)
-
-##fn <- ecdf(object$coefDist[,i]-object$bcoefficients[i])
-##1-fn(object$coefficients[i])
 }))
 
 TAB <- cbind(Estimate = coef(object),

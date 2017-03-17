@@ -1,6 +1,6 @@
 Package: alR
-Version: 2.0.1
-Date: 06/02/2017
+Version: 2.0.4
+Date: 06/03/2017
 Title: Arc lengths of statistical functions
 Description: Estimation, regression and classification using arc lengths.
 Depends: R (>= 3.2)
@@ -12,3 +12,4 @@ License: GPL (>=2)
 URL: https://github.com/mtloots/alR
 RoxygenNote: 5.0.1
 Suggests: testthat
+LazyData: true

@@ -138,7 +138,6 @@ rownames(alTAB) <- paste("[", round(object$p1, 5), ", ", round(object$p2, 5), "]
     colnames(alTAB) <- c("Theoretical", "Sample")
 
 y <- object$residuals+object$fitted.values
-
 r.squared <- 1-var(object$residuals)/var(y)
 
 al <- list(call=object$call,

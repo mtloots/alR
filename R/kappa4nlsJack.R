@@ -108,9 +108,6 @@ ci <- do.call(rbind, lapply(1:ncol(object$coefDist), function(j) c(qsamp(object$
 pval <- do.call(rbind, lapply(1:length(object$coefficients), function(i) {
 lpv <- mean(object$coefDist[,i]-object$jcoefficients[i] <= object$coefficients[i])
 2*min(lpv, 1-lpv)
-
-##fn <- ecdf(object$coefDist[,i]-object$jcoefficients[i])
-##1-fn(object$coefficients[i])
 }))
 
 TAB <- cbind(Estimate = coef(object),
