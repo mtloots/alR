@@ -7,7 +7,7 @@
 #' \item Simulate bootstrap distributions for parameter estimates, resulting from sample arc length statistics.
 #' }
 #'
-#' This method is currently only implimented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolarence level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
+#' This method is currently only implemented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolerance level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
 #'
 #' @param X A vector of sample values.
 #' @param q1,q2 Vectors specifying the quantiles over which arc length segments are to be computed.

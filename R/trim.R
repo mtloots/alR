@@ -31,7 +31,7 @@ stop("'trim' must be numeric of length one")
 n <- length(x)
 if(trim > 0 && n > 0)
 {
-if(is.complex(x)) stop("trimmed sd are not defined for complex data")
+if(is.complex(x)) stop("trim is not defined for complex data")
 if(trim >= 0.5) return(0)
 lo <- floor(n * trim) + 1
 hi <- n + 1 - lo

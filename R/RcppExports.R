@@ -5,7 +5,7 @@
 #' @return alE: A list with the following components (see \code{\link{optim}}):
 #' \itemize{
 #' \item par: The estimated parameters.
-#' \item abstol: The absolute tolarence level (default 1e-15).
+#' \item abstol: The absolute tolerance level (default 1e-15).
 #' \item fail: An integer code indicating convergence.
 #' \item fncount: Number of function evaluations.
 #' }
@@ -42,8 +42,10 @@ alEfitdist <- function(x, q1, q2, dc, type, bootstraps) {
 #' alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, TRUE, -1)
 #' alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, FALSE, -1)
 #' alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, FALSE, -1)
-#' alEdist(50, 100, 2, 3.5, qnorm(0.025,2,3.5), qnorm(0.975, 2, 3.5), FALSE, FALSE, -1)
-#' alEdist(50, 100, 2, 3.5, c(qnorm(0.025, 2, 3.5),2), c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
+#' alEdist(50, 100, 2, 3.5, qnorm(0.025,2,3.5),
+#' qnorm(0.975, 2, 3.5), FALSE, FALSE, -1)
+#' alEdist(50, 100, 2, 3.5, c(qnorm(0.025, 2, 3.5),2),
+#' c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
 #' }
 #' @export
 alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type) {

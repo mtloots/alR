@@ -61,7 +61,7 @@ Goodness-of-fit using arc lengths.
 \details{
 First the distributional parameters of a sample is estimated using the continuous arc length sample statistic (see \code{\link{alE}}).  The calculated sample arc length statistic is then compared to the distribution of that particular sample statistic, obtained by a parametric bootstrap, using the estimated parameters (see \code{\link{alEdist}}).  This finally leads to the calculation of a p-value for a goodness-of-fit test, based on the simulated distribution.
 
-This method is currently only implimented for the normal distribution, and for a single arc length segment.
+This method is currently only implemented for the normal distribution, and for a single arc length segment.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -75,15 +75,19 @@ alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, TRUE, -1)
 alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, TRUE, -1)
 alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, FALSE, -1)
 alEdist(50, 100, 2, 3.5, c(0.025,0.5), c(0.5,0.975), TRUE, FALSE, -1)
-alEdist(50, 100, 2, 3.5, qnorm(0.025,2,3.5), qnorm(0.975, 2, 3.5), FALSE, FALSE, -1)
-alEdist(50, 100, 2, 3.5, c(qnorm(0.025, 2, 3.5),2), c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
+alEdist(50, 100, 2, 3.5, qnorm(0.025,2,3.5),
+qnorm(0.975, 2, 3.5), FALSE, FALSE, -1)
+alEdist(50, 100, 2, 3.5, c(qnorm(0.025, 2, 3.5),2),
+c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
 }
 \dontrun{
 x <- rnorm(1000)
 s1 <- alE(x, 0.025, 0.975, TRUE, -1)
-alEtest(x, mu=s1$par[1], sigma=s1$par[2], q1=0.025, q2=0.975, type=-1, bootstraps=50)
+alEtest(x, mu=s1$par[1], sigma=s1$par[2], q1=0.025, q2=0.975,
+type=-1, bootstraps=50)
 s2 <- alE(x, 0.025, 0.975, FALSE, -1)
-alEtest(x, mu=s2$par[1], sigma=s2$par[2], q1=0.025, q2=0.975, type=-1, bootstraps=50)
+alEtest(x, mu=s2$par[1], sigma=s2$par[2], q1=0.025, q2=0.975,
+type=-1, bootstraps=50)
 }
 
 }
