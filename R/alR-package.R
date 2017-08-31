@@ -5,7 +5,7 @@
 #' @name alR
 #' @author m. Theodor Loots <theo.loots@@gmail.com>
 #' @docType package
-#' @useDynLib alR
+#' @useDynLib alR, .registration=TRUE
 #' @importFrom Rcpp sourceCpp
 #' @exportPattern "^[[:alpha:]]+"
 NULL

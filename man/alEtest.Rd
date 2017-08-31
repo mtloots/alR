@@ -69,6 +69,7 @@ This method is currently only implemented for the normal distribution, and for a
 
 \item \code{alEtest}: print method for alEtest.
 }}
+
 \examples{
 \dontrun{
 alEdist(50, 100, 2, 3.5, 0.025, 0.975, TRUE, TRUE, -1)
@@ -91,4 +92,3 @@ type=-1, bootstraps=50)
 }
 
 }
-

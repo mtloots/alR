@@ -1,0 +1,49 @@
+\documentclass{amsart}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\usepackage{Sweavel}
+
+
+\usepackage{alltt}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\begin{Schunk}
+\begin{Soutput}
+'data.frame':	35711 obs. of  5 variables:
+ $ Gene_ID              : Factor w/ 35711 levels "Eucgr.A00001",..: 4 23 24 48 49 56 67 71 76 77 ...
+ $ Raw_FPKM             : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ H3K4me3_signal_bin25 : num  -16.65 10.3 -11.81 -16.95 -9.86 ...
+ $ H3K27me3_signal_bin21: num  -10.2 25.57 18.57 -3.97 -8.32 ...
+ $ Train                : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
+\end{Soutput}
+\begin{Soutput}
+       x                y               S60         
+ Min.   : 0.000   Min.   :  0.9419   Mode :logical  
+ 1st Qu.: 4.808   1st Qu.: 22.4046   FALSE:2275     
+ Median : 9.616   Median :117.3510   TRUE :3495     
+ Mean   : 9.616   Mean   :157.6762                  
+ 3rd Qu.:14.424   3rd Qu.:299.1403                  
+ Max.   :19.232   Max.   :400.0364                  
+\end{Soutput}
+\begin{Soutput}
+       x                y               S60         
+ Min.   : 0.000   Min.   :  0.9567   Mode :logical  
+ 1st Qu.: 3.400   1st Qu.:  9.8794   FALSE:1584     
+ Median : 6.799   Median : 26.6139   TRUE :2496     
+ Mean   : 6.799   Mean   : 86.7793                  
+ 3rd Qu.:10.199   3rd Qu.:166.7730                  
+ Max.   :13.599   Max.   :300.0511                  
+\end{Soutput}
+\end{Schunk}
+
+\end{document}

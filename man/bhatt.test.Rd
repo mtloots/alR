@@ -33,4 +33,3 @@ x <- rnorm(1000)
 bhatt.test(y,x,10)
 
 }
-

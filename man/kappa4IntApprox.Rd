@@ -36,4 +36,3 @@ kappa4IntApprox2(x, y, c(0.025, 0.5), c(0.5, 0.975), TRUE)
 kappa4IntApprox2(x, y, c(-1.96, 0), c(0, 1.96), FALSE)
 
 }
-

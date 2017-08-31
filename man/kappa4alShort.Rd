@@ -37,4 +37,3 @@ y <- sapply(x, function(i) pkappa4(i, 4, 0.4, -4, k))
 kappa4alShort(y~x, xin=c(0.1, -3, -0.1), q1=c(0.1, 0.5), q2=c(0.5, 0.9))
 
 }
-

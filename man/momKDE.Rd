@@ -23,4 +23,3 @@ Square root of sum of squared differences between \code{gamma}*\code{beta} and \
 \description{
 The moments of kernel density estimates are matched.
 }
-

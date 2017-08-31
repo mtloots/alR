@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R, R/alEfit.R
 \name{alE}
 \alias{alE}
+\alias{alEfitdist}
 \alias{alEfit}
 \alias{alEfit.default}
-\alias{alEfitdist}
 \alias{print.alEfit}
 \title{Arc length estimation.}
 \usage{
@@ -73,6 +73,7 @@ This method is currently only implemented for the normal distribution.  The unde
 
 \item \code{alEfit}: print method for alEfit.
 }}
+
 \examples{
 x <- rnorm(1000)
 alE(x,0.025, 0.975, TRUE, -1)
@@ -88,4 +89,3 @@ alEfit(x, q1=0.025, q2=0.975, dc=TRUE, type=-1, bootstraps=50)
 alEfit(x, q1=0.025, q2=0.975, dc=FALSE, type=-1, bootstraps=50)
 
 }
-

@@ -39,4 +39,3 @@ XIn <- lm(y~x)
 alKDEshort(y~x, xin=coef(XIn), q1=c(0.1,0.5), q2=c(0.5,0.9), type=-1)
 
 }
-

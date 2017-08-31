@@ -58,4 +58,3 @@ p12 <- qkappa4(0.5, mu, sigma, h, k)
 kappa4Int2(mu, sigma, h, k, tau, c(p1, p12), c(p12, p2), FALSE)
 
 }
-

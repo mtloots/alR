@@ -3,11 +3,11 @@
 \name{mmKDEjack}
 \alias{mmKDEjack}
 \alias{mmKDEjack.default}
+\alias{print.mmKDEjack}
+\alias{summary.mmKDEjack}
+\alias{print.summary.mmKDEjack}
 \alias{mmKDEjack.formula}
 \alias{predict.mmKDEjack}
-\alias{print.mmKDEjack}
-\alias{print.summary.mmKDEjack}
-\alias{summary.mmKDEjack}
 \title{Moment matching for kernel density estimators.}
 \usage{
 mmKDEjack(formula, data = list(), xin, type, jackName, ...)

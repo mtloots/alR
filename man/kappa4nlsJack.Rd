@@ -3,11 +3,11 @@
 \name{kappa4nlsJack}
 \alias{kappa4nlsJack}
 \alias{kappa4nlsJack.default}
+\alias{print.kappa4nlsJack}
+\alias{summary.kappa4nlsJack}
+\alias{print.summary.kappa4nlsJack}
 \alias{kappa4nlsJack.formula}
 \alias{predict.kappa4nlsJack}
-\alias{print.kappa4nlsJack}
-\alias{print.summary.kappa4nlsJack}
-\alias{summary.kappa4nlsJack}
 \title{Sigmoidal curve fitting.}
 \usage{
 kappa4nlsJack(formula, data = list(), xin, lower, upper, tol, maxiter,

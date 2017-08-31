@@ -3,11 +3,11 @@
 \name{mmKDE}
 \alias{mmKDE}
 \alias{mmKDE.default}
+\alias{print.mmKDE}
+\alias{summary.mmKDE}
+\alias{print.summary.mmKDE}
 \alias{mmKDE.formula}
 \alias{predict.mmKDE}
-\alias{print.mmKDE}
-\alias{print.summary.mmKDE}
-\alias{summary.mmKDE}
 \title{Moment matching for kernel density estimators.}
 \usage{
 mmKDE(formula, data = list(), xin, type, ...)
@@ -93,6 +93,7 @@ Estimate parameters of a linear model by matching the moments of kernel density 
 
 \item \code{mmKDE}: predict method for mmKDE.
 }}
+
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
@@ -106,4 +107,3 @@ mom <- mmKDE(y~x, xin=coef(XIn), type=-1)
 predict(mom, newdata=data.frame(y=v, x=u))
 
 }
-

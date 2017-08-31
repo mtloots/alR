@@ -19,4 +19,3 @@ Performs LULU smoothing of the provided vector.
 x <- rnorm(10)
 lulu(x)
 }
-

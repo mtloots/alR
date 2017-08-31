@@ -3,11 +3,11 @@
 \name{kappa4al}
 \alias{kappa4al}
 \alias{kappa4al.default}
+\alias{print.kappa4al}
+\alias{summary.kappa4al}
+\alias{print.summary.kappa4al}
 \alias{kappa4al.formula}
 \alias{predict.kappa4al}
-\alias{print.kappa4al}
-\alias{print.summary.kappa4al}
-\alias{summary.kappa4al}
 \title{Sigmoidal curve fitting.}
 \usage{
 kappa4al(formula, data = list(), lower, upper, q1, q2, tol, maxiter, ...)
@@ -98,6 +98,7 @@ A framework for arc length fitting of the four-parameter kappa sigmoidal functio
 
 \item \code{kappa4al}: predict method for kappa4al.
 }}
+
 \examples{
 k <- kappa4tc(-4, 0, 1)$par
 x <- seq(qkappa4(0, 4, 0.4, -4, k), qkappa4(0.7, 4, 0.4, -4, k), length.out=100)
@@ -110,4 +111,3 @@ al <- kappa4al(y~x, q1=c(0.025, 0.5), q2=c(0.5, 0.975), tol=1e-5)
 predict(al, newdata=data.frame(y=v, x=u))
 
 }
-

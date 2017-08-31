@@ -22,4 +22,3 @@ The sorted vector is returned along with the original index of the vector it bel
 \examples{
 pairSort(c(5, 2, 6))
 }
-

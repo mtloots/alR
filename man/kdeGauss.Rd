@@ -49,4 +49,3 @@ dkdeGauss(0, x, h_x)
 pkdeGauss(0, x, h_x)
 qkdeGauss(0.5, x, h_x)
 }
-

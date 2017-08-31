@@ -3,11 +3,11 @@
 \name{alKDEjack}
 \alias{alKDEjack}
 \alias{alKDEjack.default}
+\alias{print.alKDEjack}
+\alias{summary.alKDEjack}
+\alias{print.summary.alKDEjack}
 \alias{alKDEjack.formula}
 \alias{predict.alKDEjack}
-\alias{print.alKDEjack}
-\alias{print.summary.alKDEjack}
-\alias{summary.alKDEjack}
 \title{Arc length matching for kernel density estimators.}
 \usage{
 alKDEjack(formula, data = list(), xin, q1, q2, type, jackName, ...)

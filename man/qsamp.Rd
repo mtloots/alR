@@ -23,4 +23,3 @@ Calculate empirical sample quantile.
 x<-rnorm(100)
 qsamp(x, 0.5)
 }
-

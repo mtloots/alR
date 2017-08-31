@@ -26,4 +26,3 @@ h_x <- bw(x, type=-1)
 kdeGaussMom(3, x, h_x)
 
 }
-

@@ -25,4 +25,3 @@ Square root of the sum of squared differences between \code{gamma}*\code{beta} a
 \description{
 The arc lengths over specified intervals, in the domain of kernel density estimates, are matched.
 }
-

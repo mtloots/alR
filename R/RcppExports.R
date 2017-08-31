@@ -19,7 +19,7 @@
 #'
 #' @export
 alE <- function(x, q1, q2, dc, type) {
-    .Call('alR_alE', PACKAGE = 'alR', x, q1, q2, dc, type)
+    .Call(`_alR_alE`, x, q1, q2, dc, type)
 }
 
 #' @rdname alEfit
@@ -31,7 +31,7 @@ alE <- function(x, q1, q2, dc, type) {
 #' }
 #' @export
 alEfitdist <- function(x, q1, q2, dc, type, bootstraps) {
-    .Call('alR_alEfitdist', PACKAGE = 'alR', x, q1, q2, dc, type, bootstraps)
+    .Call(`_alR_alEfitdist`, x, q1, q2, dc, type, bootstraps)
 }
 
 #' @rdname alEtest
@@ -49,7 +49,7 @@ alEfitdist <- function(x, q1, q2, dc, type, bootstraps) {
 #' }
 #' @export
 alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type) {
-    .Call('alR_alEdist', PACKAGE = 'alR', n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
+    .Call(`_alR_alEdist`, n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
 }
 
 #' Objective function for KDE arc length matching.
@@ -67,7 +67,7 @@ alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type) {
 #'
 #' @export
 alrKDE <- function(beta, gamma, aly, q1, q2, type) {
-    .Call('alR_alrKDE', PACKAGE = 'alR', beta, gamma, aly, q1, q2, type)
+    .Call(`_alR_alrKDE`, beta, gamma, aly, q1, q2, type)
 }
 
 #' @rdname bw
@@ -80,7 +80,7 @@ alrKDE <- function(beta, gamma, aly, q1, q2, type) {
 #'
 #' @export
 Silverman <- function(x) {
-    .Call('alR_Silverman', PACKAGE = 'alR', x)
+    .Call(`_alR_Silverman`, x)
 }
 
 #' @rdname bw
@@ -91,7 +91,7 @@ Silverman <- function(x) {
 #'
 #' @export
 Silverman2 <- function(x) {
-    .Call('alR_Silverman2', PACKAGE = 'alR', x)
+    .Call(`_alR_Silverman2`, x)
 }
 
 #' Kernel density bandwidth estimators.
@@ -115,7 +115,7 @@ Silverman2 <- function(x) {
 #'
 #' @export
 bw <- function(x, type) {
-    .Call('alR_bw', PACKAGE = 'alR', x, type)
+    .Call(`_alR_bw`, x, type)
 }
 
 #' Arc length of Gaussian PDF.
@@ -147,7 +147,7 @@ bw <- function(x, type) {
 #'
 #' @export
 GaussInt <- function(mu, sigma, q1, q2, quantile) {
-    .Call('alR_GaussInt', PACKAGE = 'alR', mu, sigma, q1, q2, quantile)
+    .Call(`_alR_GaussInt`, mu, sigma, q1, q2, quantile)
 }
 
 #' @rdname GaussInt
@@ -159,7 +159,7 @@ GaussInt <- function(mu, sigma, q1, q2, quantile) {
 #'
 #' @export
 GaussInt2 <- function(mu, sigma, q1, q2, quantile) {
-    .Call('alR_GaussInt2', PACKAGE = 'alR', mu, sigma, q1, q2, quantile)
+    .Call(`_alR_GaussInt2`, mu, sigma, q1, q2, quantile)
 }
 
 #' Four-parameter kappa distribution.
@@ -177,7 +177,7 @@ GaussInt2 <- function(mu, sigma, q1, q2, quantile) {
 #' @return pkappa4: The cumulative distribution function at the point \code{x}.
 #' @export
 pkappa4 <- function(x, mu, sigma, h, k) {
-    .Call('alR_pkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+    .Call(`_alR_pkappa4`, x, mu, sigma, h, k)
 }
 
 #' @rdname kappa4
@@ -186,7 +186,7 @@ pkappa4 <- function(x, mu, sigma, h, k) {
 #' dkappa4(1, 1, 2, 0.5, 2)
 #' @export
 dkappa4 <- function(x, mu, sigma, h, k) {
-    .Call('alR_dkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+    .Call(`_alR_dkappa4`, x, mu, sigma, h, k)
 }
 
 #' @rdname kappa4
@@ -195,7 +195,7 @@ dkappa4 <- function(x, mu, sigma, h, k) {
 #' @return qkappa4: The \code{x}th quantile of the distribution.
 #' @export
 qkappa4 <- function(x, mu, sigma, h, k) {
-    .Call('alR_qkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+    .Call(`_alR_qkappa4`, x, mu, sigma, h, k)
 }
 
 #' @rdname kappa4
@@ -204,7 +204,7 @@ qkappa4 <- function(x, mu, sigma, h, k) {
 #' @return rkappa4: Randomly generated numbers from the distribution.
 #' @export
 rkappa4 <- function(n, mu, sigma, h, k) {
-    .Call('alR_rkappa4', PACKAGE = 'alR', n, mu, sigma, h, k)
+    .Call(`_alR_rkappa4`, n, mu, sigma, h, k)
 }
 
 #' @rdname kappa4
@@ -213,7 +213,7 @@ rkappa4 <- function(n, mu, sigma, h, k) {
 #' dddkappa4(1, 1, 2, 0.5, 2)
 #' @export
 dddkappa4 <- function(x, mu, sigma, h, k) {
-    .Call('alR_dddkappa4', PACKAGE = 'alR', x, mu, sigma, h, k)
+    .Call(`_alR_dddkappa4`, x, mu, sigma, h, k)
 }
 
 #' @rdname kappa4
@@ -222,7 +222,7 @@ dddkappa4 <- function(x, mu, sigma, h, k) {
 #' kappa4cond(1, 2, 0.5, 2)
 #' @export
 kappa4cond <- function(mu, sigma, h, k) {
-    .Call('alR_kappa4cond', PACKAGE = 'alR', mu, sigma, h, k)
+    .Call(`_alR_kappa4cond`, mu, sigma, h, k)
 }
 
 #' @rdname kappa4
@@ -237,7 +237,7 @@ kappa4cond <- function(mu, sigma, h, k) {
 #' kappa4tc(-4, 0, 1)
 #' @export
 kappa4tc <- function(h, mu, sigma) {
-    .Call('alR_kappa4tc', PACKAGE = 'alR', h, mu, sigma)
+    .Call(`_alR_kappa4tc`, h, mu, sigma)
 }
 
 #' Arc length of four-parameter kappa CDF.
@@ -276,7 +276,7 @@ kappa4tc <- function(h, mu, sigma) {
 #'
 #' @export
 kappa4Int <- function(mu, sigma, h, k, tau, q1, q2, quantile) {
-    .Call('alR_kappa4Int', PACKAGE = 'alR', mu, sigma, h, k, tau, q1, q2, quantile)
+    .Call(`_alR_kappa4Int`, mu, sigma, h, k, tau, q1, q2, quantile)
 }
 
 #' @rdname kappa4Int
@@ -289,7 +289,7 @@ kappa4Int <- function(mu, sigma, h, k, tau, q1, q2, quantile) {
 #'
 #' @export
 kappa4Int2 <- function(mu, sigma, h, k, tau, q1, q2, quantile) {
-    .Call('alR_kappa4Int2', PACKAGE = 'alR', mu, sigma, h, k, tau, q1, q2, quantile)
+    .Call(`_alR_kappa4Int2`, mu, sigma, h, k, tau, q1, q2, quantile)
 }
 
 #' Sample arc length statistic.
@@ -309,7 +309,7 @@ kappa4Int2 <- function(mu, sigma, h, k, tau, q1, q2, quantile) {
 #'
 #' @export
 kappa4IntApprox <- function(x, y, q1, q2, quantile) {
-    .Call('alR_kappa4IntApprox', PACKAGE = 'alR', x, y, q1, q2, quantile)
+    .Call(`_alR_kappa4IntApprox`, x, y, q1, q2, quantile)
 }
 
 #' @rdname kappa4IntApprox
@@ -321,7 +321,7 @@ kappa4IntApprox <- function(x, y, q1, q2, quantile) {
 #'
 #' @export
 kappa4IntApprox2 <- function(x, y, q1, q2, quantile) {
-    .Call('alR_kappa4IntApprox2', PACKAGE = 'alR', x, y, q1, q2, quantile)
+    .Call(`_alR_kappa4IntApprox2`, x, y, q1, q2, quantile)
 }
 
 #' Sigmoidal curve fitting.
@@ -339,56 +339,56 @@ kappa4IntApprox2 <- function(x, y, q1, q2, quantile) {
 #' @return kappa4NLSobj: The nonlinear least squares objective function.
 #' @export
 kappa4NLSobj <- function(parms, xvec, y, x_min, x_max) {
-    .Call('alR_kappa4NLSobj', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+    .Call(`_alR_kappa4NLSobj`, parms, xvec, y, x_min, x_max)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4NLScon: A vector with three conditions evaluated.
 #' @export
 kappa4NLScon <- function(parms, xvec, y, x_min, x_max) {
-    .Call('alR_kappa4NLScon', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+    .Call(`_alR_kappa4NLScon`, parms, xvec, y, x_min, x_max)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4NLShin: A vector specifying a single nonlinear inequality constraint.
 #' @export
 kappa4NLShin <- function(parms, xvec, y, x_min, x_max) {
-    .Call('alR_kappa4NLShin', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+    .Call(`_alR_kappa4NLShin`, parms, xvec, y, x_min, x_max)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4NLSheq: A vector specifying two nonlinear equality constraints.
 #' @export
 kappa4NLSheq <- function(parms, xvec, y, x_min, x_max) {
-    .Call('alR_kappa4NLSheq', PACKAGE = 'alR', parms, xvec, y, x_min, x_max)
+    .Call(`_alR_kappa4NLSheq`, parms, xvec, y, x_min, x_max)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4ALobj: The arc length objective function.
 #' @export
 kappa4ALobj <- function(parms, al_samp, x_min, x_max, q1, q2) {
-    .Call('alR_kappa4ALobj', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+    .Call(`_alR_kappa4ALobj`, parms, al_samp, x_min, x_max, q1, q2)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4ALcon: A vector with three conditions evaluated.
 #' @export
 kappa4ALcon <- function(parms, al_samp, x_min, x_max, q1, q2) {
-    .Call('alR_kappa4ALcon', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+    .Call(`_alR_kappa4ALcon`, parms, al_samp, x_min, x_max, q1, q2)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4ALhin: A vector specifying a single nonlinear inequality constraint.
 #' @export
 kappa4ALhin <- function(parms, al_samp, x_min, x_max, q1, q2) {
-    .Call('alR_kappa4ALhin', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+    .Call(`_alR_kappa4ALhin`, parms, al_samp, x_min, x_max, q1, q2)
 }
 
 #' @rdname kappa4NLSobj
 #' @return kappa4ALheq: A vector specifying two nonlinear equality constraints.
 #' @export
 kappa4ALheq <- function(parms, al_samp, x_min, x_max, q1, q2) {
-    .Call('alR_kappa4ALheq', PACKAGE = 'alR', parms, al_samp, x_min, x_max, q1, q2)
+    .Call(`_alR_kappa4ALheq`, parms, al_samp, x_min, x_max, q1, q2)
 }
 
 #' Gaussian kernel density estimator.
@@ -411,7 +411,7 @@ kappa4ALheq <- function(parms, al_samp, x_min, x_max, q1, q2) {
 #' dkdeGauss(0, x, h_x)
 #' @export
 dkdeGauss <- function(x, mu, h) {
-    .Call('alR_dkdeGauss', PACKAGE = 'alR', x, mu, h)
+    .Call(`_alR_dkdeGauss`, x, mu, h)
 }
 
 #' @rdname kdeGauss
@@ -420,7 +420,7 @@ dkdeGauss <- function(x, mu, h) {
 #' @return pkdeGauss: The estimated value of the cumulative distribution function at the point \code{x}.
 #' @export
 pkdeGauss <- function(x, mu, h) {
-    .Call('alR_pkdeGauss', PACKAGE = 'alR', x, mu, h)
+    .Call(`_alR_pkdeGauss`, x, mu, h)
 }
 
 #' @rdname kdeGauss
@@ -436,7 +436,7 @@ pkdeGauss <- function(x, mu, h) {
 #' }
 #' @export
 qkdeGauss <- function(x, mu, h) {
-    .Call('alR_qkdeGauss', PACKAGE = 'alR', x, mu, h)
+    .Call(`_alR_qkdeGauss`, x, mu, h)
 }
 
 #' Arc length of Gaussian KDE.
@@ -470,7 +470,7 @@ qkdeGauss <- function(x, mu, h) {
 #'
 #' @export
 kdeGaussInt <- function(mu, h, q1, q2, quantile) {
-    .Call('alR_kdeGaussInt', PACKAGE = 'alR', mu, h, q1, q2, quantile)
+    .Call(`_alR_kdeGaussInt`, mu, h, q1, q2, quantile)
 }
 
 #' @rdname kdeGaussInt
@@ -482,7 +482,7 @@ kdeGaussInt <- function(mu, h, q1, q2, quantile) {
 #'
 #' @export
 kdeGaussInt2 <- function(mu, h, q1, q2, quantile) {
-    .Call('alR_kdeGaussInt2', PACKAGE = 'alR', mu, h, q1, q2, quantile)
+    .Call(`_alR_kdeGaussInt2`, mu, h, q1, q2, quantile)
 }
 
 #' @rdname kdeGaussInt
@@ -493,7 +493,7 @@ kdeGaussInt2 <- function(mu, h, q1, q2, quantile) {
 #'
 #' @export
 kdeGaussIntApprox <- function(mu, h, q1, q2, quantile) {
-    .Call('alR_kdeGaussIntApprox', PACKAGE = 'alR', mu, h, q1, q2, quantile)
+    .Call(`_alR_kdeGaussIntApprox`, mu, h, q1, q2, quantile)
 }
 
 #' @rdname kdeGaussInt
@@ -505,7 +505,7 @@ kdeGaussIntApprox <- function(mu, h, q1, q2, quantile) {
 #'
 #' @export
 kdeGaussIntApprox2 <- function(mu, h, q1, q2, quantile) {
-    .Call('alR_kdeGaussIntApprox2', PACKAGE = 'alR', mu, h, q1, q2, quantile)
+    .Call(`_alR_kdeGaussIntApprox2`, mu, h, q1, q2, quantile)
 }
 
 #' Objective function for KDE moment matching.
@@ -522,7 +522,7 @@ kdeGaussIntApprox2 <- function(mu, h, q1, q2, quantile) {
 #'
 #' @export
 momKDE <- function(beta, gamma, momy, kdeGaussMom, type) {
-    .Call('alR_momKDE', PACKAGE = 'alR', beta, gamma, momy, kdeGaussMom, type)
+    .Call(`_alR_momKDE`, beta, gamma, momy, kdeGaussMom, type)
 }
 
 #' Point corresponding to quantile.
@@ -539,7 +539,7 @@ momKDE <- function(beta, gamma, momy, kdeGaussMom, type) {
 #' qlin(x, y, 0.5)
 #' @export
 qlin <- function(x, y, q) {
-    .Call('alR_qlin', PACKAGE = 'alR', x, y, q)
+    .Call(`_alR_qlin`, x, y, q)
 }
 
 #' Empirical sample quantile.
@@ -554,7 +554,7 @@ qlin <- function(x, y, q) {
 #' qsamp(x, 0.5)
 #' @export
 qsamp <- function(x, q) {
-    .Call('alR_qsamp', PACKAGE = 'alR', x, q)
+    .Call(`_alR_qsamp`, x, q)
 }
 
 #' Sorted vector index.
@@ -573,7 +573,7 @@ qsamp <- function(x, q) {
 #' pairSort(c(5, 2, 6))
 #' @export
 pairSort <- function(x) {
-    .Call('alR_pairSort', PACKAGE = 'alR', x)
+    .Call(`_alR_pairSort`, x)
 }
 
 #' LULU smoother.
@@ -589,6 +589,6 @@ pairSort <- function(x) {
 #' lulu(x)
 #' @export
 lulu <- function(x) {
-    .Call('alR_lulu', PACKAGE = 'alR', x)
+    .Call(`_alR_lulu`, x)
 }
 

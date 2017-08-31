@@ -3,11 +3,11 @@
 \name{kappa4nls}
 \alias{kappa4nls}
 \alias{kappa4nls.default}
+\alias{print.kappa4nls}
+\alias{summary.kappa4nls}
+\alias{print.summary.kappa4nls}
 \alias{kappa4nls.formula}
 \alias{predict.kappa4nls}
-\alias{print.kappa4nls}
-\alias{print.summary.kappa4nls}
-\alias{summary.kappa4nls}
 \title{Sigmoidal curve fitting.}
 \usage{
 kappa4nls(formula, data = list(), lower, upper, tol, maxiter, ...)
@@ -91,6 +91,7 @@ A framework for nonlinear least squares fitting of the four-parameter kappa sigm
 
 \item \code{kappa4nls}: predict method for kappa4nls.
 }}
+
 \examples{
 k <- kappa4tc(-4, 0, 1)$par
 x <- seq(qkappa4(0, 4, 0.4, -4, k), qkappa4(0.7, 4, 0.4, -4, k), length.out=100)
@@ -103,4 +104,3 @@ nls <- kappa4nls(y~x, tol=1e-5)
 predict(nls, newdata=data.frame(y=v, x=u))
 
 }
-

@@ -11,4 +11,3 @@ Functions using arc lengths, for performing estimation, regression, and classifi
 \author{
 m. Theodor Loots <theo.loots@gmail.com>
 }
-

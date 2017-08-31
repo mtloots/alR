@@ -3,11 +3,11 @@
 \name{mmKDEboot}
 \alias{mmKDEboot}
 \alias{mmKDEboot.default}
+\alias{print.mmKDEboot}
+\alias{summary.mmKDEboot}
+\alias{print.summary.mmKDEboot}
 \alias{mmKDEboot.formula}
 \alias{predict.mmKDEboot}
-\alias{print.mmKDEboot}
-\alias{print.summary.mmKDEboot}
-\alias{summary.mmKDEboot}
 \title{Moment matching for kernel density estimators.}
 \usage{
 mmKDEboot(formula, data = list(), xin, type, bootstraps, bootName, ...)

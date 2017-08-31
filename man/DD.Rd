@@ -24,4 +24,3 @@ DD(expression(exp(m*t+(1/2)*(s^2)*(t^2))), "t", 1) ## m
 DD(expression(exp(m*t+(1/2)*(s^2)*(t^2))), "t", 2) ## m^2+s^2
 
 }
-

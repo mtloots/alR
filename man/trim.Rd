@@ -30,4 +30,3 @@ sd(x)
 sd(trim(x, trim=0.01))
 
 }
-

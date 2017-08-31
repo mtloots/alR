@@ -19,4 +19,3 @@ The \code{object} is returned with the estimated coefficients corresponding to t
 \description{
 Remove jackknife estimates associated with extreme jackknife distribution values, resulting from arc length methods.
 }
-

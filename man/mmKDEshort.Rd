@@ -37,4 +37,3 @@ XIn <- lm(y~x)
 mmKDEshort(y~x, xin=coef(XIn), type=-1)
 
 }
-

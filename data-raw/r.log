@@ -1,0 +1,18 @@
+
+
+processing file: data.rnw
+  |                                                                         |                                                                 |   0%  |                                                                         |......................                                           |  33%
+  ordinary text without R code
+
+  |                                                                         |...........................................                      |  67%
+label: readin (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: data.tex
+
+[1] "data.tex"

@@ -3,11 +3,11 @@
 \name{kappa4alBoot}
 \alias{kappa4alBoot}
 \alias{kappa4alBoot.default}
+\alias{print.kappa4alBoot}
+\alias{summary.kappa4alBoot}
+\alias{print.summary.kappa4alBoot}
 \alias{kappa4alBoot.formula}
 \alias{predict.kappa4alBoot}
-\alias{print.kappa4alBoot}
-\alias{print.summary.kappa4alBoot}
-\alias{summary.kappa4alBoot}
 \title{Sigmoidal curve fitting.}
 \usage{
 kappa4alBoot(formula, data = list(), xin, lower, upper, q1, q2, tol, maxiter,

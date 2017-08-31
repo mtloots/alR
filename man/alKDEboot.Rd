@@ -3,11 +3,11 @@
 \name{alKDEboot}
 \alias{alKDEboot}
 \alias{alKDEboot.default}
+\alias{print.alKDEboot}
+\alias{summary.alKDEboot}
+\alias{print.summary.alKDEboot}
 \alias{alKDEboot.formula}
 \alias{predict.alKDEboot}
-\alias{print.alKDEboot}
-\alias{print.summary.alKDEboot}
-\alias{summary.alKDEboot}
 \title{Arc length matching for kernel density estimators.}
 \usage{
 alKDEboot(formula, data = list(), xin, q1, q2, type, bootstraps, bootName,

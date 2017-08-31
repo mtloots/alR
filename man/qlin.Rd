@@ -26,4 +26,3 @@ x <- rnorm(100)
 y <- pnorm(x)
 qlin(x, y, 0.5)
 }
-

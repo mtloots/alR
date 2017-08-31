@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // alE
 List alE(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type);
-RcppExport SEXP alR_alE(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP) {
+RcppExport SEXP _alR_alE(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,7 +23,7 @@ END_RCPP
 }
 // alEfitdist
 NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps);
-RcppExport SEXP alR_alEfitdist(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP bootstrapsSEXP) {
+RcppExport SEXP _alR_alEfitdist(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP bootstrapsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,7 +39,7 @@ END_RCPP
 }
 // alEdist
 NumericMatrix alEdist(int n, int bootstraps, double mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type);
-RcppExport SEXP alR_alEdist(SEXP nSEXP, SEXP bootstrapsSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP, SEXP dcSEXP, SEXP typeSEXP) {
+RcppExport SEXP _alR_alEdist(SEXP nSEXP, SEXP bootstrapsSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP, SEXP dcSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -58,7 +58,7 @@ END_RCPP
 }
 // alrKDE
 double alrKDE(const arma::vec& beta, const arma::mat& gamma, const arma::vec& aly, const arma::vec& q1, const arma::vec& q2, const int& type);
-RcppExport SEXP alR_alrKDE(SEXP betaSEXP, SEXP gammaSEXP, SEXP alySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP typeSEXP) {
+RcppExport SEXP _alR_alrKDE(SEXP betaSEXP, SEXP gammaSEXP, SEXP alySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -74,7 +74,7 @@ END_RCPP
 }
 // Silverman
 double Silverman(NumericVector x);
-RcppExport SEXP alR_Silverman(SEXP xSEXP) {
+RcppExport SEXP _alR_Silverman(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -85,7 +85,7 @@ END_RCPP
 }
 // Silverman2
 double Silverman2(NumericVector x);
-RcppExport SEXP alR_Silverman2(SEXP xSEXP) {
+RcppExport SEXP _alR_Silverman2(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -96,7 +96,7 @@ END_RCPP
 }
 // bw
 double bw(NumericVector x, double type);
-RcppExport SEXP alR_bw(SEXP xSEXP, SEXP typeSEXP) {
+RcppExport SEXP _alR_bw(SEXP xSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -108,7 +108,7 @@ END_RCPP
 }
 // GaussInt
 List GaussInt(double mu, double sigma, double q1, double q2, bool quantile);
-RcppExport SEXP alR_GaussInt(SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_GaussInt(SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -123,7 +123,7 @@ END_RCPP
 }
 // GaussInt2
 NumericVector GaussInt2(double mu, double sigma, NumericVector q1, NumericVector q2, bool quantile);
-RcppExport SEXP alR_GaussInt2(SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_GaussInt2(SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -138,7 +138,7 @@ END_RCPP
 }
 // pkappa4
 double pkappa4(double x, double mu, double sigma, double h, double k);
-RcppExport SEXP alR_pkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+RcppExport SEXP _alR_pkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -153,7 +153,7 @@ END_RCPP
 }
 // dkappa4
 double dkappa4(double x, double mu, double sigma, double h, double k);
-RcppExport SEXP alR_dkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+RcppExport SEXP _alR_dkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -168,7 +168,7 @@ END_RCPP
 }
 // qkappa4
 double qkappa4(double x, double mu, double sigma, double h, double k);
-RcppExport SEXP alR_qkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+RcppExport SEXP _alR_qkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -183,7 +183,7 @@ END_RCPP
 }
 // rkappa4
 NumericVector rkappa4(int n, double mu, double sigma, double h, double k);
-RcppExport SEXP alR_rkappa4(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+RcppExport SEXP _alR_rkappa4(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -198,7 +198,7 @@ END_RCPP
 }
 // dddkappa4
 double dddkappa4(double x, double mu, double sigma, double h, double k);
-RcppExport SEXP alR_dddkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+RcppExport SEXP _alR_dddkappa4(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -213,7 +213,7 @@ END_RCPP
 }
 // kappa4cond
 double kappa4cond(double mu, double sigma, double h, double k);
-RcppExport SEXP alR_kappa4cond(SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
+RcppExport SEXP _alR_kappa4cond(SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -227,7 +227,7 @@ END_RCPP
 }
 // kappa4tc
 List kappa4tc(double h, double mu, double sigma);
-RcppExport SEXP alR_kappa4tc(SEXP hSEXP, SEXP muSEXP, SEXP sigmaSEXP) {
+RcppExport SEXP _alR_kappa4tc(SEXP hSEXP, SEXP muSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -240,7 +240,7 @@ END_RCPP
 }
 // kappa4Int
 List kappa4Int(double mu, double sigma, double h, double k, double tau, double q1, double q2, bool quantile);
-RcppExport SEXP alR_kappa4Int(SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP, SEXP tauSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kappa4Int(SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP, SEXP tauSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -258,7 +258,7 @@ END_RCPP
 }
 // kappa4Int2
 NumericVector kappa4Int2(double mu, double sigma, double h, double k, double tau, NumericVector q1, NumericVector q2, bool quantile);
-RcppExport SEXP alR_kappa4Int2(SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP, SEXP tauSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kappa4Int2(SEXP muSEXP, SEXP sigmaSEXP, SEXP hSEXP, SEXP kSEXP, SEXP tauSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -276,7 +276,7 @@ END_RCPP
 }
 // kappa4IntApprox
 double kappa4IntApprox(NumericVector x, NumericVector y, double q1, double q2, bool quantile);
-RcppExport SEXP alR_kappa4IntApprox(SEXP xSEXP, SEXP ySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kappa4IntApprox(SEXP xSEXP, SEXP ySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -291,7 +291,7 @@ END_RCPP
 }
 // kappa4IntApprox2
 NumericVector kappa4IntApprox2(NumericVector x, NumericVector y, NumericVector q1, NumericVector q2, bool quantile);
-RcppExport SEXP alR_kappa4IntApprox2(SEXP xSEXP, SEXP ySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kappa4IntApprox2(SEXP xSEXP, SEXP ySEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -306,7 +306,7 @@ END_RCPP
 }
 // kappa4NLSobj
 double kappa4NLSobj(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
-RcppExport SEXP alR_kappa4NLSobj(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+RcppExport SEXP _alR_kappa4NLSobj(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -321,7 +321,7 @@ END_RCPP
 }
 // kappa4NLScon
 NumericVector kappa4NLScon(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
-RcppExport SEXP alR_kappa4NLScon(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+RcppExport SEXP _alR_kappa4NLScon(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -336,7 +336,7 @@ END_RCPP
 }
 // kappa4NLShin
 NumericVector kappa4NLShin(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
-RcppExport SEXP alR_kappa4NLShin(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+RcppExport SEXP _alR_kappa4NLShin(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -351,7 +351,7 @@ END_RCPP
 }
 // kappa4NLSheq
 NumericVector kappa4NLSheq(NumericVector parms, NumericVector xvec, NumericVector y, double x_min, double x_max);
-RcppExport SEXP alR_kappa4NLSheq(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
+RcppExport SEXP _alR_kappa4NLSheq(SEXP parmsSEXP, SEXP xvecSEXP, SEXP ySEXP, SEXP x_minSEXP, SEXP x_maxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -366,7 +366,7 @@ END_RCPP
 }
 // kappa4ALobj
 double kappa4ALobj(NumericVector parms, NumericVector al_samp, double x_min, double x_max, NumericVector q1, NumericVector q2);
-RcppExport SEXP alR_kappa4ALobj(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
+RcppExport SEXP _alR_kappa4ALobj(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -382,7 +382,7 @@ END_RCPP
 }
 // kappa4ALcon
 NumericVector kappa4ALcon(NumericVector parms, NumericVector al_samp, double x_min, double x_max, NumericVector q1, NumericVector q2);
-RcppExport SEXP alR_kappa4ALcon(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
+RcppExport SEXP _alR_kappa4ALcon(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -398,7 +398,7 @@ END_RCPP
 }
 // kappa4ALhin
 NumericVector kappa4ALhin(NumericVector parms, NumericVector al_samp, double x_min, double x_max, NumericVector q1, NumericVector q2);
-RcppExport SEXP alR_kappa4ALhin(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
+RcppExport SEXP _alR_kappa4ALhin(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -414,7 +414,7 @@ END_RCPP
 }
 // kappa4ALheq
 NumericVector kappa4ALheq(NumericVector parms, NumericVector al_samp, double x_min, double x_max, NumericVector q1, NumericVector q2);
-RcppExport SEXP alR_kappa4ALheq(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
+RcppExport SEXP _alR_kappa4ALheq(SEXP parmsSEXP, SEXP al_sampSEXP, SEXP x_minSEXP, SEXP x_maxSEXP, SEXP q1SEXP, SEXP q2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -430,7 +430,7 @@ END_RCPP
 }
 // dkdeGauss
 double dkdeGauss(double x, NumericVector mu, double h);
-RcppExport SEXP alR_dkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
+RcppExport SEXP _alR_dkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -443,7 +443,7 @@ END_RCPP
 }
 // pkdeGauss
 double pkdeGauss(double x, NumericVector mu, double h);
-RcppExport SEXP alR_pkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
+RcppExport SEXP _alR_pkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -456,7 +456,7 @@ END_RCPP
 }
 // qkdeGauss
 List qkdeGauss(double x, NumericVector mu, double h);
-RcppExport SEXP alR_qkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
+RcppExport SEXP _alR_qkdeGauss(SEXP xSEXP, SEXP muSEXP, SEXP hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -469,7 +469,7 @@ END_RCPP
 }
 // kdeGaussInt
 List kdeGaussInt(NumericVector mu, double h, double q1, double q2, bool quantile);
-RcppExport SEXP alR_kdeGaussInt(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kdeGaussInt(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -484,7 +484,7 @@ END_RCPP
 }
 // kdeGaussInt2
 NumericVector kdeGaussInt2(NumericVector mu, double h, NumericVector q1, NumericVector q2, bool quantile);
-RcppExport SEXP alR_kdeGaussInt2(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kdeGaussInt2(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -499,7 +499,7 @@ END_RCPP
 }
 // kdeGaussIntApprox
 double kdeGaussIntApprox(NumericVector mu, double h, double q1, double q2, bool quantile);
-RcppExport SEXP alR_kdeGaussIntApprox(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kdeGaussIntApprox(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -514,7 +514,7 @@ END_RCPP
 }
 // kdeGaussIntApprox2
 NumericVector kdeGaussIntApprox2(NumericVector mu, double h, NumericVector q1, NumericVector q2, bool quantile);
-RcppExport SEXP alR_kdeGaussIntApprox2(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+RcppExport SEXP _alR_kdeGaussIntApprox2(SEXP muSEXP, SEXP hSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -529,7 +529,7 @@ END_RCPP
 }
 // momKDE
 double momKDE(const arma::vec& beta, const arma::mat& gamma, const arma::vec& momy, Function kdeGaussMom, const int& type);
-RcppExport SEXP alR_momKDE(SEXP betaSEXP, SEXP gammaSEXP, SEXP momySEXP, SEXP kdeGaussMomSEXP, SEXP typeSEXP) {
+RcppExport SEXP _alR_momKDE(SEXP betaSEXP, SEXP gammaSEXP, SEXP momySEXP, SEXP kdeGaussMomSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -544,7 +544,7 @@ END_RCPP
 }
 // qlin
 double qlin(NumericVector x, NumericVector y, double q);
-RcppExport SEXP alR_qlin(SEXP xSEXP, SEXP ySEXP, SEXP qSEXP) {
+RcppExport SEXP _alR_qlin(SEXP xSEXP, SEXP ySEXP, SEXP qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -557,7 +557,7 @@ END_RCPP
 }
 // qsamp
 double qsamp(NumericVector x, double q);
-RcppExport SEXP alR_qsamp(SEXP xSEXP, SEXP qSEXP) {
+RcppExport SEXP _alR_qsamp(SEXP xSEXP, SEXP qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -569,7 +569,7 @@ END_RCPP
 }
 // pairSort
 List pairSort(NumericVector x);
-RcppExport SEXP alR_pairSort(SEXP xSEXP) {
+RcppExport SEXP _alR_pairSort(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -580,7 +580,7 @@ END_RCPP
 }
 // lulu
 NumericVector lulu(NumericVector x);
-RcppExport SEXP alR_lulu(SEXP xSEXP) {
+RcppExport SEXP _alR_lulu(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -588,4 +588,53 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(lulu(x));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_alR_alE", (DL_FUNC) &_alR_alE, 5},
+    {"_alR_alEfitdist", (DL_FUNC) &_alR_alEfitdist, 6},
+    {"_alR_alEdist", (DL_FUNC) &_alR_alEdist, 9},
+    {"_alR_alrKDE", (DL_FUNC) &_alR_alrKDE, 6},
+    {"_alR_Silverman", (DL_FUNC) &_alR_Silverman, 1},
+    {"_alR_Silverman2", (DL_FUNC) &_alR_Silverman2, 1},
+    {"_alR_bw", (DL_FUNC) &_alR_bw, 2},
+    {"_alR_GaussInt", (DL_FUNC) &_alR_GaussInt, 5},
+    {"_alR_GaussInt2", (DL_FUNC) &_alR_GaussInt2, 5},
+    {"_alR_pkappa4", (DL_FUNC) &_alR_pkappa4, 5},
+    {"_alR_dkappa4", (DL_FUNC) &_alR_dkappa4, 5},
+    {"_alR_qkappa4", (DL_FUNC) &_alR_qkappa4, 5},
+    {"_alR_rkappa4", (DL_FUNC) &_alR_rkappa4, 5},
+    {"_alR_dddkappa4", (DL_FUNC) &_alR_dddkappa4, 5},
+    {"_alR_kappa4cond", (DL_FUNC) &_alR_kappa4cond, 4},
+    {"_alR_kappa4tc", (DL_FUNC) &_alR_kappa4tc, 3},
+    {"_alR_kappa4Int", (DL_FUNC) &_alR_kappa4Int, 8},
+    {"_alR_kappa4Int2", (DL_FUNC) &_alR_kappa4Int2, 8},
+    {"_alR_kappa4IntApprox", (DL_FUNC) &_alR_kappa4IntApprox, 5},
+    {"_alR_kappa4IntApprox2", (DL_FUNC) &_alR_kappa4IntApprox2, 5},
+    {"_alR_kappa4NLSobj", (DL_FUNC) &_alR_kappa4NLSobj, 5},
+    {"_alR_kappa4NLScon", (DL_FUNC) &_alR_kappa4NLScon, 5},
+    {"_alR_kappa4NLShin", (DL_FUNC) &_alR_kappa4NLShin, 5},
+    {"_alR_kappa4NLSheq", (DL_FUNC) &_alR_kappa4NLSheq, 5},
+    {"_alR_kappa4ALobj", (DL_FUNC) &_alR_kappa4ALobj, 6},
+    {"_alR_kappa4ALcon", (DL_FUNC) &_alR_kappa4ALcon, 6},
+    {"_alR_kappa4ALhin", (DL_FUNC) &_alR_kappa4ALhin, 6},
+    {"_alR_kappa4ALheq", (DL_FUNC) &_alR_kappa4ALheq, 6},
+    {"_alR_dkdeGauss", (DL_FUNC) &_alR_dkdeGauss, 3},
+    {"_alR_pkdeGauss", (DL_FUNC) &_alR_pkdeGauss, 3},
+    {"_alR_qkdeGauss", (DL_FUNC) &_alR_qkdeGauss, 3},
+    {"_alR_kdeGaussInt", (DL_FUNC) &_alR_kdeGaussInt, 5},
+    {"_alR_kdeGaussInt2", (DL_FUNC) &_alR_kdeGaussInt2, 5},
+    {"_alR_kdeGaussIntApprox", (DL_FUNC) &_alR_kdeGaussIntApprox, 5},
+    {"_alR_kdeGaussIntApprox2", (DL_FUNC) &_alR_kdeGaussIntApprox2, 5},
+    {"_alR_momKDE", (DL_FUNC) &_alR_momKDE, 5},
+    {"_alR_qlin", (DL_FUNC) &_alR_qlin, 3},
+    {"_alR_qsamp", (DL_FUNC) &_alR_qsamp, 2},
+    {"_alR_pairSort", (DL_FUNC) &_alR_pairSort, 1},
+    {"_alR_lulu", (DL_FUNC) &_alR_lulu, 1},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_alR(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

@@ -66,4 +66,3 @@ kdeGaussIntApprox2(mu, h, c(0.025, 0.5), c(0.5, 0.975), TRUE)
 kdeGaussIntApprox2(mu, h, c(-1.96, 0), c(0, 1.96), FALSE)
 
 }
-

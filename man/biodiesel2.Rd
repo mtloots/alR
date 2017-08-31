@@ -26,4 +26,3 @@ summary(biodiesel2)
 plot(y~x, data=biodiesel2)
 }
 \keyword{datasets}
-

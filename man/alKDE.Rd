@@ -3,11 +3,11 @@
 \name{alKDE}
 \alias{alKDE}
 \alias{alKDE.default}
+\alias{print.alKDE}
+\alias{summary.alKDE}
+\alias{print.summary.alKDE}
 \alias{alKDE.formula}
 \alias{predict.alKDE}
-\alias{print.alKDE}
-\alias{print.summary.alKDE}
-\alias{summary.alKDE}
 \title{Arc length matching for kernel density estimators.}
 \usage{
 alKDE(formula, data = list(), xin, q1, q2, type, ...)
@@ -97,6 +97,7 @@ Estimate parameters of a linear model by matching the arc lengths of kernel dens
 
 \item \code{alKDE}: predict method for alKDE.
 }}
+
 \examples{
 x <- 1:10
 y <- x+rnorm(10)
@@ -110,4 +111,3 @@ al <- alKDE(y~x, xin=coef(XIn), q1=c(0.025,0.5), q2=c(0.5,0.975), type=-1)
 predict(al, newdata=data.frame(y=v, x=u))
 
 }
-
