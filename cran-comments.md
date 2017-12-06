@@ -1,6 +1,6 @@
 ## Test environments
 * local Windows 10 x64 install, R 3.4.1
-* ubuntu 12.04 (on travis-ci), R 3.1.2
+* Linux (on travis-ci), R devel
 * win-builder (devel and release)
 
 ## R CMD check results
@@ -8,4 +8,4 @@
 * Note regarding registration of native routines on some Windows installations.
 
 ## Downstream dependencies
-* No downstream dependencies, as this is the first submission.
+* No downstream dependencies.

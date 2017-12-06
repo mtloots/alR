@@ -30,7 +30,7 @@ typedef struct { NumericVector mu; double h; double q; } Qarams;
 // [[Rcpp::export]]
 double dkdeGauss(double x, NumericVector mu, double h)
 {
-return (1.0/(mu.size()*sqrt(2*PI)*h))*sum(exp(-0.5*pow((x-mu)/h, 2)));
+return (1.0/(mu.size()*pow(2*PI, 0.5)*h))*sum(exp(-0.5*pow((x-mu)/h, 2)));
 }
 
 void pdfkdeGauss(double *t, int n, void *ex)

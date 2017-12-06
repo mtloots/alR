@@ -22,5 +22,5 @@ double momKDE(const arma::vec& beta, const arma::mat& gamma, const arma::vec& mo
 arma::vec X = gamma*beta;
 double h_gamma = bw(as<NumericVector>(wrap(X)), type);
 arma::vec mom_gamma = as<NumericVector>(wrap(kdeGaussMom(beta.n_rows, X, h_gamma)));
-return sqrt(arma::sum(pow(mom_gamma-momy, 2)));
+return pow(arma::sum(pow(mom_gamma-momy, 2)), 0.5);
 }

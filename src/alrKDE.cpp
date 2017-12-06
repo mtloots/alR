@@ -23,5 +23,5 @@ double alrKDE(const arma::vec& beta, const arma::mat& gamma, const arma::vec& al
 arma::vec X = gamma*beta;
 double h_gamma = bw(as<NumericVector>(wrap(X)), type);
 arma::vec al_gamma = as<NumericVector>(wrap(kdeGaussInt2(as<NumericVector>(wrap(X)), h_gamma, as<NumericVector>(wrap(q1)), as<NumericVector>(wrap(q2)), false)));
-return sqrt(arma::sum(pow(al_gamma-aly, 2)));
+return pow(arma::sum(pow(al_gamma-aly, 2)), 0.5);
 }

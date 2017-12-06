@@ -15,7 +15,7 @@ double h = param->h;
 
 for(int i = 0; i < n; i++)
 {
-t[i] = sqrt(1+(1/(2*PI*pow(mu.size(), 2)*pow(h, 6)))*pow(sum((t[i]-mu)*exp(-0.5*pow((t[i]-mu)/h, 2))), 2));
+t[i] = pow(1+(1/(2*PI*pow(mu.size(), 2)*pow(h, 6)))*pow(sum((t[i]-mu)*exp(-0.5*pow((t[i]-mu)/h, 2))), 2), 0.5);
 }
 }
 
@@ -127,7 +127,7 @@ for (int i=0; i<n; i++)
 xHat[i] = dkdeGauss(x[i], x, h);
 }
 
-return sum(sqrt(pow(diff(x), 2)+pow(diff(xHat), 2)));
+return sum(pow(pow(diff(x), 2)+pow(diff(xHat), 2), 0.5));
 }
 
 //' @rdname kdeGaussInt

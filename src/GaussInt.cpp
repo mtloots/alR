@@ -14,7 +14,7 @@ double sigma = param->sigma;
 
 for(int i = 0; i < n; i++)
 {
-t[i] = sqrt(1+(1/(2*PI*pow(sigma, 6)))*pow(t[i]-mu, 2)*exp(-pow((t[i]-mu)/sigma, 2)));
+t[i] = pow(1+(1/(2*PI*pow(sigma, 6)))*pow(t[i]-mu, 2)*exp(-pow((t[i]-mu)/sigma, 2)), 0.5);
 }
 }
 

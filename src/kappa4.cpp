@@ -56,7 +56,7 @@ double qkappa4(double x, double mu, double sigma, double h, double k)
 {
 if (h == 0)
 {
-return mu+(sigma/k)*(1-pow(log(1/x), k));
+return mu+(sigma/k)*(1-pow(std::log(1/x), k));
 }
 else
 {

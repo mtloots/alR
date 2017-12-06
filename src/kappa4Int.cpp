@@ -17,7 +17,7 @@ double tau = param->tau;
 
 for(int i = 0; i < n; i++)
 {
-t[i] = sqrt(1+pow(dkappa4(t[i], mu, sigma, h, k)/tau, 2));
+t[i] = pow(1+pow(dkappa4(t[i], mu, sigma, h, k)/tau, 2), 0.5);
 }
 }
 
@@ -140,7 +140,7 @@ select = ifelse((x >= Q1) & (x <= Q2), true, false);
 NumericVector x_seg = x[select];
 NumericVector y_seg = y[select];
 
-return sum(sqrt(pow(diff(x_seg), 2)+pow(diff(y_seg), 2)));
+return sum(pow(pow(diff(x_seg), 2)+pow(diff(y_seg), 2), 0.5));
 }
 
 

@@ -45,7 +45,7 @@ yHat = yHat/pkappa4(x_max, x0, parms[0], parms[1], parms[2]);
 
 yHat = ifelse(is_nan(yHat), 1, yHat);
 
-return sqrt(sum(pow(y-yHat, 2)));
+return pow(sum(pow(y-yHat, 2)), 0.5);
 }
 
 
@@ -162,7 +162,7 @@ al_theo = kappa4Int2(x0, parms[0], parms[1], k, pkappa4(x_max, x0, parms[0], par
 
 al_theo = ifelse(is_nan(al_theo), 0, al_theo);
 
-return sqrt(sum(pow(al_theo-al_samp, 2)));
+return pow(sum(pow(al_theo-al_samp, 2)), 0.5);
 }
 
 

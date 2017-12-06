@@ -15,7 +15,7 @@ NumericVector q2 = aux->q2;
 
 NumericVector theoAL = GaussInt2(par[0], par[1], q1, q2, false);
 
-return sqrt(sum(pow(theoAL-sampAL, 2)));
+return pow(sum(pow(theoAL-sampAL, 2)), 0.5);
 }
 
 //' @rdname alEfit
