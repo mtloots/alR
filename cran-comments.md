@@ -1,5 +1,8 @@
+## Resubmission
+* C++ code containing log() and sqrt() have been updated.
+
 ## Test environments
-* local Windows 10 x64 install, R 3.4.1
+* local Windows 10 x64 install, R 3.4.3
 * Linux (on travis-ci), R devel
 * win-builder (devel and release)
 
