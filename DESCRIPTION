@@ -1,15 +1,15 @@
 Package: alR
-Version: 2.2.2
-Date: 2017-12-07
+Version: 2.3.0
+Date: 2018-03-15
 Title: Arc Lengths of Statistical Functions
 Description: Estimation, regression and classification are redefined using a mathematically intractible measure, namely, the arc length.  Functions for parameter estimation, goodness-of-fit and regression (linear and non-linear) are provided.  These methods have been implemented with parallel computing in mind, and may therefore be executed on large clusters.
 Depends: R (>= 3.2)
-Imports: alabama, pbdMPI, DEoptimR, Rcpp, stats
+Imports: alabama, DEoptimR, Rcpp, stats
 LinkingTo: Rcpp, RcppArmadillo
 Author: M Theodor Loots <theodor.loots@up.ac.za>
 Maintainer: M Theodor Loots <theodor.loots@up.ac.za>
 License: GPL (>=2)
 URL: https://github.com/mtloots/alR
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests: pbdMPI, testthat
 LazyData: true

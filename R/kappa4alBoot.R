@@ -2,6 +2,8 @@
 #'
 #' Bootstrap estimates, along with standard  errors and confidence intervals, of a nonlinear model, resulting from  arc length fitting of the four-parameter kappa sigmoidal function.
 #'
+#' On systems where the pbMPI package is available, this code will run in parallel.
+#'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param xin Numeric vector of length 3 containing initial values, for \eqn{\sigma}, \eqn{h}, and \eqn{k}.
@@ -16,7 +18,6 @@
 #'
 #' @return A generic S3 object with class kappa4alBoot.
 #'
-#' @import pbdMPI
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat sd var
 #'
 #' @export
@@ -35,17 +36,19 @@ kappa4alBoot <- function(formula, data=list(), xin, lower, upper, q1, q2, tol, m
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 #' }
 #' 
 #' @export
 kappa4alBoot.default <- function(formula, data=list(), xin, lower=c(0, -5, -5), upper=c(10, 1, 1), q1, q2, tol=1e-15, maxiter=50000, bootstraps, bootName, ...)
 {
-comm.set.seed(123, diff=TRUE)
+if(requireNamespace("pbdMPI", quietly=TRUE))
+{
+pbdMPI::comm.set.seed(123, diff=TRUE)
 N <- nrow(data)
 
-ret.time <- comm.timer({
-ret <- task.pull(1:bootstraps, function(jid)
+ret.time <- pbdMPI::comm.timer({
+ret <- pbdMPI::task.pull(1:bootstraps, function(jid)
 {
 id <- sample(1:N, N, replace=TRUE)
 id <- id[order(id)]
@@ -53,7 +56,7 @@ kappa4alShort(formula, data[id,], xin, q1, q2)
 })
 })
 
-if(comm.rank() == 0)
+if(pbdMPI::comm.rank() == 0)
 {
 boot <- kappa4al(formula, data, lower, upper, q1, q2, tol, maxiter, ...)
 
@@ -73,7 +76,39 @@ class(boot) <- "kappa4alBoot"
 saveRDS(boot, paste(bootName, ".rds", sep=""))
 }
 
-finalize()
+pbdMPI::finalize()
+}
+else
+{
+set.seed(123)
+N <- nrow(data)
+
+ret.time <- system.time({
+ret <- lapply(1:bootstraps, function(jid)
+{
+id <- sample(1:N, N, replace=TRUE)
+id <- id[order(id)]
+kappa4alShort(formula, data[id,], xin, q1, q2)
+})
+})
+
+boot <- kappa4al(formula, data, lower, upper, q1, q2, tol, maxiter, ...)
+
+boot$call <- match.call()
+
+boot$time <- ret.time
+ret.coef <- do.call(rbind, lapply(1:bootstraps, function(x) ret[[x]]$coefficients))
+
+boot$coefDist <- ret.coef
+
+boot$bcoefficients <- colMeans(ret.coef)
+boot$se <- apply(ret.coef, 2, sd)
+
+boot$errorList <- as.vector(do.call(rbind, lapply(1:bootstraps, function(x) ret[[x]]$error)))
+
+class(boot) <- "kappa4alBoot"
+saveRDS(boot, paste(bootName, ".rds", sep=""))
+}
 }
 
 #' @describeIn kappa4alBoot print method for kappa4alBoot.
@@ -101,7 +136,7 @@ print(x$coefficients, digits=5)
 #' \item r.squared: The \eqn{r^{2}} coefficient.
 #' \item sigma: The residual standard error.
 #' \item error: Value of the objective function.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 #' \item residSum: Summary statistics for the distribution of the residuals.
 #' \item errorSum: Summary statistics for the distribution of the value of the objective function.
 #' }

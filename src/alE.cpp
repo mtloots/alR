@@ -3,7 +3,7 @@ using namespace Rcpp;
 #include "alR.h"
 
 
-typedef struct { NumericVector sampAL; NumericVector q1; NumericVector q2; } Aux;
+typedef struct { NumericVector sampAL; NumericVector q1; NumericVector q2; int distribution; } Aux;
 
 
 double alEobj(int n, double *par, void *ex)
@@ -12,11 +12,23 @@ Aux *aux = (Aux *) ex;
 NumericVector sampAL = aux->sampAL;
 NumericVector q1 = aux->q1;
 NumericVector q2 = aux->q2;
+int distribution = aux->distribution;
+NumericVector theoAL(q1.size());
 
-NumericVector theoAL = GaussInt2(par[0], par[1], q1, q2, false);
+switch (distribution)
+{
+case 1:
+theoAL = GaussInt2(par[0], par[1], q1, q2, false);
+break;
+case 2:
+theoAL = GPDInt2(par[0], std::abs(par[1]), par[2], q1, q2, false);
+break;
+default: throw exception("Unknown distribution selected.");
+}
 
 return pow(sum(pow(theoAL-sampAL, 2)), 0.5);
 }
+
 
 //' @rdname alEfit
 //' @return alE: A list with the following components (see \code{\link{optim}}):
@@ -36,7 +48,7 @@ return pow(sum(pow(theoAL-sampAL, 2)), 0.5);
 //'
 //' @export
 // [[Rcpp::export]]
-List alE(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type)
+List alE(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int distribution=1)
 {
 double h = bw(x, type);
 int n = q1.size();
@@ -57,10 +69,23 @@ else
  sampAL = kdeGaussInt2(x, h, p1, p2, false);
 }
 
-Aux aux = {sampAL, p1, p2};
-double xin[2] = {mean(x), sd(x)};
+Aux aux = {sampAL, p1, p2, distribution};
 
-return Rcpp_nmmin(2, alEobj, xin, &aux);
+switch (distribution)
+{
+case 1:
+{
+double xina[2] = {mean(x), sd(x)};
+return Rcpp_nmmin(2, alEobj, xina, &aux);
+}
+case 2:
+{
+NumericVector temp = GPDqML(x);
+double xinb[3] = {temp[0], temp[1], temp[2]};
+return Rcpp_nmmin(3, alEobj, xinb, &aux);
+}
+default: throw exception("Unknown distribution selected.");
+}
 }
 
 
@@ -73,7 +98,11 @@ return Rcpp_nmmin(2, alEobj, xin, &aux);
 //' }
 //' @export
 // [[Rcpp::export]]
-NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps)
+NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps, int distribution=1)
+{
+switch (distribution)
+{
+case 1:
 {
 NumericMatrix sampDist(bootstraps, 2);
 int n = x.size();
@@ -81,10 +110,26 @@ int n = x.size();
 for (int i=0; i<bootstraps; i++)
 {
 NumericVector sample = RcppSample(x, n);
-sampDist(i, _) = as<NumericVector>(wrap(alE(sample, q1, q2, dc, type)["par"]));
+sampDist(i, _) = as<NumericVector>(wrap(alE(sample, q1, q2, dc, type, distribution)["par"]));
 }
 
 return sampDist;
+}
+case 2:
+{
+NumericMatrix sampDist(bootstraps, 3);
+int n = x.size();
+
+for (int i=0; i<bootstraps; i++)
+{
+NumericVector sample = RcppSample(x, n);
+sampDist(i, _) = as<NumericVector>(wrap(alE(sample, q1, q2, dc, type, distribution)["par"]));
+}
+
+return sampDist;
+}
+default:  throw exception("Unknown distribution selected.");
+}
 }
 
 
@@ -103,13 +148,24 @@ return sampDist;
 //' }
 //' @export
 // [[Rcpp::export]]
-NumericMatrix alEdist(int n, int bootstraps, double mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type)
+NumericMatrix alEdist(int n, int bootstraps, NumericVector mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type, int distribution=1)
 {
 NumericMatrix sampDist(bootstraps, q1.size());
+NumericVector x(n);
 
 for (int i=0; i<bootstraps; i++)
 {
-NumericVector x = rnorm(n, mu, sigma);
+switch (distribution)
+{
+case 1:
+x = rnorm(n, mu[0], sigma);
+break;
+case 2:
+x = rGPD(n, mu[0], mu[1], mu[2]);
+break;
+default: throw exception("Unknown distribution selected.");
+}
+
 double h = bw(x, type);
 
 if (dc)

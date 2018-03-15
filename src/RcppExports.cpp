@@ -7,8 +7,8 @@
 using namespace Rcpp;
 
 // alE
-List alE(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type);
-RcppExport SEXP _alR_alE(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP) {
+List alE(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int distribution);
+RcppExport SEXP _alR_alE(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP distributionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,13 +17,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type q2(q2SEXP);
     Rcpp::traits::input_parameter< bool >::type dc(dcSEXP);
     Rcpp::traits::input_parameter< double >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(alE(x, q1, q2, dc, type));
+    Rcpp::traits::input_parameter< int >::type distribution(distributionSEXP);
+    rcpp_result_gen = Rcpp::wrap(alE(x, q1, q2, dc, type, distribution));
     return rcpp_result_gen;
 END_RCPP
 }
 // alEfitdist
-NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps);
-RcppExport SEXP _alR_alEfitdist(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP bootstrapsSEXP) {
+NumericMatrix alEfitdist(NumericVector x, NumericVector q1, NumericVector q2, bool dc, double type, int bootstraps, int distribution);
+RcppExport SEXP _alR_alEfitdist(SEXP xSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP bootstrapsSEXP, SEXP distributionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,26 +34,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type dc(dcSEXP);
     Rcpp::traits::input_parameter< double >::type type(typeSEXP);
     Rcpp::traits::input_parameter< int >::type bootstraps(bootstrapsSEXP);
-    rcpp_result_gen = Rcpp::wrap(alEfitdist(x, q1, q2, dc, type, bootstraps));
+    Rcpp::traits::input_parameter< int >::type distribution(distributionSEXP);
+    rcpp_result_gen = Rcpp::wrap(alEfitdist(x, q1, q2, dc, type, bootstraps, distribution));
     return rcpp_result_gen;
 END_RCPP
 }
 // alEdist
-NumericMatrix alEdist(int n, int bootstraps, double mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type);
-RcppExport SEXP _alR_alEdist(SEXP nSEXP, SEXP bootstrapsSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP, SEXP dcSEXP, SEXP typeSEXP) {
+NumericMatrix alEdist(int n, int bootstraps, NumericVector mu, double sigma, NumericVector q1, NumericVector q2, bool quantile, bool dc, double type, int distribution);
+RcppExport SEXP _alR_alEdist(SEXP nSEXP, SEXP bootstrapsSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP, SEXP dcSEXP, SEXP typeSEXP, SEXP distributionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type bootstraps(bootstrapsSEXP);
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
     Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type q1(q1SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type q2(q2SEXP);
     Rcpp::traits::input_parameter< bool >::type quantile(quantileSEXP);
     Rcpp::traits::input_parameter< bool >::type dc(dcSEXP);
     Rcpp::traits::input_parameter< double >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(alEdist(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type));
+    Rcpp::traits::input_parameter< int >::type distribution(distributionSEXP);
+    rcpp_result_gen = Rcpp::wrap(alEdist(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type, distribution));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -133,6 +136,127 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type q2(q2SEXP);
     Rcpp::traits::input_parameter< bool >::type quantile(quantileSEXP);
     rcpp_result_gen = Rcpp::wrap(GaussInt2(mu, sigma, q1, q2, quantile));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dGPD
+NumericVector dGPD(NumericVector x, double mu, double sigma, double alpha);
+RcppExport SEXP _alR_dGPD(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(dGPD(x, mu, sigma, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pGPD
+NumericVector pGPD(NumericVector q, double mu, double sigma, double alpha);
+RcppExport SEXP _alR_pGPD(SEXP qSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(pGPD(q, mu, sigma, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// qGPD
+double qGPD(double p, double mu, double sigma, double alpha);
+RcppExport SEXP _alR_qGPD(SEXP pSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(qGPD(p, mu, sigma, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rGPD
+NumericVector rGPD(const int n, double mu, double sigma, double alpha);
+RcppExport SEXP _alR_rGPD(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(rGPD(n, mu, sigma, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GPDInt
+List GPDInt(double mu, double sigma, double alpha, double q1, double q2, bool quantile);
+RcppExport SEXP _alR_GPDInt(SEXP muSEXP, SEXP sigmaSEXP, SEXP alphaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type q1(q1SEXP);
+    Rcpp::traits::input_parameter< double >::type q2(q2SEXP);
+    Rcpp::traits::input_parameter< bool >::type quantile(quantileSEXP);
+    rcpp_result_gen = Rcpp::wrap(GPDInt(mu, sigma, alpha, q1, q2, quantile));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GPDInt2
+NumericVector GPDInt2(double mu, double sigma, double alpha, NumericVector q1, NumericVector q2, bool quantile);
+RcppExport SEXP _alR_GPDInt2(SEXP muSEXP, SEXP sigmaSEXP, SEXP alphaSEXP, SEXP q1SEXP, SEXP q2SEXP, SEXP quantileSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q1(q1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type q2(q2SEXP);
+    Rcpp::traits::input_parameter< bool >::type quantile(quantileSEXP);
+    rcpp_result_gen = Rcpp::wrap(GPDInt2(mu, sigma, alpha, q1, q2, quantile));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GPDMLE
+NumericVector GPDMLE(NumericVector x);
+RcppExport SEXP _alR_GPDMLE(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(GPDMLE(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GPDqML
+NumericVector GPDqML(NumericVector x);
+RcppExport SEXP _alR_GPDqML(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(GPDqML(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GPDMSE
+NumericVector GPDMSE(NumericVector x);
+RcppExport SEXP _alR_GPDMSE(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(GPDMSE(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -591,15 +715,24 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_alR_alE", (DL_FUNC) &_alR_alE, 5},
-    {"_alR_alEfitdist", (DL_FUNC) &_alR_alEfitdist, 6},
-    {"_alR_alEdist", (DL_FUNC) &_alR_alEdist, 9},
+    {"_alR_alE", (DL_FUNC) &_alR_alE, 6},
+    {"_alR_alEfitdist", (DL_FUNC) &_alR_alEfitdist, 7},
+    {"_alR_alEdist", (DL_FUNC) &_alR_alEdist, 10},
     {"_alR_alrKDE", (DL_FUNC) &_alR_alrKDE, 6},
     {"_alR_Silverman", (DL_FUNC) &_alR_Silverman, 1},
     {"_alR_Silverman2", (DL_FUNC) &_alR_Silverman2, 1},
     {"_alR_bw", (DL_FUNC) &_alR_bw, 2},
     {"_alR_GaussInt", (DL_FUNC) &_alR_GaussInt, 5},
     {"_alR_GaussInt2", (DL_FUNC) &_alR_GaussInt2, 5},
+    {"_alR_dGPD", (DL_FUNC) &_alR_dGPD, 4},
+    {"_alR_pGPD", (DL_FUNC) &_alR_pGPD, 4},
+    {"_alR_qGPD", (DL_FUNC) &_alR_qGPD, 4},
+    {"_alR_rGPD", (DL_FUNC) &_alR_rGPD, 4},
+    {"_alR_GPDInt", (DL_FUNC) &_alR_GPDInt, 6},
+    {"_alR_GPDInt2", (DL_FUNC) &_alR_GPDInt2, 6},
+    {"_alR_GPDMLE", (DL_FUNC) &_alR_GPDMLE, 1},
+    {"_alR_GPDqML", (DL_FUNC) &_alR_GPDqML, 1},
+    {"_alR_GPDMSE", (DL_FUNC) &_alR_GPDMSE, 1},
     {"_alR_pkappa4", (DL_FUNC) &_alR_pkappa4, 5},
     {"_alR_dkappa4", (DL_FUNC) &_alR_dkappa4, 5},
     {"_alR_qkappa4", (DL_FUNC) &_alR_qkappa4, 5},

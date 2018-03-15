@@ -1,5 +1,6 @@
 ## Resubmission
 * C++ code containing log() and sqrt() have been updated.
+* An error regarding a package dependency not being available has been fixed.
 
 ## Test environments
 * local Windows 10 x64 install, R 3.4.3

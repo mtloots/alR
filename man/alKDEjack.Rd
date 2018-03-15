@@ -67,7 +67,7 @@ alKDEjack.default: A list object (saved using \code{saveRDS} in the specified lo
 \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 \item ALy: Arc length segments of the KDE cast over the dependent variable.
 \item ALX: Arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
 p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 }
@@ -82,7 +82,7 @@ summary.alKDEjack: A list of class summary.alKDEjack with the following componen
 \item sigma: The residual standard error.
 \item df: Degrees of freedom for the model.
 \item error: Value of the objective function.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 \item residSum: Summary statistics for the distribution of the residuals.
 \item errorSum: Summary statistics for the distribution of the value of the objective function.
 }
@@ -93,6 +93,9 @@ predict.alKDEjack: A vector of predicted values resulting from the estimated mod
 }
 \description{
 Bias corrected jackknife estimates, along with standard  errors and confidence intervals, of a linear model, resulting from arc length matching of kernel density estimates.
+}
+\details{
+On systems where the pbdMPI package is available, this code will run in parallel.
 }
 \section{Methods (by class)}{
 \itemize{

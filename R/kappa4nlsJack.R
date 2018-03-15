@@ -2,6 +2,8 @@
 #'
 #' Bias corrected jackknife estimates, along with standard  errors and confidence intervals, of a nonlinear model, resulting from  nonlinear least squares fitting of the four-parameter kappa sigmoidal function.
 #'
+#' On systems where the pbMPI package is available, this code will run in parallel.
+#'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param xin Numeric vector of length 3 containing initial values, for \eqn{\sigma}, \eqn{h}, and \eqn{k}.
@@ -14,7 +16,6 @@
 #'
 #' @return A generic S3 object with class kappa4nlsJack.
 #'
-#' @import pbdMPI
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat var
 #'
 #' @export
@@ -35,17 +36,19 @@ kappa4nlsJack <- function(formula, data=list(), xin, lower, upper, tol, maxiter,
 #' \item fitted.values: A vector of estimated values.
 #' \item residuals: The residuals resulting from the fitted model.
 #' \item call: The call to the function.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 #' }
 #' 
 #' @export
 kappa4nlsJack.default <- function(formula, data=list(), xin, lower=c(0, -5, -5), upper=c(10, 1, 1), tol=1e-15, maxiter=50000, jackName, ...)
 {
-ret.time <- comm.timer({
-ret <- task.pull(1:nrow(data), function(jid) kappa4nlsShort(formula, data[-jid], xin))
+if(requireNamespace("pbdMPI", quietly=TRUE))
+{
+ret.time <- pbdMPI::comm.timer({
+ret <- pbdMPI::task.pull(1:nrow(data), function(jid) kappa4nlsShort(formula, data[-jid], xin))
 })
 
-if(comm.rank() == 0)
+if(pbdMPI::comm.rank() == 0)
 {
 jack <- kappa4nls(formula, data, lower, upper, tol, maxiter, ...)
 
@@ -68,7 +71,34 @@ class(jack) <- "kappa4nlsJack"
 saveRDS(jack, paste(jackName, ".rds", sep=""))
 }
 
-finalize()
+pbdMPI::finalize()
+}
+else
+{
+ret.time <- system.time({
+ret <- lapply(1:nrow(data), function(jid) kappa4nlsShort(formula, data[-jid], xin))
+})
+
+jack <- kappa4nls(formula, data, lower, upper, tol, maxiter, ...)
+
+jack$call <- match.call()
+
+jack$time <- ret.time
+ret.coef <- do.call(rbind, lapply(1:nrow(data), function(x) ret[[x]]$coefficients))
+
+jack$coefDist <- ret.coef
+
+coefMean <- colMeans(ret.coef)
+coefVar <- ((nrow(data)-1)/nrow(data))*colSums((ret.coef-coefMean)^2)
+jack$se <- sqrt(coefVar)
+jack$bias <- (nrow(data)-1)*(coefMean-jack$coefficients)
+jack$jcoefficients <- jack$coefficients-jack$bias
+
+jack$errorList <- as.vector(do.call(rbind, lapply(1:nrow(data), function(x) ret[[x]]$error)))
+
+class(jack) <- "kappa4nlsJack"
+saveRDS(jack, paste(jackName, ".rds", sep=""))
+}
 }
 
 #' @describeIn kappa4nlsJack print method for kappa4nlsJack.
@@ -95,7 +125,7 @@ print(x$coefficients, digits=5)
 #' \item r.squared: The \eqn{r^{2}} coefficient.
 #' \item sigma: The residual standard error.
 #' \item error: Value of the objective function.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 #' \item residSum: Summary statistics for the distribution of the residuals.
 #' \item errorSum: Summary statistics for the distribution of the value of the objective function.
 #' }

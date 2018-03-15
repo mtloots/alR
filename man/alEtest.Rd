@@ -7,11 +7,13 @@
 \alias{print.alEtest}
 \title{Arc length estimation.}
 \usage{
-alEdist(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
+alEdist(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type,
+  distribution = 1L)
 
-alEtest(X, mu, sigma, q1, q2, type, bootstraps, ...)
+alEtest(X, mu, sigma = 1, q1, q2, type, bootstraps, distribution = 1, ...)
 
-\method{alEtest}{default}(X, mu, sigma, q1, q2, type, bootstraps, ...)
+\method{alEtest}{default}(X, mu, sigma = 1, q1, q2, type, bootstraps,
+  distribution = 1, ...)
 
 \method{print}{alEtest}(x, ...)
 }
@@ -20,7 +22,7 @@ alEtest(X, mu, sigma, q1, q2, type, bootstraps, ...)
 
 \item{bootstraps}{An integer specifying the size of the parametric bootstrap.}
 
-\item{mu}{A real value specifying the mean of the normal distribution.}
+\item{mu}{A real value specifying the mean of the normal distribution, or a vector of parameters in other cases.}
 
 \item{sigma}{A positive real number specifying the scale parameter of the normal distribution.}
 
@@ -32,9 +34,13 @@ alEtest(X, mu, sigma, q1, q2, type, bootstraps, ...)
 
 \item{type}{The type of bandwidth estimator for the underlying KDE; see \code{\link{bw}}.}
 
+\item{distribution}{An integer specifying the distribution to simulate from:  1=normal (default) and 2=GPD.}
+
 \item{X}{A vector of sample values.}
 
-\item{...}{Additional arguments passed to \code{alEtest} (not currently used).}
+\item{...}{Additional arguments passed to \code{alEtest} (not currently used).
+
+If a vector of parameters is passed through mu, it should correspond to the location, scale and shape parameters of the GPD (in this particular order).}
 
 \item{x}{An alEtest object.}
 }
@@ -46,13 +52,13 @@ alEtest: A generic S3 object with class alEtest.
 alEtest.default: A list with the following components:
 \itemize{
 \item q1, q2: The segment over which the arc length was calculated.
-\item mu: A real value specifying the mean of the normal distribution.
-\item sigma: A positive real number specifying the scale parameter of the normal distribution.
+\item par: A real valued vector specifying the parameters of the simulating distribution.
 \item bw: The bandwidth for the kernel density estimator.
 \item dist: A numeric matrix whose columns represent a bootstrap distribution for the corresponding sample arc length statistic.
 \item statistic: The value of the observed sample statistic.
 \item pvalue: The p-value for the test based on a parametric bootstrap sample.
 \item bootstraps: Number of bootstrap samples.
+\item distribution: The distribution being fitted.
 }
 }
 \description{
@@ -61,7 +67,7 @@ Goodness-of-fit using arc lengths.
 \details{
 First the distributional parameters of a sample is estimated using the continuous arc length sample statistic (see \code{\link{alE}}).  The calculated sample arc length statistic is then compared to the distribution of that particular sample statistic, obtained by a parametric bootstrap, using the estimated parameters (see \code{\link{alEdist}}).  This finally leads to the calculation of a p-value for a goodness-of-fit test, based on the simulated distribution.
 
-This method is currently only implemented for the normal distribution, and for a single arc length segment.
+This method is currently only implemented for the normal and generalised Pareto distributions, and for a single arc length segment.
 }
 \section{Methods (by class)}{
 \itemize{

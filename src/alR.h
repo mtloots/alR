@@ -25,22 +25,31 @@ NumericVector kappa4Int2(double mu, double sigma, double h, double k, double tau
 
 Rcpp::List kappa4tc(double h, double mu, double sigma);
 
-
 double dkdeGauss(double x, Rcpp::NumericVector mu, double h);
 
 Rcpp::NumericVector GaussInt2(double mu, double sigma, Rcpp::NumericVector q1, Rcpp::NumericVector q2, bool quantile);
+
+Rcpp::NumericVector GPDInt2(double mu, double sigma, double alpha, Rcpp::NumericVector q1, Rcpp::NumericVector q2, bool quantile);
+
+Rcpp::NumericVector GPDqML(Rcpp::NumericVector x);
 
 Rcpp::NumericVector kdeGaussInt2(Rcpp::NumericVector mu, double h, Rcpp::NumericVector q1, Rcpp::NumericVector q2, bool quantile);
 
 Rcpp::NumericVector kdeGaussIntApprox2(Rcpp::NumericVector mu, double h, Rcpp::NumericVector q1, Rcpp::NumericVector q2, bool quantile);
 
-Rcpp::NumericVector lulu(Rcpp::NumericVector x);
-
 Rcpp::List qkdeGauss(double x, Rcpp::NumericVector mu, double h);
+
+Rcpp::NumericVector dGPD(Rcpp::NumericVector x, double mu, double sigma, double alpha);
+
+Rcpp::NumericVector pGPD(Rcpp::NumericVector q, double mu, double sigma, double alpha);
+
+double qGPD(double p, double mu, double sigma, double alpha);
 
 double qlin(NumericVector x, NumericVector y, double q);
 
 double qsamp(Rcpp::NumericVector x, double q);
+
+Rcpp::NumericVector rGPD(const int n, double mu, double sigma, double alpha);
 
 Rcpp::List Rcpp_integrate(integr_fn f, void *ex, double lower, double upper, int subdiv = 100, double eps_abs = 1e-10, double eps_rel = 1e-10);
 

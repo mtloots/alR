@@ -2,6 +2,8 @@
 #'
 #' Bias corrected jackknife estimates, along with standard  errors and confidence intervals, of a linear model, resulting from arc length matching of kernel density estimates.
 #'
+#' On systems where the pbdMPI package is available, this code will run in parallel.
+#'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param xin Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.
@@ -12,7 +14,6 @@
 #'
 #' @return A generic S3 object with class alKDEjack.
 #'
-#' @import pbdMPI
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
@@ -37,7 +38,7 @@ alKDEjack <- function(formula, data=list(), xin, q1, q2, type, jackName, ...) Us
 #' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item ALy: Arc length segments of the KDE cast over the dependent variable.
 #' \item ALX: Arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 #' p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
 #' p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
 #' }
@@ -45,14 +46,13 @@ alKDEjack <- function(formula, data=list(), xin, q1, q2, type, jackName, ...) Us
 #' @export
 alKDEjack.default <- function(formula, data=list(), xin, q1, q2, type, jackName, ...)
 {
-comm.set.seed(123, diff=TRUE)
-N <- nrow(data)
-
-ret.time <- comm.timer({
-ret <- task.pull(1:nrow(data), function(jid) alKDEshort(formula, data[-jid], xin, q1, q2, type, ...))
+if(requireNamespace("pbdMPI", quietly=TRUE))
+{
+ret.time <- pbdMPI::comm.timer({
+ret <- pbdMPI::task.pull(1:nrow(data), function(jid) alKDEshort(formula, data[-jid], xin, q1, q2, type, ...))
 })
 
-if(comm.rank() == 0)
+if(pbdMPI::comm.rank() == 0)
 {
 jack <- alKDE(formula, data, xin, q1, q2, type, ...)
 
@@ -75,7 +75,37 @@ class(jack) <- "alKDEjack"
 saveRDS(jack, paste(jackName, ".rds", sep=""))
 }
 
-finalize()
+pbdMPI::finalize()
+}
+else
+{
+set.seed(123)
+N <- nrow(data)
+
+ret.time <- system.time({
+ret <- lapply(1:nrow(data), function(jid) alKDEshort(formula, data[-jid], xin, q1, q2, type, ...))
+})
+
+jack <- alKDE(formula, data, xin, q1, q2, type, ...)
+
+jack$call <- match.call()
+
+jack$time <- ret.time
+ret.coef <- do.call(rbind, lapply(1:nrow(data), function(x) ret[[x]]$coefficients))
+
+jack$coefDist <- ret.coef
+
+coefMean <- colMeans(ret.coef)
+coefVar <- ((nrow(data)-1)/nrow(data))*colSums((ret.coef-coefMean)^2)
+jack$se <- sqrt(coefVar)
+jack$bias <- (nrow(data)-1)*(coefMean-jack$coefficients)
+jack$jcoefficients <- jack$coefficients-jack$bias
+
+jack$errorList <- as.vector(do.call(rbind, lapply(1:nrow(data), function(x) ret[[x]]$error)))
+
+class(jack) <- "alKDEjack"
+saveRDS(jack, paste(jackName, ".rds", sep=""))
+}
 }
 
 #' @describeIn alKDEjack print method for alKDEjack.
@@ -105,7 +135,7 @@ print(x$coefficients, digits=5)
 #' \item sigma: The residual standard error.
 #' \item df: Degrees of freedom for the model.
 #' \item error: Value of the objective function.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 #' \item residSum: Summary statistics for the distribution of the residuals.
 #' \item errorSum: Summary statistics for the distribution of the value of the objective function.
 #' }

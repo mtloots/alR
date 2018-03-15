@@ -72,7 +72,7 @@ alKDEboot.default: A list object (saved using \code{saveRDS} in the specified lo
 \item ALX: Arc length segments of the KDE cast over the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 p1: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q1}.
 p2: The vector of quantiles in the domain of \eqn{y} corresponding to \code{q2}.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 }
 
 summary.alKDEboot: A list of class summary.alKDEboot with the following components:
@@ -85,7 +85,7 @@ summary.alKDEboot: A list of class summary.alKDEboot with the following componen
 \item sigma: The residual standard error.
 \item df: Degrees of freedom for the model.
 \item error: Value of the objective function.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that obtained from \code{\link{system.time}}.
 \item residSum: Summary statistics for the distribution of the residuals.
 \item errorSum: Summary statistics for the distribution of the value of the objective function.
 }
@@ -96,6 +96,9 @@ predict.alKDEboot: A vector of predicted values resulting from the estimated mod
 }
 \description{
 Bootstrap estimates, along with standard  errors and confidence intervals, of a linear model, resulting from arc length matching of kernel density estimates.
+}
+\details{
+On systems where the pbMPI package is available, this code will run in parallel.
 }
 \section{Methods (by class)}{
 \itemize{

@@ -8,13 +8,14 @@
 \alias{print.alEfit}
 \title{Arc length estimation.}
 \usage{
-alE(x, q1, q2, dc, type)
+alE(x, q1, q2, dc, type, distribution = 1L)
 
-alEfitdist(x, q1, q2, dc, type, bootstraps)
+alEfitdist(x, q1, q2, dc, type, bootstraps, distribution = 1L)
 
-alEfit(X, q1, q2, dc, type, bootstraps, ...)
+alEfit(X, q1, q2, dc, type, bootstraps, distribution = 1, ...)
 
-\method{alEfit}{default}(X, q1, q2, dc, type, bootstraps, ...)
+\method{alEfit}{default}(X, q1, q2, dc, type, bootstraps, distribution = 1,
+  ...)
 
 \method{print}{alEfit}(x, ...)
 }
@@ -26,6 +27,8 @@ alEfit(X, q1, q2, dc, type, bootstraps, ...)
 \item{dc}{TRUE/FALSE:  Should the discrete or continuous sample statistic be used.}
 
 \item{type}{The type of bandwidth estimator for the underlying KDE; see \code{\link{bw}}.}
+
+\item{distribution}{The distribution to be fitted, 1=normal (default), 2=generalised Pareto.}
 
 \item{bootstraps}{An integer specifying the size of the parametric bootstrap.}
 
@@ -51,6 +54,7 @@ alEfit.default: A list with all components from \code{\link{alE}}, as well as :
 \item dc: TRUE/FALSE Was the discrete or continuous sample arc length statistic used?
 \item q1, q2: The segments over which the arc length(s) were calculated.
 \item bw: The bandwidth for the kernel density estimator.
+\item distribution: The distribution fitted to the data.
 \item dist: A numeric matrix whose columns represent a bootstrap distribution for the corresponding parameter estimate.
 \item se: A numeric vector with standard errors, obtained by a parametric bootstrap.
 \item bootstraps: Number of bootstrap samples.
@@ -65,7 +69,7 @@ A framework for arc length estimation.
 \item Simulate bootstrap distributions for parameter estimates, resulting from sample arc length statistics.
 }
 
-This method is currently only implemented for the normal distribution.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolerance level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
+This method is currently only implemented for the normal and generalised Pareto distributions.  The underlying C code for the Nelder-Mead method of the optim function is used for optimising the objective function.  The tolerance level is set at 1e-15, and a maximum number of 1000 iterations is allowed.  The maximum likelihood estimates are used as initial values for the Nelder-Mead algorithm.
 }
 \section{Methods (by class)}{
 \itemize{

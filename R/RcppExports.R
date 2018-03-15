@@ -18,8 +18,8 @@
 #' alE(x,c(0.025, 0.5), c(0.5, 0.975), FALSE, -1)
 #'
 #' @export
-alE <- function(x, q1, q2, dc, type) {
-    .Call(`_alR_alE`, x, q1, q2, dc, type)
+alE <- function(x, q1, q2, dc, type, distribution = 1L) {
+    .Call(`_alR_alE`, x, q1, q2, dc, type, distribution)
 }
 
 #' @rdname alEfit
@@ -30,8 +30,8 @@ alE <- function(x, q1, q2, dc, type) {
 #' alEfitdist(x, 0.025, 0.975, FALSE, -1, 100)
 #' }
 #' @export
-alEfitdist <- function(x, q1, q2, dc, type, bootstraps) {
-    .Call(`_alR_alEfitdist`, x, q1, q2, dc, type, bootstraps)
+alEfitdist <- function(x, q1, q2, dc, type, bootstraps, distribution = 1L) {
+    .Call(`_alR_alEfitdist`, x, q1, q2, dc, type, bootstraps, distribution)
 }
 
 #' @rdname alEtest
@@ -48,8 +48,8 @@ alEfitdist <- function(x, q1, q2, dc, type, bootstraps) {
 #' c(2,qnorm(0.975, 2, 3.5)), FALSE, FALSE, -1)
 #' }
 #' @export
-alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type) {
-    .Call(`_alR_alEdist`, n, bootstraps, mu, sigma, q1, q2, quantile, dc, type)
+alEdist <- function(n, bootstraps, mu, sigma, q1, q2, quantile, dc, type, distribution = 1L) {
+    .Call(`_alR_alEdist`, n, bootstraps, mu, sigma, q1, q2, quantile, dc, type, distribution)
 }
 
 #' Objective function for KDE arc length matching.
@@ -160,6 +160,134 @@ GaussInt <- function(mu, sigma, q1, q2, quantile) {
 #' @export
 GaussInt2 <- function(mu, sigma, q1, q2, quantile) {
     .Call(`_alR_GaussInt2`, mu, sigma, q1, q2, quantile)
+}
+
+#' The Generalised Pareto Distribution (GPD).
+#'
+#' Density, distribution function, quantile function and random generation for the generalised Pareto distribution (GPD) with location parameter \code{mu}, scale parameter \code{sigma}, and shape parameter \code{alpha}. .
+#'
+#' @param x,q A data point, or quantile, at which the GPD should be evaluated (may be vectors).
+#' @param p A probability, at which the GPD should be evaluated.
+#' @param mu The location parameter of the GPD.
+#' @param sigma The scale parameter of the GPD (should be strictly positive).
+#' @param alpha The shape parameter of the GPD (valid for all real numbers).
+#' @param n The number of random numbers which should be generated for the GPD.
+#' @rdname GPD
+#' @return dGPD: The estimated value of the density function of the GPD at the point \code{x}.
+#' @examples
+#' library(alR)
+#' dGPD(0.5, 0, 1, 2)
+#' @export
+dGPD <- function(x, mu, sigma, alpha) {
+    .Call(`_alR_dGPD`, x, mu, sigma, alpha)
+}
+
+#' @rdname GPD
+#' @examples
+#' pGPD(0.5, 0, 1, 2)
+#' @return pGPD: The value of the cumulative distribution function of the GPD at the point \code{x}.
+#' @export
+pGPD <- function(q, mu, sigma, alpha) {
+    .Call(`_alR_pGPD`, q, mu, sigma, alpha)
+}
+
+#' @rdname GPD
+#' @examples
+#' qGPD(0.5, 0, 1, 2)
+#' @return qGPD: The \code{x}th quantile of the GPD.
+#' @export
+qGPD <- function(p, mu, sigma, alpha) {
+    .Call(`_alR_qGPD`, p, mu, sigma, alpha)
+}
+
+#' @rdname GPD
+#' @examples
+#' rGPD(10, 0, 1, 2)
+#' @return rGPD: \code{n} random numbers from the GPD.
+#' @export
+rGPD <- function(n, mu, sigma, alpha) {
+    .Call(`_alR_rGPD`, n, mu, sigma, alpha)
+}
+
+#' Arc length of GPD PDF.
+#'
+#' Calculate the arc length for a univariate generalised Pareto probability density function over a specified interval.
+#'
+#' The arc length of a univariate generalised Pareto probability density function is approximated using the numerical integration C code implimented for R's integrate functions, i.e. using Rdqags.  For this approximation, subdiv = 100 (100 subdivisions), and eps_abs = eps_rel = 1e-10, i.e. the absolute and relative errors respectively.
+#'
+#' @param mu A real number specifying the location parameter.
+#' @param sigma A strictly positive real number specifying the scale parameter.
+#' @param alpha A real number specifying the shape parameter.
+#' @param q1 The point (or vector for \code{GPDInt2}) specifying the lower limit of the arc length integral.
+#' @param q2 The point (or vector for \code{GPDInt2}) specifying the upper limit of the arc length integral.
+#' @param quantile Logical, TRUE/FALSE, whether \code{q1} and \code{q2} are quantiles, or actual points in the domain.
+#'
+#' @return GPDInt: A list with the following components:
+#' \itemize{
+#' \item value: The resultant arc length.
+#' \item abs.err: The absolute error between iterations.
+#' subdivisions: Number of subdivisions used in the numerical approximation.
+#' \item neval: Number of function evaluations used by the numerical approximation.
+#' }
+#'
+#' @examples
+#' library(alR)
+#' mu <- 0
+#' sigma <- 1
+#' alpha <- 2
+#' GPDInt(mu, sigma, alpha, 0.025, 0.975, TRUE)
+#' GPDInt(mu, sigma, alpha, 0.001, 0.5, FALSE)
+#'
+#' @export
+GPDInt <- function(mu, sigma, alpha, q1, q2, quantile) {
+    .Call(`_alR_GPDInt`, mu, sigma, alpha, q1, q2, quantile)
+}
+
+#' @rdname GPDInt
+#' @return GPDInt2: A vector having length equal to that of the vector of lower quantile bounds, containing the arc lengths requested for a generalised Pareto probability density function.
+#'
+#' @examples
+#' GPDInt2(mu, sigma, alpha, c(0.025, 0.5), c(0.5, 0.975), TRUE)
+#' GPDInt2(mu, sigma, alpha, c(-1.96, 0), c(0, 1.96), FALSE)
+#'
+#' @export
+GPDInt2 <- function(mu, sigma, alpha, q1, q2, quantile) {
+    .Call(`_alR_GPDInt2`, mu, sigma, alpha, q1, q2, quantile)
+}
+
+#' The qML Method for the Generalised Pareto Distribution (GPD).
+#'
+#' Estimation of the parameters of the generalised Pareto distribution (GPD) with location parameter \code{mu}, scale parameter \code{sigma}, and shape parameter \code{alpha}.  using the quasi-maximum-likelihood method.
+#'
+#' @param x A vector of data points.
+#' @rdname GPDqML
+#' @return GPDMLE:  A named vector containing the maximum likelihood estimates for the GPD fitted to the data \code{x}.
+#' @examples
+#' x <- rGPD(100, 0, 1, 2)
+#' GPDMLE(x)
+#' @export
+GPDMLE <- function(x) {
+    .Call(`_alR_GPDMLE`, x)
+}
+
+#' @rdname GPDqML
+#' @return GPDqML:  A named vector containing the estimated parameters for the GPD fitted to the data \code{x}, using quasi-maximum likelihood.
+#' @examples
+#' GPDqML(x)
+#' @export
+GPDqML <- function(x) {
+    .Call(`_alR_GPDqML`, x)
+}
+
+#' @rdname GPDqML
+#' @return GPDMSE:  A named vector containing the estimated parameters for the GPD fitted to the data \code{x}, using maximum spacings estimation (MSE).
+#' @examples
+#' \dontrun{
+#' GPDMSE(x)
+#' }
+#' @export
+GPDMSE <- function(x) {
+    .Call(`_alR_GPDMSE`, x)
 }
 
 #' Four-parameter kappa distribution.

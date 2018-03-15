@@ -71,7 +71,7 @@ kappa4alJack.default: A list object (saved using \code{saveRDS} in the specified
 \item fitted.values: A vector of estimated values.
 \item residuals: The residuals resulting from the fitted model.
 \item call: The call to the function.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 }
 
 summary.kappa4alJack: A list of class summary.kappa4alJack with the following components:
@@ -82,7 +82,7 @@ summary.kappa4alJack: A list of class summary.kappa4alJack with the following co
 \item r.squared: The \eqn{r^{2}} coefficient.
 \item sigma: The residual standard error.
 \item error: Value of the objective function.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 \item residSum: Summary statistics for the distribution of the residuals.
 \item errorSum: Summary statistics for the distribution of the value of the objective function.
 }
@@ -93,6 +93,9 @@ predict.kappa4alJack: A vector of predicted values resulting from the estimated 
 }
 \description{
 Bias corrected jackknife estimates, along with standard  errors and confidence intervals, of a nonlinear model, resulting from  arc length fitting of the four-parameter kappa sigmoidal function.
+}
+\details{
+On systems where the pbMPI package is available, this code will run in parallel.
 }
 \section{Methods (by class)}{
 \itemize{

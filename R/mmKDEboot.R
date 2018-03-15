@@ -2,6 +2,8 @@
 #'
 #' Bootstrap estimates, along with standard  errors and confidence intervals, of a linear model, resulting from moment matching of kernel density estimates.
 #'
+#' On systems where the pbMPI package is available, this code will run in parallel.
+#'
 #' @param formula An LHS ~ RHS formula, specifying the linear model to be estimated.
 #' @param data A data.frame which contains the variables in \code{formula}.
 #' @param xin Numeric vector of length equal to the number of independent variables, of initial values, for the parameters to be estimated.
@@ -12,7 +14,6 @@
 #'
 #' @return A generic S3 object with class mmKDEboot.
 #'
-#' @import pbdMPI
 #' @importFrom stats coef fitted model.frame model.matrix model.response printCoefmat
 #'
 #' @export
@@ -37,24 +38,26 @@ mmKDEboot <- function(formula, data=list(), xin, type, bootstraps, bootName, ...
 #' \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 #' \item MOMy: The first \eqn{n} non central moments of the dependent variable, where \eqn{n} is the number of columns in the design matrix.
 #' \item MOMX: The first \eqn{n} non central moments of the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where \eqn{n} is the number of columns in the design matrix.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 #' }
 #' 
 #' @export
 mmKDEboot.default <- function(formula, data=list(), xin, type, bootstraps, bootName, ...)
 {
-comm.set.seed(123, diff=TRUE)
+if(requireNamespace("pbdMPI", quietly=TRUE))
+{
+pbdMPI::comm.set.seed(123, diff=TRUE)
 N <- nrow(data)
 
-ret.time <- comm.timer({
-ret <- task.pull(1:bootstraps, function(jid)
+ret.time <- pbdMPI::comm.timer({
+ret <- pbdMPI::task.pull(1:bootstraps, function(jid)
 {
 id <- sample(1:N, N, replace=TRUE)
 mmKDEshort(formula, data[id,], xin, type, ...)
 })
 })
 
-if(comm.rank() == 0)
+if(pbdMPI::comm.rank() == 0)
 {
 boot <- mmKDE(formula, data, xin, type, ...)
 
@@ -76,7 +79,40 @@ class(boot) <- "mmKDEboot"
 saveRDS(boot, paste(bootName, ".rds", sep=""))
 }
 
-finalize()
+pbdMPI::finalize()
+}
+else
+{
+set.seed(123)
+N <- nrow(data)
+
+ret.time <- system.time({
+ret <- lapply(1:bootstraps, function(jid)
+{
+id <- sample(1:N, N, replace=TRUE)
+mmKDEshort(formula, data[id,], xin, type, ...)
+})
+})
+
+boot <- mmKDE(formula, data, xin, type, ...)
+
+boot$call <- match.call()
+
+boot$time <- ret.time
+ret.coef <- do.call(rbind, lapply(1:bootstraps, function(x) ret[[x]]$coefficients))
+
+boot$coefDist <- ret.coef
+
+coefMean <- colMeans(ret.coef)
+coefVar <- (1/(bootstraps-1))*colSums((ret.coef-coefMean)^2)
+boot$se <- sqrt(coefVar)
+boot$bcoefficients <- coefMean
+
+boot$errorList <- as.vector(do.call(rbind, lapply(1:bootstraps, function(x) ret[[x]]$error)))
+
+class(boot) <- "mmKDEboot"
+saveRDS(boot, paste(bootName, ".rds", sep=""))
+}
 }
 
 #' @describeIn mmKDEboot print method for mmKDEboot.
@@ -106,7 +142,7 @@ print(x$coefficients, digits=5)
 #' \item sigma: The residual standard error.
 #' \item df: Degrees of freedom for the model.
 #' \item error: Value of the objective function.
-#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+#' \item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 #' \item residSum: Summary statistics for the distribution of the residuals.
 #' \item errorSum: Summary statistics for the distribution of the value of the objective function.
 #' }

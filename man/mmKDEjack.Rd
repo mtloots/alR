@@ -64,7 +64,7 @@ mmKDEjack.default: A list object (saved using \code{saveRDS} in the specified lo
 \item h_X: The KDE bandwidth estimator for the independent variables, i.e. \eqn{\mathbf{X}\underline{\hat{\beta}}}.
 \item MOMy: The first \eqn{n} non central moments of the dependent variable, where \eqn{n} is the number of columns in the design matrix.
 \item MOMX: The first \eqn{n} non central moments of the independent variables \eqn{\mathbf{X}\underline{\hat{\beta}}}, where \eqn{n} is the number of columns in the design matrix.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 }
 
 summary.mmKDEjack: A list of class summary.mmKDEjack with the following components:
@@ -77,7 +77,7 @@ summary.mmKDEjack: A list of class summary.mmKDEjack with the following componen
 \item sigma: The residual standard error.
 \item df: Degrees of freedom for the model.
 \item error: Value of the objective function.
-\item time: Min, mean and max time incurred by the computation, as obtained from \code{\link{comm.timer}}.
+\item time: Min, mean and max time incurred by the computation, as obtained from \code{comm.timer}, or that from \code{\link{system.time}}.
 \item residSum: Summary statistics for the distribution of the residuals.
 \item errorSum: Summary statistics for the distribution of the value of the objective function.
 }
@@ -88,6 +88,9 @@ predict.mmKDEjack: A vector of predicted values resulting from the estimated mod
 }
 \description{
 Bias corrected jackknife estimates, along with standard  errors and confidence intervals, of a linear model, resulting from moment matching of kernel density estimates.
+}
+\details{
+On systems where the pbMPI package is available, this code will run in parallel.
 }
 \section{Methods (by class)}{
 \itemize{
