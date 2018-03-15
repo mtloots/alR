@@ -10,6 +10,7 @@ before_install:
 - LD_PRELOAD=/usr/lib/openmpi/lib/libmpi.so
 
 r_packages:
+- devtools
 - rlecuyer
 - pbdPROF
 - pbdZMQ
